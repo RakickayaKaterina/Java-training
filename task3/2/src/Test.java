@@ -1,0 +1,10 @@
+
+public class Test {
+
+	public static void main(String[] args) {
+		Generator generator = new Generator();
+		generator.generateNumbers();
+		generator.show();
+	}
+
+}
