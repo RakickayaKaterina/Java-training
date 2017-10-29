@@ -2,6 +2,8 @@ package models;
 
 import java.util.Date;
 
+import utils.DateWorker;
+
 public class Lesson extends Entity {
 	private long id;
 	private Lecture mLecture;
@@ -28,5 +30,10 @@ public class Lesson extends Entity {
 	public Date getDate() {
 		return mDate;
 	}
+	@Override
+	public String toString() {
+		return String.format("Lesson [id=%s, mLectureName=%s, mDate=%s]", id, mLecture.getName(), DateWorker.dateFormat.format(mDate));
+	}
+	
 
 }

@@ -2,6 +2,9 @@ package models;
 
 import java.util.Date;
 
+import utils.ArrayWorker;
+import utils.DateWorker;
+
 public class Course extends Entity {
 	private long id;
 	private String name;
@@ -9,6 +12,7 @@ public class Course extends Entity {
 	private Date startDate;
 	private Date endDate;
 	private Lector lector;
+	private Student[] students;
 	private Lecture[] lectures;
 
 	public Course(long id, String name, String description, Date startDate, Date endDate, Lector lector,
@@ -21,6 +25,7 @@ public class Course extends Entity {
 		this.endDate = endDate;
 		this.lector = lector;
 		lectures = new Lecture[countLectures];
+		students = new Student[30];
 	}
 	
 	@Override
@@ -58,6 +63,23 @@ public class Course extends Entity {
 		return lectures;
 	}
 
+	public void setLector(Lector lector) {
+		this.lector = lector;
+	}
+	public void addStudent(Student pStudent){
+		ArrayWorker.addToArray(pStudent, students);
+	}
+
+	public Student[] getStudents() {
+		return students;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Course [id=%s, name=%s, startDate=%s, endDate=%s, lector=%s, count=%s]", id, name, DateWorker.dateFormat.format(startDate),
+				DateWorker.dateFormat.format(endDate), lector, ArrayWorker.getLenghtArray(students));
+	}
+	
 	
 
 }

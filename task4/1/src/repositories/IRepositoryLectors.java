@@ -11,7 +11,7 @@ public interface IRepositoryLectors {
 
 	public Lector getLector(long pId);
 
-	public Lector[] getListLector();
+	public Lector[] getListLectors();
 
 	public void saveState();
 }

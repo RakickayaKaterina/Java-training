@@ -38,7 +38,7 @@ public class RepositoryLectors implements IRepositoryLectors {
 	}
 
 	@Override
-	public Lector[] getListLector() {
+	public Lector[] getListLectors() {
 		return mLectors;
 	}
 

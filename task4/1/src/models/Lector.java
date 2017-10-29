@@ -1,5 +1,7 @@
 package models;
 
+import utils.ArrayWorker;
+
 public class Lector extends Entity {
 	private long id;
 	private String nameLector;
@@ -28,6 +30,11 @@ public class Lector extends Entity {
 
 	public Course[] getCourses() {
 		return courses;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Lector [id=%s, nameLector=%s,countCourses=%s]", id, nameLector,ArrayWorker.getLenghtArray(courses));
 	}
 	
 

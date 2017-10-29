@@ -60,9 +60,10 @@ public class ArrayWorker {
 		swap(pEntities, position, lastPosition);
 		return removedEntity;
 	}
-	public static void updatePosition(Entity pEntity,Entity[] pEntities){
+
+	public static void updatePosition(Entity pEntity, Entity[] pEntities) {
 		int position = getPositionById(pEntity.getId(), pEntities);
-		if(position<0){
+		if (position < 0) {
 			return;
 		}
 		pEntities[position] = pEntity;
@@ -74,5 +75,15 @@ public class ArrayWorker {
 		Entity temp = pEntities[first];
 		pEntities[first] = pEntities[second];
 		pEntities[second] = temp;
+	}
+
+	public static int getLenghtArray(Entity[] pEntities) {
+		int count = 0;
+		for (int i = 0; i < pEntities.length; i++) {
+			if (pEntities[i] != null) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

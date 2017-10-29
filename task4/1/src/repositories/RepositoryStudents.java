@@ -12,7 +12,7 @@ public class RepositoryStudents implements IRepositoryStudents {
 	}
 
 	@Override 
-	public void addStudents(Student pStudent) {
+	public void addStudent(Student pStudent) {
 		ArrayWorker.addToArray(pStudent, mStudents);
 	}
 

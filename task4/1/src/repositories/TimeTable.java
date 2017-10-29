@@ -44,7 +44,7 @@ public class TimeTable implements ITimeTable {
 
 	@Override
 	public void saveState() {
-		// TODO Auto-generated method stub
+		// TODO save
 		
 	}
 

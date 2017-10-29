@@ -3,7 +3,7 @@ package repositories;
 import models.Student;
 
 public interface IRepositoryStudents {
-	public void addStudents(Student pStudent);
+	public void addStudent(Student pStudent);
 
 	public Student removeStudent(long id);
 
