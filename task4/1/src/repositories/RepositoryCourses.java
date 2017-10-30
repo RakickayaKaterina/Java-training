@@ -40,7 +40,7 @@ public class RepositoryCourses implements IRepositoryCourses {
 	@Override
 	public Course getCourse(long pId) {
 		int position = ArrayWorker.getPositionById(pId, mCourses);
-		if (position > 0) {
+		if (position >= 0) {
 			return mCourses[position];
 		}
 		return null;

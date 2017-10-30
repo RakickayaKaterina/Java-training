@@ -39,7 +39,7 @@ public class TimeTable implements ITimeTable {
 	@Override
 	public Lesson getLesson(long pId) {
 		int position = ArrayWorker.getPositionById(pId, mLessons);
-		if (position > 0) {
+		if (position >= 0) {
 			return mLessons[position];
 		}
 		return null;

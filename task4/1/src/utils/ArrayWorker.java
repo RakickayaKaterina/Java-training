@@ -31,7 +31,7 @@ public class ArrayWorker {
 
 	public static int getPositionById(long id, Entity[] pEntities) {
 		for (int i = 0; i < pEntities.length; i++) {
-			if (pEntities[i].getId() == id)
+			if (pEntities[i]!= null && pEntities[i].getId() == id)
 				return i;
 		}
 		return -1;

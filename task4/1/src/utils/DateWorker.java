@@ -1,5 +1,6 @@
 package utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -21,5 +22,7 @@ public class DateWorker {
 	public static boolean isSubInterval(Date startDateMain, Date endSateMain, Date startDateSub, Date endDateSub) {
 		return startDateMain.before(startDateSub) && endSateMain.after(endDateSub);
 	}
-
+	public static Date createDate(String pStringDate) throws ParseException{
+		return dateFormat.parse(pStringDate);
+	}
 }

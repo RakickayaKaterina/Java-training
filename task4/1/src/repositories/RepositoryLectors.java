@@ -36,7 +36,7 @@ public class RepositoryLectors implements IRepositoryLectors {
 	@Override
 	public Lector getLector(long pId) {
 		int position = ArrayWorker.getPositionById(pId, mLectors);
-		if (position > 0) {
+		if (position >= 0) {
 			return mLectors[position];
 		}
 		return null;

@@ -39,7 +39,7 @@ public class RepositoryStudents implements IRepositoryStudents {
 	@Override
 	public Student getStudent(long pId) {
 		int position = ArrayWorker.getPositionById(pId, mStudents);
-		if (position > 0) {
+		if (position >= 0) {
 			return mStudents[position];
 		}
 		return null;

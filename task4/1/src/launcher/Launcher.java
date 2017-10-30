@@ -91,6 +91,9 @@ public class Launcher {
 			serviceTime = new ServiceTimeTable(timeTable);
 			serviceCource = new ServiceCourses(repoCourses);
 			
+			serviceLect.setServiceCourses(serviceCource);
+			serviceStud.setServiceCourses(serviceCource);
+			
 			serviceCource.setServiceLectors(serviceLect);
 			serviceCource.setServiceStudents(serviceStud);
 			serviceCource.setServiceTimeTable(serviceTime);

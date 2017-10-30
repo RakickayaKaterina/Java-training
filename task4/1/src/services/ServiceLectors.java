@@ -67,7 +67,7 @@ public class ServiceLectors implements IServiceLectors {
 	public void addCourseToLector(long pIdCourse, long pIdLector) {
 		Lector[] lectors = mRepositoryLectors.getListLectors();
 		for (int i = 0; i < ArrayWorker.getLenghtArray(lectors); i++) {
-			if (lectors[i].getId() == pIdLector) {
+			if (lectors[i]!=null && lectors[i].getId() == pIdLector) {
 				ArrayWorker.addToArray(mServiceCourses.getCourse(pIdCourse), lectors[i].getCourses());
 				break;
 			}

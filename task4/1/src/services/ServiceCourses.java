@@ -143,10 +143,9 @@ public class ServiceCourses implements IServiceCourses {
 	public void addLectorToCourse(long pIdLector, long pId) {
 		Course[] courses = mRepositoryCourses.getListCourse();
 		for (int i = 0; i < ArrayWorker.getLenghtArray(courses); i++) {
-			if (courses[i].getId() == pId && courses[i].getLector() == null) {
+			if (courses[i]!=null && courses[i].getId() == pId) {
 				courses[i].setLector(mServiceLectors.getLector(pIdLector));
-			} else if (courses[i].getLector() != null)
-				Printer.show("Lector has existed already");
+			}
 		}
 		mServiceLectors.addCourseToLector(pId, pIdLector);
 

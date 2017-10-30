@@ -66,9 +66,20 @@ public class CoursePlanningFacade {
 	// 3
 	public void showDetailedDescription(long pIdCourse) {
 		Course course = mServiceCourses.getCourse(pIdCourse);
-		String detailedDescription = String.format("Detailed description: [description=%s, lector=%s, students=%s]",
-				course.getDescription(), course.getLector(), Arrays.toString(course.getStudents()));
-		Printer.show(detailedDescription);
+		if(course==null) return;
+		
+		String detailedDescription = String.format("Detailed description:\ndescription=%s\nlector=%s\n",
+				course.getDescription(), course.getLector().getName());
+		
+		StringBuilder builder = new StringBuilder(detailedDescription);
+		builder.append("Students:\n");
+		for(Student student : course.getStudents()){
+			if(student!=null){
+				builder.append(student.getNameStudent()+"\n");
+			}
+		}
+		
+		Printer.show(builder.toString());
 	}
 
 	// 4
@@ -141,9 +152,8 @@ public class CoursePlanningFacade {
 	}
 
 	// 10
-	public void createCourse(long id, String nameCourse, String description, Date startDate, Date endDate,
-			int countLectures) {
-		mServiceCourses.addCourse(new Course(id, nameCourse, description, startDate, endDate, countLectures));
+	public void addCourse(Course course) {
+		mServiceCourses.addCourse(course);
 	}
 
 	// 11
@@ -152,8 +162,8 @@ public class CoursePlanningFacade {
 	}
 
 	// 14
-	public void addStudent(long id, String nameStudent) {
-		mServiceStudent.addStudent(new Student(id, nameStudent));
+	public void addStudent(Student student) {
+		mServiceStudent.addStudent(student);
 	}
 
 	public void addStudentToCourse(long idStudent, long idCourse) {
@@ -165,8 +175,8 @@ public class CoursePlanningFacade {
 	}
 
 	// 15
-	public void addLector(long id, String nameLector) {
-		mServiceLectors.addLector(new Lector(id, nameLector));
+	public void addLector(Lector lector) {
+		mServiceLectors.addLector(lector);
 	}
 
 	public void addLectorToCourse(long idLector, long idCourse) {
@@ -178,8 +188,8 @@ public class CoursePlanningFacade {
 	}
 
 	// 13
-	public void addLectureToCourse(long idLecture, String nameLecture, long pIdCourse) {
-		mServiceCourses.addLectureToCourse(new Lecture(idLecture, nameLecture), pIdCourse);
+	public void addLectureToCourse(Lecture lecture, long pIdCourse) {
+		mServiceCourses.addLectureToCourse(lecture, pIdCourse);
 	}
 
 	public void removeLecture(long idLecture) {

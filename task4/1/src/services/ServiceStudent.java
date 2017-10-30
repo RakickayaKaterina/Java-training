@@ -8,6 +8,10 @@ public class ServiceStudent implements IServiceStudent {
 	private IRepositoryStudents mRepositoryStudents;
 	private IServiceCourses mServiceCourses;
 
+	public void setServiceCourses(IServiceCourses mServiceCourses) {
+		this.mServiceCourses = mServiceCourses;
+	}
+
 	public ServiceStudent(IRepositoryStudents mRepositoryStudents) {
 		super();
 		this.mRepositoryStudents = mRepositoryStudents;
