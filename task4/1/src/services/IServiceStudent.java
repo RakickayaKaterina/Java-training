@@ -12,6 +12,10 @@ public interface IServiceStudent {
 	public Student getStudent(long pId);
 
 	public Student[] getListStudent();
-	
+
 	public void saveState();
+
+	public void addCourseToStudent(long pIdCourse, long pIdStudents);
+
+	public void removeCourseFromStudent(long pIdCourse);
 }

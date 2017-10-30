@@ -15,7 +15,7 @@ public class Course extends Entity {
 	private Student[] students;
 	private Lecture[] lectures;
 
-	public Course(long id, String name, String description, Date startDate, Date endDate, Lector lector,
+	public Course(long id, String name, String description, Date startDate, Date endDate,
 			int countLectures) {
 		super();
 		this.id = id;
@@ -23,7 +23,6 @@ public class Course extends Entity {
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.lector = lector;
 		lectures = new Lecture[countLectures];
 		students = new Student[30];
 	}
@@ -37,7 +36,6 @@ public class Course extends Entity {
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;

@@ -1,6 +1,5 @@
 package facade;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -13,12 +12,13 @@ import comparators.lector.CountCoursesComparator;
 import comparators.lesson.AlphabetLessonComparator;
 import comparators.lesson.DateLessonComparator;
 import models.Course;
-import repositories.ITimeTable;
+import models.Lector;
+import models.Lecture;
+import models.Student;
 import services.IServiceCourses;
 import services.IServiceLectors;
 import services.IServiceStudent;
 import services.IServiceTimeTable;
-import services.ServiceLectors;
 import utils.ArrayWorker;
 import utils.Printer;
 
@@ -37,6 +37,7 @@ public class CoursePlanningFacade {
 		this.mServiceStudent = mServiceStudent;
 	}
 
+	// 2
 	public void showSortedLectorsByAlphabet() {
 		Printer.show(mServiceLectors.sort(new AlphabetLectorComparator()));
 	}
@@ -45,6 +46,7 @@ public class CoursePlanningFacade {
 		Printer.show(mServiceLectors.sort(new CountCoursesComparator()));
 	}
 
+	// 1
 	public void showSortedCoursesByStartDate() {
 		Printer.show(mServiceCourses.sort(new DateCourseComparator()));
 	}
@@ -61,6 +63,7 @@ public class CoursePlanningFacade {
 		Printer.show(mServiceCourses.sort(new AlphabetCourseComparator()));
 	}
 
+	// 3
 	public void showDetailedDescription(long pIdCourse) {
 		Course course = mServiceCourses.getCourse(pIdCourse);
 		String detailedDescription = String.format("Detailed description: [description=%s, lector=%s, students=%s]",
@@ -68,6 +71,7 @@ public class CoursePlanningFacade {
 		Printer.show(detailedDescription);
 	}
 
+	// 4
 	public void showSortedTimeTableByDate() {
 		Printer.show(mServiceTimeTable.sort(new DateLessonComparator()));
 	}
@@ -76,6 +80,7 @@ public class CoursePlanningFacade {
 		Printer.show(mServiceTimeTable.sort(new AlphabetLessonComparator()));
 	}
 
+	// 5
 	public void showSortedCoursesByStartDate(Date afterDate) {
 		Printer.show(mServiceCourses.getSortedListCoursesAfterDate(afterDate, new DateCourseComparator()));
 	}
@@ -92,6 +97,7 @@ public class CoursePlanningFacade {
 		Printer.show(mServiceCourses.getSortedListCoursesAfterDate(afterDate, new AlphabetCourseComparator()));
 	}
 
+	// 6
 	public void showSortedCurrentCoursesByStartDate(Date currentDate) {
 		Printer.show(mServiceCourses.getSortedListCurrentCourses(currentDate, new DateCourseComparator()));
 	}
@@ -108,6 +114,7 @@ public class CoursePlanningFacade {
 		Printer.show(mServiceCourses.getSortedListCurrentCourses(currentDate, new AlphabetCourseComparator()));
 	}
 
+	// 7
 	public void showTotalCountCourse() {
 		int count = ArrayWorker.getLenghtArray(mServiceCourses.getListCourses());
 		Printer.show("Total count courses: " + count);
@@ -123,11 +130,69 @@ public class CoursePlanningFacade {
 		Printer.show("Total count lectors: " + count);
 	}
 
+	// 8
 	public void showListLessonByDate(Date pDate) {
 		Printer.show(mServiceTimeTable.getListLesson(pDate));
 	}
 
-	public void createCourse() {
-
+	// 9
+	public void showPastCourses(Date startDate, Date endDate) {
+		Printer.show(mServiceCourses.getPastCourses(startDate, endDate));
 	}
+
+	// 10
+	public void createCourse(long id, String nameCourse, String description, Date startDate, Date endDate,
+			int countLectures) {
+		mServiceCourses.addCourse(new Course(id, nameCourse, description, startDate, endDate, countLectures));
+	}
+
+	// 11
+	public void removeCourse(long idCourse) {
+		mServiceCourses.removeCourse(idCourse);
+	}
+
+	// 14
+	public void addStudent(long id, String nameStudent) {
+		mServiceStudent.addStudent(new Student(id, nameStudent));
+	}
+
+	public void addStudentToCourse(long idStudent, long idCourse) {
+		mServiceCourses.addStudentToCourse(idStudent, idCourse);
+	}
+
+	public void removeStudent(long idStudent) {
+		mServiceStudent.removeStudent(idStudent);
+	}
+
+	// 15
+	public void addLector(long id, String nameLector) {
+		mServiceLectors.addLector(new Lector(id, nameLector));
+	}
+
+	public void addLectorToCourse(long idLector, long idCourse) {
+		mServiceCourses.addLectorToCourse(idLector, idCourse);
+	}
+
+	public void removeLector(long idLector) {
+		mServiceLectors.removeLector(idLector);
+	}
+
+	// 13
+	public void addLectureToCourse(long idLecture, String nameLecture, long pIdCourse) {
+		mServiceCourses.addLectureToCourse(new Lecture(idLecture, nameLecture), pIdCourse);
+	}
+
+	public void removeLecture(long idLecture) {
+		mServiceCourses.removeLectureFromCourse(idLecture);
+	}
+
+	// 16
+	public void createTimeTableForLecture(long idLecture, Date dateForLecture) {
+		mServiceTimeTable.createLesson(idLecture, dateForLecture);
+	}
+
+	public void removeTimeTableForLecture(long idLecture) {
+		mServiceTimeTable.removeLessonByLectureId(idLecture);
+	}
+
 }

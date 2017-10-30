@@ -9,9 +9,9 @@ public class Lesson extends Entity {
 	private Lecture mLecture;
 	private Date mDate;
 
-	public Lesson(Lecture pLecture, Date pDate) {
+	public Lesson(Lecture mLecture, Date pDate) {
 		super();
-		this.mLecture = pLecture;
+		this.mLecture = mLecture;
 		this.mDate = pDate;
 	}
 	@Override
@@ -23,10 +23,13 @@ public class Lesson extends Entity {
 		this.id = id;
 	}
 
+	
 	public Lecture getLecture() {
 		return mLecture;
 	}
-
+	public void setLecture(Lecture mLecture) {
+		this.mLecture = mLecture;
+	}
 	public Date getDate() {
 		return mDate;
 	}

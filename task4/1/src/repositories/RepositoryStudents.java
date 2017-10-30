@@ -5,21 +5,20 @@ import utils.ArrayWorker;
 
 public class RepositoryStudents implements IRepositoryStudents {
 	private Student[] mStudents;
-	
+
 	public RepositoryStudents(int countStudents) {
 		super();
 		mStudents = new Student[countStudents];
 	}
 
-	@Override 
+	@Override
 	public void addStudent(Student pStudent) {
 		ArrayWorker.addToArray(pStudent, mStudents);
 	}
 
-
 	@Override
 	public Student removeStudent(long pId) {
-		return (Student)ArrayWorker.removeFromArray(pId, mStudents);
+		return (Student) ArrayWorker.removeFromArray(pId, mStudents);
 	}
 
 	@Override
@@ -45,7 +44,7 @@ public class RepositoryStudents implements IRepositoryStudents {
 	@Override
 	public void saveState() {
 		// TODO saveMethod
-		
+
 	}
 
 }

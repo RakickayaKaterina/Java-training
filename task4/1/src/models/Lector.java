@@ -7,11 +7,11 @@ public class Lector extends Entity {
 	private String nameLector;
 	private Course[] courses;
 
-	public Lector(long id, String nameLector, int countCourse) {
+	public Lector(long id, String nameLector) {
 		super();
 		this.id = id;
 		this.nameLector = nameLector;
-		courses = new Course[countCourse];
+		courses = new Course[1];
 	}
 
 	@Override

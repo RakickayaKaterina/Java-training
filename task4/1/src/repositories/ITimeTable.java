@@ -1,6 +1,5 @@
 package repositories;
 
-
 import models.Lesson;
 
 public interface ITimeTable {
@@ -13,8 +12,6 @@ public interface ITimeTable {
 	public Lesson getLesson(long pId);
 
 	public Lesson[] getListLesson();
-
-
 
 	public void saveState();
 }

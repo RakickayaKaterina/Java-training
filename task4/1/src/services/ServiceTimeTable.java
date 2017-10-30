@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 
+import models.Lecture;
 import models.Lesson;
 import repositories.ITimeTable;
 import utils.ArrayWorker;
@@ -11,10 +12,12 @@ import utils.DateWorker;
 
 public class ServiceTimeTable implements IServiceTimeTable {
 	private ITimeTable mTimeTable;
+	private IServiceCourses mServiceCourses;
 
-	public ServiceTimeTable(ITimeTable mTimeTable) {
+	public ServiceTimeTable(ITimeTable mTimeTable, IServiceCourses mServiceCourses) {
 		super();
 		this.mTimeTable = mTimeTable;
+		this.mServiceCourses = mServiceCourses;
 	}
 
 	@Override
@@ -25,7 +28,7 @@ public class ServiceTimeTable implements IServiceTimeTable {
 
 	@Override
 	public void removeLesson(long pId) {
-		// TODO remove
+		mTimeTable.removeLesson(pId);
 
 	}
 
@@ -59,10 +62,27 @@ public class ServiceTimeTable implements IServiceTimeTable {
 		Lesson[] resultList = new Lesson[7];
 		Lesson[] allLessons = mTimeTable.getListLesson();
 		for (int i = 0; i < ArrayWorker.getLenghtArray(allLessons); i++) {
-			if(DateWorker.isEqualsDate(pDate, allLessons[i].getDate()))
+			if (DateWorker.isEqualsDate(pDate, allLessons[i].getDate()))
 				ArrayWorker.addToArray(allLessons[i], resultList);
 		}
 		return resultList;
+	}
+
+	@Override
+	public void removeLessonByLectureId(long idLecture) {
+		Lesson[] lessons = mTimeTable.getListLesson();
+		for (int i = 0; i < ArrayWorker.getLenghtArray(lessons); i++) {
+			if (lessons[i].getLecture().getId() == idLecture)
+				ArrayWorker.removeFromArray(lessons[i].getId(), lessons);
+		}
+
+	}
+
+	@Override
+	public void createLesson(long idLecture, Date dateForLecture) {
+		Lecture lecture = mServiceCourses.getLectureCourse(idLecture);
+		if (lecture != null)
+			mTimeTable.addLesson(new Lesson(lecture, dateForLecture));
 	}
 
 }

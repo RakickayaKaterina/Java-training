@@ -2,10 +2,12 @@ package services;
 
 import models.Student;
 import repositories.IRepositoryStudents;
+import utils.ArrayWorker;
 
 public class ServiceStudent implements IServiceStudent {
 	private IRepositoryStudents mRepositoryStudents;
-	
+	private IServiceCourses mServiceCourses;
+
 	public ServiceStudent(IRepositoryStudents mRepositoryStudents) {
 		super();
 		this.mRepositoryStudents = mRepositoryStudents;
@@ -19,7 +21,8 @@ public class ServiceStudent implements IServiceStudent {
 
 	@Override
 	public void removeStudent(long pId) {
-		// TODO remove
+		mRepositoryStudents.removeStudent(pId);
+		mServiceCourses.removeStudentFromCourse(pId);
 
 	}
 
@@ -42,6 +45,27 @@ public class ServiceStudent implements IServiceStudent {
 	@Override
 	public void saveState() {
 		// TODO save
+
+	}
+
+	@Override
+	public void addCourseToStudent(long pIdCourse, long pIdStudent) {
+		Student[] students = mRepositoryStudents.getListStudent();
+		for (int i = 0; i < ArrayWorker.getLenghtArray(students); i++) {
+			if (students[i].getId() == pIdStudent) {
+				ArrayWorker.addToArray(mServiceCourses.getCourse(pIdCourse), students[i].getCourses());
+				break;
+			}
+		}
+
+	}
+
+	@Override
+	public void removeCourseFromStudent(long pIdCourse) {
+		Student[] students = mRepositoryStudents.getListStudent();
+		for (int i = 0; i < ArrayWorker.getLenghtArray(students); i++) {
+			ArrayWorker.removeFromArray(pIdCourse, students[i].getCourses());
+		}
 
 	}
 

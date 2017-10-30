@@ -12,9 +12,15 @@ public interface IServiceLectors {
 	public void updateLector(Lector pLector);
 
 	public Lector getLector(long id);
+
 	public Lector[] getListLectors();
 
 	public Lector[] sort(Comparator<Lector> pComparator);
 
 	public void saveState();
+
+	public void addCourseToLector(long pIdCourse, long pIdLector);
+
+	public void removeCourseFromLector(long pIdCourse);
+
 }
