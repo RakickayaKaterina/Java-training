@@ -17,6 +17,11 @@ public class RepositoryLectors implements IRepositoryLectors {
 
 	}
 
+	public RepositoryLectors(Lector[] mLectors) {
+		super();
+		this.mLectors = mLectors;
+	}
+
 	@Override
 	public Lector removeLector(long pId) {
 		return (Lector) ArrayWorker.removeFromArray(pId, mLectors);

@@ -10,6 +10,15 @@ public class RepositoryStudents implements IRepositoryStudents {
 		super();
 		mStudents = new Student[countStudents];
 	}
+	
+	
+
+	public RepositoryStudents(Student[] mStudents) {
+		super();
+		this.mStudents = mStudents;
+	}
+
+
 
 	@Override
 	public void addStudent(Student pStudent) {

@@ -23,8 +23,9 @@ public class ServiceLectors implements IServiceLectors {
 	@Override
 	public Lector[] sort(Comparator<Lector> comparator) {
 		Lector[] listLectors = mRepositoryLectors.getListLectors();
-		Arrays.sort(listLectors, comparator);
-		return listLectors;
+		Lector[] pListLector = Arrays.copyOf(listLectors, ArrayWorker.getLenghtArray(listLectors));
+		Arrays.sort(pListLector, comparator);
+		return pListLector;
 	}
 
 	@Override

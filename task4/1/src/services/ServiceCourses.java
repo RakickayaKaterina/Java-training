@@ -18,14 +18,31 @@ public class ServiceCourses implements IServiceCourses {
 	private IServiceLectors mServiceLectors;
 	private IServiceTimeTable mServiceTimeTable;
 
-	public ServiceCourses(IRepositoryCourses mRepositoryCourses, IServiceStudent mServiceStudents,
-			IServiceLectors mServiceLectors, IServiceTimeTable mServiceTimeTable) {
+	
+	public ServiceCourses(IRepositoryCourses mRepositoryCourses) {
 		super();
 		this.mRepositoryCourses = mRepositoryCourses;
+	}
+	
+	
+
+	public void setServiceStudents(IServiceStudent mServiceStudents) {
 		this.mServiceStudents = mServiceStudents;
+	}
+
+
+
+	public void setServiceLectors(IServiceLectors mServiceLectors) {
 		this.mServiceLectors = mServiceLectors;
+	}
+
+
+
+	public void setServiceTimeTable(IServiceTimeTable mServiceTimeTable) {
 		this.mServiceTimeTable = mServiceTimeTable;
 	}
+
+
 
 	@Override
 	public void addCourse(Course pCourse) {
@@ -72,8 +89,9 @@ public class ServiceCourses implements IServiceCourses {
 	@Override
 	public Course[] sort(Comparator<Course> mComparator) {
 		Course[] listCourses = mRepositoryCourses.getListCourse();
-		Arrays.sort(listCourses, mComparator);
-		return listCourses;
+		Course[] pListCourses = Arrays.copyOf(listCourses, ArrayWorker.getLenghtArray(listCourses));
+		Arrays.sort(pListCourses, mComparator);
+		return pListCourses;
 	}
 
 	@Override

@@ -10,6 +10,15 @@ public class RepositoryCourses implements IRepositoryCourses {
 		super();
 		mCourses = new Course[countCourses];
 	}
+	
+	
+
+	public RepositoryCourses(Course[] mCourses) {
+		super();
+		this.mCourses = mCourses;
+	}
+
+
 
 	@Override
 	public void addCourse(Course pCourse) {

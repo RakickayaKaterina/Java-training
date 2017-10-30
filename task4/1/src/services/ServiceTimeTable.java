@@ -14,11 +14,18 @@ public class ServiceTimeTable implements IServiceTimeTable {
 	private ITimeTable mTimeTable;
 	private IServiceCourses mServiceCourses;
 
-	public ServiceTimeTable(ITimeTable mTimeTable, IServiceCourses mServiceCourses) {
+	public ServiceTimeTable(ITimeTable mTimeTable) {
 		super();
 		this.mTimeTable = mTimeTable;
+	}
+	
+	
+
+	public void setServiceCourses(IServiceCourses mServiceCourses) {
 		this.mServiceCourses = mServiceCourses;
 	}
+
+
 
 	@Override
 	public void addLesson(Lesson pLesson) {
@@ -46,8 +53,9 @@ public class ServiceTimeTable implements IServiceTimeTable {
 	@Override
 	public Lesson[] sort(Comparator<Lesson> pComparator) {
 		Lesson[] listLesson = mTimeTable.getListLesson();
-		Arrays.sort(listLesson, pComparator);
-		return listLesson;
+		Lesson[] pListLesson = Arrays.copyOf(listLesson, ArrayWorker.getLenghtArray(listLesson));
+		Arrays.sort(pListLesson, pComparator);
+		return pListLesson;
 
 	}
 

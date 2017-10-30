@@ -10,6 +10,14 @@ public class TimeTable implements ITimeTable {
 		super();
 		mLessons = new Lesson[countLessons];
 	}
+	
+
+	public TimeTable(Lesson[] mLessons) {
+		super();
+		this.mLessons = mLessons;
+	}
+
+
 
 	@Override
 	public void addLesson(Lesson pLesson) {
