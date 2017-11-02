@@ -16,9 +16,9 @@ import com.github.rakickayakaterina.courseplanner.utils.GeneratorId;
 public class Runner {
 	public static void main(String[] args) throws ParseException {
 
-		FillerRepositories filler = new FillerRepositories(PathsToFiles.STUDENTS_FILE, PathsToFiles.LECTORS_FILE,
-				PathsToFiles.COURSES_FILE, PathsToFiles.RELATIONS_FILE, PathsToFiles.TIME_TABLE_FILE);
-
+		FillerRepositories filler = new FillerRepositories(args[4], args[2],
+				args[0], args[3], args[5]);
+		GeneratorId.restore(args[1]);
 		filler.fillAll();
 
 		Launcher launcher = new Launcher(filler);
@@ -88,7 +88,8 @@ public class Runner {
 		facade.showSortedTimeTableByAlphabet();
 
 		facade.showSortedLectorsByCountCourses();
+		
 		launcher.save();
-
+		GeneratorId.saveState(args[1]);;
 	}
 }

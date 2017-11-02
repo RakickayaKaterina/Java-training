@@ -46,7 +46,6 @@ public class Launcher {
 
 	public Launcher(FillerRepositories parser) {
 		this.fillerRepositories = parser;
-		GeneratorId.restore("D:\\java\\wspace64\\CoursePlanner\\res\\id.txt");
 		loading();
 
 	}
@@ -145,7 +144,6 @@ public class Launcher {
 		fillerRepositories.writeCourseToFile(repoCourses.getListCourse());
 		fillerRepositories.writeRelationToFile(repoRelations.getListRelations());
 		fillerRepositories.writeLessonToFile(timeTable.getListLesson());
-		GeneratorId.saveState("D:\\java\\wspace64\\CoursePlanner\\res\\id.txt");
 	}
 
 }
