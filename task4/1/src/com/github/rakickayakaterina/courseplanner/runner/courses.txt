@@ -1,0 +1,4 @@
+2@@Machine Learning@@This course is very difficult@@01:09:2017@@25:12:2017@@2@@$$
+12@@Machine Learning@@This course is very difficult@@01:09:2017@@25:12:2017@@12@@$$
+1@@Discrete Math@@This course is very interesting@@01:09:2017@@25:12:2017@@1@@1;;Combinatoric$$2;;Boolean algebra$$$$
+11@@Discrete Math@@This course is very interesting@@01:09:2017@@25:12:2017@@11@@11;;Combinatoric$$12;;Boolean algebra$$$$
