@@ -152,26 +152,7 @@ public class ServiceCourses implements IServiceCourses {
 	}
 
 	@Override
-	public String getDetailDescription(long pIdCourse) {
-		Course course = mRepositoryCourses.getCourse(pIdCourse);
-		if (course == null)
-			return "This course not exist";
-		String detailedDescription = String.format("Detailed description:\ndescription=%s\nlector=%s\n",
-				course.getDescription(), course.getLector().getName());
-
-		StringBuilder builder = new StringBuilder(detailedDescription);
-		builder.append("Students:\n");
-		for (Student student : course.getStudents()) {
-			if (student != null) {
-				builder.append(student.getNameStudent() + "\n");
-			}
-		}
-		return builder.toString();
-
-	}
-
-	@Override
-	public Course[] getSortedListCoursesAfterDate(Date pDate, Comparator<Course> pComparator) {
+	public Course[] getListCoursesAfterDate(Date pDate, Comparator<Course> pComparator) {
 		Course[] resultList = new Course[10];
 		Course[] courses = mRepositoryCourses.getListCourse();
 		for (int i = 0; i < ArrayWorker.getLenghtArray(courses); i++) {
@@ -184,7 +165,7 @@ public class ServiceCourses implements IServiceCourses {
 	}
 
 	@Override
-	public Course[] getSortedListCurrentCourses(Date pCurrentDate, Comparator<Course> pComparator) {
+	public Course[] getListCurrentCourses(Date pCurrentDate, Comparator<Course> pComparator) {
 		Course[] resultList = new Course[10];
 		Course[] courses = mRepositoryCourses.getListCourse();
 		for (int i = 0; i < ArrayWorker.getLenghtArray(courses); i++) {

@@ -23,7 +23,6 @@ import com.github.rakickayakaterina.courseplanner.services.ServiceCourses;
 import com.github.rakickayakaterina.courseplanner.services.ServiceLectors;
 import com.github.rakickayakaterina.courseplanner.services.ServiceStudents;
 import com.github.rakickayakaterina.courseplanner.services.ServiceTimeTable;
-import com.github.rakickayakaterina.courseplanner.utils.GeneratorId;
 import com.github.rakickayakaterina.courseplanner.utils.FillerRepositories;
 
 public class Launcher {

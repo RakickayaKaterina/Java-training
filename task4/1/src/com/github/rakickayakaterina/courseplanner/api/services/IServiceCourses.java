@@ -31,11 +31,9 @@ public interface IServiceCourses {
 
 	public Course[] getSortedList(Comparator<Course> pComparator);
 
-	public String getDetailDescription(long pIdCourse);
+	public Course[] getListCoursesAfterDate(Date pDate, Comparator<Course> pComparator);
 
-	public Course[] getSortedListCoursesAfterDate(Date pDate, Comparator<Course> pComparator);
-
-	public Course[] getSortedListCurrentCourses(Date pCurrentDate, Comparator<Course> pComparator);
+	public Course[] getListCurrentCourses(Date pCurrentDate, Comparator<Course> pComparator);
 
 	public int getTotalCountCourses();
 

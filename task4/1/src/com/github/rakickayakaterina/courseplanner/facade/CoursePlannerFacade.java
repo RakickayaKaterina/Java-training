@@ -55,7 +55,20 @@ public class CoursePlannerFacade {
 
 	// 3
 	public void showDetailedDescription(long pIdCourse) {
-		Printer.show(mServiceCourses.getDetailDescription(pIdCourse));
+		Course course = mServiceCourses.getCourse(pIdCourse);
+		if (course == null)
+			Printer.show("This course not exist");
+		String detailedDescription = String.format("Detailed description:\ndescription=%s\nlector=%s\n",
+				course.getDescription(), course.getLector().getName());
+
+		StringBuilder builder = new StringBuilder(detailedDescription);
+		builder.append("Students:\n");
+		for (Student student : course.getStudents()) {
+			if (student != null) {
+				builder.append(student.getNameStudent() + "\n");
+			}
+		}
+		Printer.show(builder.toString());
 	}
 
 	// 4
@@ -70,36 +83,36 @@ public class CoursePlannerFacade {
 
 	// 5
 	public void showSortedCoursesByStartDate(Date afterDate) {
-		Printer.show(mServiceCourses.getSortedListCoursesAfterDate(afterDate, new DateCourseComparator()));
+		Printer.show(mServiceCourses.getListCoursesAfterDate(afterDate, new DateCourseComparator()));
 	}
 
 	public void showSortedCoursesByCountStudents(Date afterDate) {
-		Printer.show(mServiceCourses.getSortedListCoursesAfterDate(afterDate, new CountStudentsComparator()));
+		Printer.show(mServiceCourses.getListCoursesAfterDate(afterDate, new CountStudentsComparator()));
 	}
 
 	public void showSortedCoursesByLectorName(Date afterDate) {
-		Printer.show(mServiceCourses.getSortedListCoursesAfterDate(afterDate, new LectorNameComparator()));
+		Printer.show(mServiceCourses.getListCoursesAfterDate(afterDate, new LectorNameComparator()));
 	}
 
 	public void showSortedCoursesByAlphabet(Date afterDate) {
-		Printer.show(mServiceCourses.getSortedListCoursesAfterDate(afterDate, new AlphabetCourseComparator()));
+		Printer.show(mServiceCourses.getListCoursesAfterDate(afterDate, new AlphabetCourseComparator()));
 	}
 
 	// 6
 	public void showSortedCurrentCoursesByStartDate(Date currentDate) {
-		Printer.show(mServiceCourses.getSortedListCurrentCourses(currentDate, new DateCourseComparator()));
+		Printer.show(mServiceCourses.getListCurrentCourses(currentDate, new DateCourseComparator()));
 	}
 
 	public void showSortedCurrentCoursesByCountStudents(Date currentDate) {
-		Printer.show(mServiceCourses.getSortedListCurrentCourses(currentDate, new CountStudentsComparator()));
+		Printer.show(mServiceCourses.getListCurrentCourses(currentDate, new CountStudentsComparator()));
 	}
 
 	public void showSortedCurrentCoursesByLectorName(Date currentDate) {
-		Printer.show(mServiceCourses.getSortedListCurrentCourses(currentDate, new LectorNameComparator()));
+		Printer.show(mServiceCourses.getListCurrentCourses(currentDate, new LectorNameComparator()));
 	}
 
 	public void showSortedCurrentCoursesByAlphabet(Date currentDate) {
-		Printer.show(mServiceCourses.getSortedListCurrentCourses(currentDate, new AlphabetCourseComparator()));
+		Printer.show(mServiceCourses.getListCurrentCourses(currentDate, new AlphabetCourseComparator()));
 	}
 
 	// 7
