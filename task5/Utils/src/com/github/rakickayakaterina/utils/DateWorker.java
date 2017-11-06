@@ -1,0 +1,34 @@
+package com.github.rakickayakaterina.utils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateWorker {
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy");
+
+	public static boolean isAfterDate(Date pDate, Date comparableDate) {
+		return comparableDate.after(pDate);
+	}
+
+	public static boolean isBetweenDate(Date pDate, Date startComparableDate, Date endComparableDate) {
+		return startComparableDate.before(pDate) && endComparableDate.after(pDate);
+	}
+
+	public static boolean isEqualsDate(Date firstDate, Date secondDate) {
+		return firstDate.equals(secondDate);
+	}
+
+	public static boolean isSubInterval(Date startDateMain, Date endSateMain, Date startDateSub, Date endDateSub) {
+		// TODO rewrite this method
+		return (startDateMain.equals(startDateSub) || startDateMain.before(startDateSub))
+				&& (endSateMain.equals(endDateSub) || endSateMain.after(endDateSub));
+	}
+
+	public static Date createDate(String pStringDate) throws ParseException {
+		return dateFormat.parse(pStringDate);
+	}
+	public static String getStringFromDate(Date pDate){
+		return dateFormat.format(pDate);
+	}
+}
