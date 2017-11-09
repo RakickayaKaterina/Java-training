@@ -9,6 +9,7 @@ import com.senla.rakickaya.controller.api.services.IStudentsService;
 import com.senla.rakickaya.model.beans.Course;
 import com.senla.rakickaya.model.beans.RelationSC;
 import com.senla.rakickaya.model.beans.Student;
+import com.senla.rakickaya.model.exception.EntityNotFoundException;
 import com.senla.rakickaya.utils.ListWorker;
 
 public class StudentsService implements IStudentsService {
@@ -31,8 +32,11 @@ public class StudentsService implements IStudentsService {
 	}
 
 	@Override
-	public void removeStudent(long id) {
-		mRepositoryStudents.removeStudent(id);
+	public void removeStudent(long id) throws EntityNotFoundException {
+		Student removedStudent = mRepositoryStudents.removeStudent(id);
+		if(removedStudent == null){
+			throw new EntityNotFoundException();
+		}
 		List<Course> courses = mRepositoryCourses.getListCourses();
 		for (int i = 0; i < courses.size(); i++) {
 			ListWorker.removeItemById(courses.get(i).getStudents(), id);

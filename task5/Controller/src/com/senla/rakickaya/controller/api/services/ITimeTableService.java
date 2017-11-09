@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.senla.rakickaya.model.beans.Lesson;
+import com.senla.rakickaya.model.exception.EntityNotFoundException;
 
 
 public interface ITimeTableService {
@@ -22,5 +23,5 @@ public interface ITimeTableService {
 
 	public List<Lesson> getListLessons(Date pDate);
 
-	public void removeLessonByLecture(long pIdLecture);
+	public void removeLessonByLecture(long pIdLecture) throws EntityNotFoundException;
 }

@@ -11,6 +11,7 @@ import com.senla.rakickaya.controller.api.services.ITimeTableService;
 import com.senla.rakickaya.model.beans.Course;
 import com.senla.rakickaya.model.beans.Lecture;
 import com.senla.rakickaya.model.beans.Lesson;
+import com.senla.rakickaya.model.exception.EntityNotFoundException;
 import com.senla.rakickaya.utils.DateWorker;
 import com.senla.rakickaya.utils.ListWorker;
 import com.senla.rakickaya.utils.launcher.Launcher;
@@ -69,12 +70,18 @@ public class TimeTableService implements ITimeTableService {
 	}
 
 	@Override
-	public void removeLessonByLecture(long idLecture) {
+	public void removeLessonByLecture(long idLecture) throws EntityNotFoundException {
 		List<Lesson> lessons = mTimeTable.getListLessons();
+		boolean exist = false;
 		for (int i = 0; i < lessons.size(); i++) {
 			Lecture lecture = lessons.get(i).getLecture();
-			if (lecture.getId() == idLecture)
+			if (lecture.getId() == idLecture) {
 				ListWorker.removeItemById(lessons, lessons.get(i).getId());
+				exist = true;
+			}
+		}
+		if(!exist){
+			throw new EntityNotFoundException();
 		}
 	}
 

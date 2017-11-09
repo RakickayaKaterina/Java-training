@@ -10,6 +10,7 @@ import com.senla.rakickaya.controller.api.repositories.ILectorsRepository;
 import com.senla.rakickaya.controller.api.services.ILectorsService;
 import com.senla.rakickaya.model.beans.Course;
 import com.senla.rakickaya.model.beans.Lector;
+import com.senla.rakickaya.model.exception.EntityNotFoundException;
 
 public class LectorsService implements ILectorsService {
 	private final ILectorsRepository mRepositoryLectors;
@@ -27,8 +28,11 @@ public class LectorsService implements ILectorsService {
 	}
 
 	@Override
-	public void removeLector(long pId) {
-		mRepositoryLectors.removeLector(pId);
+	public void removeLector(long pId) throws EntityNotFoundException {
+		Lector lector = mRepositoryLectors.removeLector(pId);
+		if(lector == null){
+			throw new EntityNotFoundException();
+		}
 		for (Course course : mRepositoryCourses.getListCourses()) {
 			if (course != null && course.getLector() != null && course.getLector().getId() == pId) {
 				course.setLector(null);

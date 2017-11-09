@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.senla.rakickaya.model.beans.Lector;
+import com.senla.rakickaya.model.exception.EntityNotFoundException;
 
 
 public interface ILectorsService {
 	public void addLector(Lector pLector);
 
-	public void removeLector(long pId);
+	public void removeLector(long pId) throws EntityNotFoundException;
 
 	public void updateLector(Lector pLector);
 

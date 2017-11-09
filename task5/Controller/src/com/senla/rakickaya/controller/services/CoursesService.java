@@ -15,6 +15,7 @@ import com.senla.rakickaya.model.beans.Lector;
 import com.senla.rakickaya.model.beans.Lecture;
 import com.senla.rakickaya.model.beans.RelationSC;
 import com.senla.rakickaya.model.beans.Student;
+import com.senla.rakickaya.model.exception.EntityNotFoundException;
 import com.senla.rakickaya.utils.DateWorker;
 import com.senla.rakickaya.utils.ListWorker;
 import com.senla.rakickaya.utils.launcher.Launcher;
@@ -41,8 +42,10 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public void removeCourse(long pId) {
-		mRepositoryCourses.removeCourse(pId);
+	public void removeCourse(long pId) throws EntityNotFoundException{
+		Course course = mRepositoryCourses.removeCourse(pId);
+		if(course==null)
+			throw new EntityNotFoundException();
 		List<Student> students = mRepositoryStudents.getListStudents();
 		for (int i = 0; i < students.size(); i++) {
 			ListWorker.removeItemById(students.get(i).getCourses(), pId);
@@ -83,10 +86,15 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public void removeStudentFromCourse(long pIdStudent, long pIdCourse) {
+	public void removeStudentFromCourse(long pIdStudent, long pIdCourse) throws EntityNotFoundException {
 		Course course = mRepositoryCourses.getCourse(pIdCourse);
-		ListWorker.removeItemById(course.getStudents(), pIdStudent);
-
+		if(course == null){
+			throw new EntityNotFoundException();
+		}
+		Student student = ListWorker.removeItemById(course.getStudents(), pIdStudent);
+		if(student == null){
+			throw new EntityNotFoundException();
+		}
 		List<RelationSC> relations = mRepositoryRelations.getListRelations();
 		for (int i = 0; i < relations.size(); i++) {
 			if (relations.get(i).getStudent().getId() == pIdStudent) {
@@ -106,9 +114,15 @@ public class CoursesService implements ICoursesService {
 
 	// lector can be nullable
 	@Override
-	public void removeLectorFromCourse(long pIdLector, long pIdCourse) {
+	public void removeLectorFromCourse(long pIdLector, long pIdCourse) throws EntityNotFoundException {
 		Course course = mRepositoryCourses.getCourse(pIdCourse);
+		if(course ==null){
+			throw new EntityNotFoundException();
+		}
 		Lector lector = course.getLector();
+		if(lector == null){
+			throw new EntityNotFoundException();
+		}
 		if (lector != null && lector.getId() == pIdLector) {
 			course.setLector(null);
 
@@ -124,9 +138,16 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public void removeLectureFromCourse(long pIdLecture, long pIdCourse) {
+	public void removeLectureFromCourse(long pIdLecture, long pIdCourse) throws EntityNotFoundException{
 		Course course = mRepositoryCourses.getCourse(pIdCourse);
-		ListWorker.removeItemById(course.getLectures(), pIdLecture);
+		if(course == null){
+			throw new EntityNotFoundException();
+		}
+		Lecture lecture = ListWorker.removeItemById(course.getLectures(), pIdLecture);
+		if(lecture == null){
+			throw new EntityNotFoundException();
+		}
+			
 
 	}
 
