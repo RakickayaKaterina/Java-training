@@ -1,26 +1,29 @@
 package com.senla.rakickaya.view.dataExchange;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Response {
-	private Map<String, String> map;
-
-	public Response(Map<String, String> map) {
+	private String statusCode;
+	private List<String> data;
+	public Response(String statusCode) {
 		super();
-		map = new HashMap<>();
+		this.statusCode = statusCode;
+		data = new ArrayList<>();
 	}
-
-	public void addEl(String el, String object) {
-		map.put(el, object);
+	public void addNote(String note){
+		data.add(note);
 	}
-
-	public String getObject(String el) {
-		return map.get(el);
+	public List<String> getData() {
+		return data;
 	}
-
-	public Map<String, String> getMap() {
-		return map;
+	public String getStatusCode() {
+		return statusCode;
 	}
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
+	}
+	
+	
 
 }
