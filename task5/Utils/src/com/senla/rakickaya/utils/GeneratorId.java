@@ -28,11 +28,11 @@ public class GeneratorId {
 		this.idRelation = idRelation;
 	}
 
-	public void setPathSave(String pathSave) {
+	private void setPathSave(String pathSave) {
 		this.pathSave = pathSave;
 	}
 
-	public void saveState(String path) {
+	public void saveState() {
 		if (pathSave != null) {
 			TextFileWorker textFileWorker = new TextFileWorker(pathSave);
 			textFileWorker.writeToFile(

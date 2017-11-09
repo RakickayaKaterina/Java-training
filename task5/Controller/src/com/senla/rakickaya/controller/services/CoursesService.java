@@ -16,8 +16,8 @@ import com.senla.rakickaya.model.beans.Lecture;
 import com.senla.rakickaya.model.beans.RelationSC;
 import com.senla.rakickaya.model.beans.Student;
 import com.senla.rakickaya.utils.DateWorker;
-import com.senla.rakickaya.utils.GeneratorId;
 import com.senla.rakickaya.utils.ListWorker;
+import com.senla.rakickaya.utils.launcher.Launcher;
 
 public class CoursesService implements ICoursesService {
 	private final ICoursesRepository mRepositoryCourses;
@@ -78,7 +78,8 @@ public class CoursesService implements ICoursesService {
 		Student student = mRepositoryStudents.getStudent(pIdStudent);
 		course.addStudent(student);
 		student.addCourse(course);
-		mRepositoryRelations.addRelation(new RelationSC(GeneratorId.getIdRelation(), student, course));
+		mRepositoryRelations
+				.addRelation(new RelationSC(Launcher.getInstance().getGeneratorId().getIdRelation(), student, course));
 	}
 
 	@Override

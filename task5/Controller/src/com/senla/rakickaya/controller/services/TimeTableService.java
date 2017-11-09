@@ -12,8 +12,8 @@ import com.senla.rakickaya.model.beans.Course;
 import com.senla.rakickaya.model.beans.Lecture;
 import com.senla.rakickaya.model.beans.Lesson;
 import com.senla.rakickaya.utils.DateWorker;
-import com.senla.rakickaya.utils.GeneratorId;
 import com.senla.rakickaya.utils.ListWorker;
+import com.senla.rakickaya.utils.launcher.Launcher;
 
 public class TimeTableService implements ITimeTableService {
 	private final ITimeTable mTimeTable;
@@ -35,7 +35,8 @@ public class TimeTableService implements ITimeTableService {
 	public void createLesson(long idLecture, Date dateForLecture) {
 		Lecture lecture = getLectureCourse(idLecture);
 		if (lecture != null)
-			mTimeTable.addLesson(new Lesson(GeneratorId.getIdLesson(), lecture, dateForLecture));
+			mTimeTable.addLesson(
+					new Lesson(Launcher.getInstance().getGeneratorId().getIdLesson(), lecture, dateForLecture));
 
 	}
 

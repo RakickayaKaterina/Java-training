@@ -1,4 +1,4 @@
-package com.senla.rakickaya.view.launcher;
+package com.senla.rakickaya.utils.launcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,9 @@ public class Launcher {
 	private static Launcher launcher;
 	public static Launcher getInstance(){
 		if(launcher == null){
-			launcher = new Launcher(parser);
+			launcher = new Launcher(new FillerRepositories(PathsToFiles.STUDENTS_FILE, PathsToFiles.LECTORS_FILE, PathsToFiles.COURSES_FILE, PathsToFiles.RELATIONS_FILE, PathsToFiles.TIME_TABLE_FILE),PathsToFiles.GENERATOR_FILE);
 		}
-		else return launcher;
+		return launcher;
 	}
 	private FillerRepositories fillerRepositories;
 	private GeneratorId generatorId;
@@ -150,7 +150,7 @@ public class Launcher {
 		fillerRepositories.writeCourseToFile(repoCourses.getListCourses());
 		fillerRepositories.writeRelationToFile(repoRelations.getListRelations());
 		fillerRepositories.writeLessonToFile(timeTable.getListLessons());
-		//generatorId.saveState(path);
+		generatorId.saveState();
 	}
 
 }

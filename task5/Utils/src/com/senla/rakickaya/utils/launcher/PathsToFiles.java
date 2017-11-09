@@ -1,4 +1,4 @@
-package com.senla.rakickaya.view.launcher;
+package com.senla.rakickaya.utils.launcher;
 
 public class PathsToFiles {
 	public static final String GENERATOR_FILE = "P:/SenlaProject/task4/2_3/id.txt";
