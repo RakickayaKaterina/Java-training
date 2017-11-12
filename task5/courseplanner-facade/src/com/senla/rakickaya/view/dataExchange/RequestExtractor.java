@@ -1,0 +1,78 @@
+package com.senla.rakickaya.view.dataExchange;
+
+import java.text.ParseException;
+import java.util.Date;
+
+import com.senla.rakickaya.courseplanner.api.beans.ICourse;
+import com.senla.rakickaya.courseplanner.api.beans.ILector;
+import com.senla.rakickaya.courseplanner.api.beans.ILecture;
+import com.senla.rakickaya.courseplanner.api.beans.IStudent;
+import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
+import com.senla.rakickaya.courseplanner.beans.Course;
+import com.senla.rakickaya.courseplanner.beans.Lector;
+import com.senla.rakickaya.courseplanner.beans.Lecture;
+import com.senla.rakickaya.courseplanner.beans.Student;
+import com.senla.rakickaya.utils.DateWorker;
+import com.senla.rakickaya.utils.GeneratorId;
+
+public class RequestExtractor {
+	private IRequest mRequest;
+
+	public RequestExtractor(IRequest mRequest) {
+		super();
+		this.mRequest = mRequest;
+	}
+	public IStudent extractStudent(){
+		String studentName = mRequest.getObject("studentName");
+		long idStudent = GeneratorId.getInstance().getIdStudent();
+		return new Student(idStudent, studentName);
+	}
+	public ILector extractLector(){
+		String lectorName = mRequest.getObject("lectorName");
+		long idLector = GeneratorId.getInstance().getIdLector();
+		return new Lector(idLector, lectorName);
+	}
+	public ILecture extractLecture(){
+		String lectureName = mRequest.getObject("lectureName");
+		long idLecture = GeneratorId.getInstance().getIdLecture();
+		return new Lecture(idLecture, lectureName);
+	}
+	public ICourse extractCourse() throws ParseException{
+		String courseName = mRequest.getObject("courseName");
+		String descriptionCourse = mRequest.getObject("descriptionCourse");
+		Date startDate = DateWorker.createDate(mRequest.getObject("startDate"));
+		Date endDate = DateWorker.createDate(mRequest.getObject("endDate"));
+		long idCourse = GeneratorId.getInstance().getIdCourse();
+		return new Course(idCourse, courseName, descriptionCourse, startDate, endDate);
+	}
+	private long extractId(String el){
+		long id = Long.valueOf(mRequest.getObject(el));
+		return id;
+	}
+	public long extractIdCourse(){
+		return extractId("idCourse");
+	}
+	public long extractIdStudent(){
+		return extractId("idStudent");
+	}
+	public long extractIdLector(){
+		return extractId("idLector");
+	}
+	public long extractIdLecture(){
+		return extractId("idLecture");
+	}
+	private Date extractDate(String el) throws ParseException{
+		Date date = DateWorker.createDate(mRequest.getObject(el));
+		return date;
+	}
+	public Date extractDate() throws ParseException{
+		return extractDate("date");
+	}
+	public Date extractStartDate() throws ParseException{
+		return extractDate("startDate");
+	}
+	public Date extractEndDate() throws ParseException{
+		return extractDate("endDate");
+	}
+	
+}
