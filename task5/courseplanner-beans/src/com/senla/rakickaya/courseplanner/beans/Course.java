@@ -8,6 +8,7 @@ import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
+import com.senla.rakickaya.utils.DateWorker;
 
 public class Course implements ICourse {
 	private long id;
@@ -79,11 +80,11 @@ public class Course implements ICourse {
 		return students;
 	}
 
-	/*
-	 * @Override public String toString() { return String.
-	 * format("Course [id=%s, name=%s, startDate=%s, endDate=%s, lector=%s, count=%s]"
-	 * , id, name, DateWorker.dateFormat.format(startDate),
-	 * DateWorker.dateFormat.format(endDate), lector,
-	 * ArrayWorker.getLenghtArray(students)); }
-	 */
+	@Override
+	public String toString() {
+		return String.format("Course [id=%s, name=%s, startDate=%s, endDate=%s, lector=%s, countStudent=%s]", id, name,
+				DateWorker.dateFormat.format(startDate), DateWorker.dateFormat.format(endDate), lector,
+				students.size());
+	}
+
 }

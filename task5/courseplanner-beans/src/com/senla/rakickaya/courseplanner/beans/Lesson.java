@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
+import com.senla.rakickaya.utils.DateWorker;
 
 public class Lesson implements ILesson {
 	private long id;
@@ -39,9 +40,10 @@ public class Lesson implements ILesson {
 		return mDate;
 	}
 
-	/*
-	 * @Override public String toString() { return
-	 * String.format("Lesson [id=%s, mLectureName=%s, mDate=%s]", id,
-	 * mLecture.getName(), DateWorker.dateFormat.format(mDate)); }
-	 */
+	@Override
+	public String toString() {
+		return String.format("Lesson [id=%s, mLectureName=%s, mDate=%s]", id, mLecture.getName(),
+				DateWorker.dateFormat.format(mDate));
+	}
+
 }
