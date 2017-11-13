@@ -13,6 +13,7 @@ import com.senla.rakickaya.courseplanner.api.beans.ILesson;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IResponse;
+import com.senla.rakickaya.courseplanner.api.data_exchange.enums.TagsResponse;
 import com.senla.rakickaya.courseplanner.api.facade.IFacade;
 import com.senla.rakickaya.courseplanner.api.services.ICoursesService;
 import com.senla.rakickaya.courseplanner.api.services.ILectorsService;
@@ -58,73 +59,60 @@ public class Facade implements IFacade {
 
 	@Override
 	public IResponse getSortedCoursesByStartDate() {
-		IResponse response = new Response("ok");
-		for (ICourse course : mCoursesService.getSortedList(new DateCourseComparator())) {
-			response.addNote(course.toString());
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mCoursesService.getSortedList(new DateCourseComparator()));
 		return response;
 	}
 
 	@Override
 	public IResponse getSortedCoursesByCountStudents() {
-		IResponse response = new Response("ok");
-		for (ICourse course : mCoursesService.getSortedList(new CountStudentsComparator())) {
-			response.addNote(course.toString());
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mCoursesService.getSortedList(new CountStudentsComparator()));
 		return response;
 	}
 
 	@Override
 	public IResponse getSortedCoursesByLectorName() {
-		IResponse response = new Response("ok");
-		for (ICourse course : mCoursesService.getSortedList(new LectorNameComparator())) {
-			response.addNote(course.toString());
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mCoursesService.getSortedList(new LectorNameComparator()));
 		return response;
 	}
 
 	@Override
 	public IResponse getSortedCoursesByAlphabet() {
-		IResponse response = new Response("ok");
-		for (ICourse course : mCoursesService.getSortedList(new AlphabetCourseComparator())) {
-			response.addNote(course.toString());
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mCoursesService.getSortedList(new AlphabetCourseComparator()));
 		return response;
 	}
 
 	@Override
 	public IResponse getSortedLectorsByAlphabet() {
-		IResponse response = new Response("ok");
-		for (ILector lector : mLectorsService.getSortedList(new AlphabetLectorComparator())) {
-			response.addNote(lector.toString());
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mLectorsService.getSortedList(new AlphabetLectorComparator()));
 		return response;
 	}
 
 	@Override
 	public IResponse getSortedLectorsByCountCourses() {
-		IResponse response = new Response("ok");
-		Map<ILector, Integer> map = mLectorsService.getLectorsInformation();
-		for (ILector lector : map.keySet()) {
-			response.addNote(lector.toString() + " " + map.get(lector));
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mLectorsService.getLectorsInformation());
 		return response;
 	}
 
 	@Override
 	public IResponse getDetailedDescription(IRequest pIdCourse) {
 		RequestExtractor requestExtractor = new RequestExtractor(pIdCourse);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		ICourse course = mCoursesService.getCourse(requestExtractor.extractIdCourse());
 		// if (course == null)
 		// Printer.show("This course not exist");
-		response.addNote(String.format("Detailed description:\ndescription=%s\nlector=%s\n", course.getDescription(),
+		response.addHead(String.format("Detailed description:\ndescription=%s\nlector=%s\n", course.getDescription(),
 				course.getLector().getName()));
 
-		response.addNote("Students:\n");
+		response.addHead("Students:\n");
 		for (IStudent student : course.getStudents()) {
 			if (student != null) {
-				response.addNote(student.getNameStudent());
+				response.addHead(student.getNameStudent());
 			}
 		}
 		return response;
@@ -132,35 +120,26 @@ public class Facade implements IFacade {
 
 	@Override
 	public IResponse getSortedTimeTableByDate() {
-		IResponse response = new Response("ok");
-		for (ILesson lesson : mTimeTableService.getSortedList(new DateLessonComparator())) {
-			response.addNote(lesson.toString());
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mTimeTableService.getSortedList(new DateLessonComparator()));
 		return response;
 	}
 
 	@Override
 	public IResponse getSortedTimeTableByAlphabet() {
-		IResponse response = new Response("ok");
-		for (ILesson lesson : mTimeTableService.getSortedList(new AlphabetLessonComparator())) {
-			response.addNote(lesson.toString());
-		}
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mTimeTableService.getSortedList(new AlphabetLessonComparator()));
 		return response;
 	}
 
 	@Override
 	public IResponse getSortedCoursesByStartDate(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response("ok");
-		try {
-			for (ICourse course : mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new DateCourseComparator())) {
-				response.addNote(course.toString());
-			}
-
-		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+		IResponse response = new Response();
+		try {response.addHead(TagsResponse.data, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
+					new DateCourseComparator()));
+			} catch (ParseException e) {
+			response.addHead(TagsResponse.message,"Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -170,16 +149,11 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getSortedCoursesByCountStudents(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response("ok");
-		try {
-			for (ICourse course : mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new CountStudentsComparator())) {
-				response.addNote(course.toString());
-			}
-
+		IResponse response = new Response();
+		try {response.addHead(TagsResponse.data,mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
+					new CountStudentsComparator()));
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message,"Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -188,16 +162,12 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getSortedCoursesByLectorName(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ICourse course : mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new LectorNameComparator())) {
-				response.addNote(course.toString());
-			}
-
+			response.addHead(TagsResponse.data, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
+					new LectorNameComparator()));
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message,"Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -206,16 +176,12 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getSortedCoursesByAlphabet(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ICourse course : mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new AlphabetCourseComparator())) {
-				response.addNote(course.toString());
-			}
-
+			response.addHead(TagsResponse.data, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
+					new AlphabetCourseComparator()));
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message, "Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -224,16 +190,12 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getSortedCurrentCoursesByStartDate(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ICourse course : mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
-					new DateCourseComparator())) {
-				response.addNote(course.toString());
-			}
-
+			response.addHead(TagsResponse.data,
+					mCoursesService.getListCurrentCourses(requestExtractor.extractDate(), new DateCourseComparator()));
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message, "Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -242,16 +204,14 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getSortedCurrentCoursesByCountStudents(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ICourse course : mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
-					new CountStudentsComparator())) {
-				response.addNote(course.toString());
-			}
+
+			response.addHead(TagsResponse.data, mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
+					new CountStudentsComparator()));
 
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message, "Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -260,16 +220,13 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getSortedCurrentCoursesByLectorName(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ICourse course : mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
-					new LectorNameComparator())) {
-				response.addNote(course.toString());
-			}
+			response.addHead(TagsResponse.data,
+					mCoursesService.getListCurrentCourses(requestExtractor.extractDate(), new LectorNameComparator()));
 
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message, "Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -278,16 +235,12 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getSortedCurrentCoursesByAlphabet(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ICourse course : mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
-					new AlphabetCourseComparator())) {
-				response.addNote(course.toString());
-			}
-
+			response.addHead(TagsResponse.data, mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
+					new AlphabetCourseComparator()));
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message, "Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -295,36 +248,33 @@ public class Facade implements IFacade {
 
 	@Override
 	public IResponse getTotalCountCourse() {
-		Response response = new Response("ok");
-		response.addNote("Total count courses: " + mCoursesService.getTotalCountCourses());
+		Response response = new Response();
+		response.addHead(TagsResponse.totalCount, mCoursesService.getTotalCountCourses());
 		return response;
 	}
 
 	@Override
 	public IResponse getTotalCountStudents() {
-		Response response = new Response("ok");
-		response.addNote("Total count students: " + mStudentsService.getTotalCountStudents());
+		Response response = new Response();
+		response.addHead(TagsResponse.totalCount, mStudentsService.getTotalCountStudents());
 		return response;
 	}
 
 	@Override
 	public IResponse getTotalCountLectors() {
-		Response response = new Response("ok");
-		response.addNote("Total count lectors: " + mLectorsService.getTotalCountLectors());
+		Response response = new Response();
+		response.addHead(TagsResponse.totalCount, mLectorsService.getTotalCountLectors());
 		return response;
 	}
 
 	@Override
 	public IResponse getListLessonByDate(IRequest date) {
 		RequestExtractor requestExtractor = new RequestExtractor(date);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ILesson lesson : mTimeTableService.getListLessons(requestExtractor.extractDate())) {
-				response.addNote(lesson.toString());
-			}
+			response.addHead(TagsResponse.data, mTimeTableService.getListLessons(requestExtractor.extractDate()));
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message, "Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 
@@ -334,15 +284,12 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse getPastCourses(IRequest interval) {
 		RequestExtractor requestExtractor = new RequestExtractor(interval);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		try {
-			for (ICourse course : mCoursesService.getPastCourses(requestExtractor.extractStartDate(),
-					requestExtractor.extractEndDate())) {
-				response.addNote(course.toString());
-			}
+			response.addHead(TagsResponse.data, mCoursesService.getPastCourses(requestExtractor.extractStartDate(),
+					requestExtractor.extractEndDate()));
 		} catch (ParseException e) {
-			response.setStatusCode("error");
-			response.addNote("Bad request(Incorrect date format)");
+			response.addHead(TagsResponse.message, "Bad request(Incorrect date format)");
 			e.printStackTrace();
 		}
 		return response;
@@ -354,11 +301,11 @@ public class Facade implements IFacade {
 		IResponse response = null;
 		try {
 			mCoursesService.addCourse(requestExtractor.extractCourse());
-			response = new Response("ok");
-			response.addNote("The course was added successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The course was added successfully");
 		} catch (ParseException e) {
-			response = new Response("error");
-			response.addNote("Incorrect date format");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Incorrect date format");
 			e.printStackTrace();
 		}
 		return response;
@@ -370,11 +317,11 @@ public class Facade implements IFacade {
 		IResponse response = null;
 		try {
 			mCoursesService.removeCourse(requestExtractor.extractIdCourse());
-			response = new Response("ok");
-			response.addNote("The course was removed successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The course was removed successfully");
 		} catch (Exception e) {
-			response = new Response("error");
-			response.addNote("Course not found");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Course not found");
 		}
 		return response;
 	}
@@ -382,9 +329,9 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse addLectureToCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		mCoursesService.addLectureToCourse(requestExtractor.extractLecture(), requestExtractor.extractIdCourse());
-		response.addNote("The lecture was added to the course successfully");
+		response.addHead(TagsResponse.message, "The lecture was added to the course successfully");
 		return response;
 	}
 
@@ -395,11 +342,11 @@ public class Facade implements IFacade {
 		try {
 			mCoursesService.removeLectureFromCourse(requestExtractor.extractIdLecture(),
 					requestExtractor.extractIdCourse());
-			response = new Response("ok");
-			response.addNote("The lecture was removed from the course successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The lecture was removed from the course successfully");
 		} catch (EntityNotFoundException e) {
-			response = new Response("error");
-			response.addNote("Course or lecture not found");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Course or lecture not found");
 			e.printStackTrace();
 		}
 		return response;
@@ -409,18 +356,18 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse addStudent(IRequest student) {
 		RequestExtractor requestExtractor = new RequestExtractor(student);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		mStudentsService.addStudent(requestExtractor.extractStudent());
-		response.addNote("The student was added  successfully");
+		response.addHead(TagsResponse.message, "The student was added  successfully");
 		return response;
 	}
 
 	@Override
 	public IResponse addStudentToCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		mCoursesService.addStudentToCourse(requestExtractor.extractIdStudent(), requestExtractor.extractIdCourse());
-		response.addNote("The student was added to the course successfully");
+		response.addHead(TagsResponse.message, "The student was added to the course successfully");
 		return response;
 	}
 
@@ -430,11 +377,11 @@ public class Facade implements IFacade {
 		IResponse response = null;
 		try {
 			mStudentsService.removeStudent(requestExtractor.extractIdStudent());
-			response = new Response("ok");
-			response.addNote("The student was removed successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The student was removed successfully");
 		} catch (EntityNotFoundException e) {
-			response = new Response("error");
-			response.addNote("Student not found");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Student not found");
 			e.printStackTrace();
 		}
 		return response;
@@ -448,11 +395,11 @@ public class Facade implements IFacade {
 		try {
 			mCoursesService.removeStudentFromCourse(requestExtractor.extractIdStudent(),
 					requestExtractor.extractIdCourse());
-			response = new Response("ok");
-			response.addNote("The student was removed from the course successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The student was removed from the course successfully");
 		} catch (EntityNotFoundException e) {
-			response = new Response("error");
-			response.addNote("Course or student not found");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Course or student not found");
 			e.printStackTrace();
 		}
 		return response;
@@ -461,18 +408,18 @@ public class Facade implements IFacade {
 	@Override
 	public IResponse addLector(IRequest lector) {
 		RequestExtractor requestExtractor = new RequestExtractor(lector);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		mLectorsService.addLector(requestExtractor.extractLector());
-		response.addNote("The lector was added  successfully");
+		response.addHead(TagsResponse.message, "The lector was added  successfully");
 		return response;
 	}
 
 	@Override
 	public IResponse addLectorToCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = new Response("ok");
+		IResponse response = new Response();
 		mCoursesService.addLectorToCourse(requestExtractor.extractIdLector(), requestExtractor.extractIdCourse());
-		response.addNote("The lector was added to the course successfully");
+		response.addHead(TagsResponse.message, "The lector was added to the course successfully");
 		return response;
 	}
 
@@ -482,11 +429,11 @@ public class Facade implements IFacade {
 		IResponse response = null;
 		try {
 			mLectorsService.removeLector(requestExtractor.extractIdLector());
-			response = new Response("ok");
-			response.addNote("The lector was removed successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The lector was removed successfully");
 		} catch (EntityNotFoundException e) {
-			response = new Response("error");
-			response.addNote("Lector not found");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Lector not found");
 			e.printStackTrace();
 		}
 		return response;
@@ -499,11 +446,11 @@ public class Facade implements IFacade {
 		try {
 			mCoursesService.removeLectorFromCourse(requestExtractor.extractIdLector(),
 					requestExtractor.extractIdCourse());
-			response = new Response("ok");
-			response.addNote("The lector was removed from the course successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The lector was removed from the course successfully");
 		} catch (EntityNotFoundException e) {
-			response = new Response("error");
-			response.addNote("Course or lector not found");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Course or lector not found");
 			e.printStackTrace();
 		}
 		return response;
@@ -515,11 +462,11 @@ public class Facade implements IFacade {
 		IResponse response = null;
 		try {
 			mTimeTableService.createLesson(requestExtractor.extractIdLecture(), requestExtractor.extractDate());
-			response = new Response("ok");
-			response.addNote("The time table was created successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The time table was created successfully");
 		} catch (ParseException e) {
-			response = new Response("error");
-			response.addNote("Incorrect date format");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Incorrect date format");
 			e.printStackTrace();
 		}
 		return response;
@@ -531,13 +478,34 @@ public class Facade implements IFacade {
 		IResponse response = null;
 		try {
 			mTimeTableService.removeLessonByLecture(requestExtractor.extractIdLecture());
-			response = new Response("ok");
-			response.addNote("The lesson was removed from the table successfully");
+			response = new Response();
+			response.addHead(TagsResponse.message, "The lesson was removed from the table successfully");
 		} catch (EntityNotFoundException e) {
-			response = new Response("error");
-			response.addNote("Lesson not found");
+			response = new Response();
+			response.addHead(TagsResponse.message, "Lesson not found");
 			e.printStackTrace();
 		}
+		return response;
+	}
+
+	@Override
+	public IResponse getAllStudents() {
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mStudentsService.getListStudents());
+		return response;
+	}
+
+	@Override
+	public IResponse getAllLectors() {
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mLectorsService.getListLectors());
+		return response;
+	}
+
+	@Override
+	public IResponse getAllCourses() {
+		IResponse response = new Response();
+		response.addHead(TagsResponse.data, mCoursesService.getListCourses());
 		return response;
 	}
 

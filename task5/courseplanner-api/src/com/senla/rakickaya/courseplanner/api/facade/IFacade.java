@@ -91,4 +91,10 @@ public interface IFacade {
 																	// dateForLecture
 
 	public IResponse removeTimeTableForLecture(IRequest idLecture);
+
+	public IResponse getAllStudents();
+
+	public IResponse getAllLectors();
+
+	public IResponse getAllCourses();
 }
