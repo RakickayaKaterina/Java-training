@@ -1,4 +1,4 @@
-package com.senla.rakickaya.ui;
+package com.senla.rakickaya.courseplanner.ui;
 
 public class MenuController {
 	private Buider builder;

@@ -1,8 +1,8 @@
-package com.senla.rakickaya.ui;
+package com.senla.rakickaya.courseplanner.ui;
 
 import java.util.List;
 
-import com.senla.rakickaya.printer.Printer;
+import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
 
 public class Navigator {
 	private Menu currentMenu;

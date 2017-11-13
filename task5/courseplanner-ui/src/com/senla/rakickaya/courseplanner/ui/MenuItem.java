@@ -1,6 +1,6 @@
-package com.senla.rakickaya.ui;
+package com.senla.rakickaya.courseplanner.ui;
 
-import com.senla.rakickaya.ui.actions.IAction;
+import com.senla.rakickaya.courseplanner.ui.api.actions.IAction;
 
 public class MenuItem {
 	private String title;
