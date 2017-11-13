@@ -2,10 +2,12 @@ package com.senla.rakickaya.courseplanner.api.data_exchange;
 
 import java.util.Map;
 
+import com.senla.rakickaya.courseplanner.api.data_exchange.enums.TagsRequest;
+
 public interface IRequest {
-	public void addEl(String el, String object);
+	public void addEl(TagsRequest el, String object);
 
-	public String getObject(String el);
+	public String getObject(TagsRequest el);
 
-	public Map<String, String> getMap();
+	public Map<TagsRequest, String> getMap();
 }

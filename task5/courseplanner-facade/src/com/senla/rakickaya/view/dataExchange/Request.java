@@ -4,28 +4,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
+import com.senla.rakickaya.courseplanner.api.data_exchange.enums.TagsRequest;
 
 public class Request implements IRequest {
-	private Map<String, String> map;
+	private Map<TagsRequest, String> map;
 
-	public Request(Map<String, String> map) {
+	public Request(Map<TagsRequest, String> map) {
 		super();
 		map = new HashMap<>();
 	}
 
 	@Override
-	public void addEl(String el, String object) {
+	public void addEl(TagsRequest el, String object) {
 		map.put(el, object);
 	}
 
 	@Override
-	public String getObject(String el) {
+	public String getObject(TagsRequest el) {
 		return map.get(el);
 	}
 
 	@Override
-	public Map<String, String> getMap() {
+	public Map<TagsRequest, String> getMap() {
 		return map;
 	}
+
 
 }

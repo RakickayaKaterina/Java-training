@@ -1,38 +1,27 @@
 package com.senla.rakickaya.view.dataExchange;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.senla.rakickaya.courseplanner.api.data_exchange.IResponse;
+import com.senla.rakickaya.courseplanner.api.data_exchange.enums.TagsResponse;
 
 public class Response implements IResponse {
-	private String statusCode;
-	private List<String> data;
+	private Map<TagsResponse, Object> map;
 
-	public Response(String statusCode) {
+	public Response() {
 		super();
-		this.statusCode = statusCode;
-		data = new ArrayList<>();
+		map = new HashMap<>();
 	}
 
 	@Override
-	public void addNote(String note) {
-		data.add(note);
+	public void addHead(TagsResponse tag, Object object) {
+		map.put(tag, object);
 	}
 
 	@Override
-	public List<String> getData() {
-		return data;
-	}
-
-	@Override
-	public String getStatusCode() {
-		return statusCode;
-	}
-
-	@Override
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
+	public Object getObject(TagsResponse tag) {
+		return map.get(tag);
 	}
 
 }
