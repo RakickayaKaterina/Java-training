@@ -7,15 +7,15 @@ import com.senla.rakickaya.courseplanner.ui.api.actions.IAction;
 import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
 import com.senla.rakickaya.view.facade.Facade;
 
-public class TotalCountSt implements IAction{
+public class TotalCountSt implements IAction {
 
 	@Override
 	public void execute() {
 		IFacade facade = Facade.getInstance();
 		IResponse response = facade.getTotalCountStudents();
 		int result = (int) response.getObject(TagsResponse.TOTAL_COUNT);
-		Printer.show("Total count students: "+ result);
-		
+		Printer.show("Total count students: " + result);
+
 	}
-	
+
 }

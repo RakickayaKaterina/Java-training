@@ -1,6 +1,5 @@
 package com.senla.rakickaya.view.dataExchange;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;

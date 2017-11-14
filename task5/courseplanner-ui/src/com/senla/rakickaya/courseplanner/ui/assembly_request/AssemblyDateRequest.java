@@ -8,7 +8,7 @@ import com.senla.rakickaya.view.dataExchange.RequestBuilder;
 
 public class AssemblyDateRequest implements IAssemblyRequest {
 	private String text;
-	
+
 	public AssemblyDateRequest(String text) {
 		super();
 		this.text = text;

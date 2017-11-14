@@ -23,22 +23,26 @@ public class RequestExtractor {
 		super();
 		this.mRequest = mRequest;
 	}
-	public IStudent extractStudent(){
+
+	public IStudent extractStudent() {
 		String studentName = mRequest.getObject(TagsRequest.STUDENT_NAME);
 		long idStudent = GeneratorId.getInstance().getIdStudent();
 		return new Student(idStudent, studentName);
 	}
-	public ILector extractLector(){
+
+	public ILector extractLector() {
 		String lectorName = mRequest.getObject(TagsRequest.LECTOR_NAME);
 		long idLector = GeneratorId.getInstance().getIdLector();
 		return new Lector(idLector, lectorName);
 	}
-	public ILecture extractLecture(){
+
+	public ILecture extractLecture() {
 		String lectureName = mRequest.getObject(TagsRequest.LECTURE_NAME);
 		long idLecture = GeneratorId.getInstance().getIdLecture();
 		return new Lecture(idLecture, lectureName);
 	}
-	public ICourse extractCourse() throws ParseException{
+
+	public ICourse extractCourse() throws ParseException {
 		String courseName = mRequest.getObject(TagsRequest.COURSE_NAME);
 		String descriptionCourse = mRequest.getObject(TagsRequest.DESCRIPTION_COURSE);
 		Date startDate = DateWorker.createDate(mRequest.getObject(TagsRequest.START_DATE_COURSE));
@@ -46,34 +50,43 @@ public class RequestExtractor {
 		long idCourse = GeneratorId.getInstance().getIdCourse();
 		return new Course(idCourse, courseName, descriptionCourse, startDate, endDate);
 	}
-	private long extractId(TagsRequest el){
+
+	private long extractId(TagsRequest el) {
 		long id = Long.valueOf(mRequest.getObject(el));
 		return id;
 	}
-	public long extractIdCourse(){
+
+	public long extractIdCourse() {
 		return extractId(TagsRequest.ID_COURSE);
 	}
-	public long extractIdStudent(){
+
+	public long extractIdStudent() {
 		return extractId(TagsRequest.ID_STUDENT);
 	}
-	public long extractIdLector(){
+
+	public long extractIdLector() {
 		return extractId(TagsRequest.ID_LECTOR);
 	}
-	public long extractIdLecture(){
+
+	public long extractIdLecture() {
 		return extractId(TagsRequest.ID_LECTURE);
 	}
-	private Date extractDate(TagsRequest el) throws ParseException{
+
+	private Date extractDate(TagsRequest el) throws ParseException {
 		Date date = DateWorker.createDate(mRequest.getObject(el));
 		return date;
 	}
-	public Date extractDate() throws ParseException{
+
+	public Date extractDate() throws ParseException {
 		return extractDate(TagsRequest.DATE);
 	}
-	public Date extractStartDate() throws ParseException{
+
+	public Date extractStartDate() throws ParseException {
 		return extractDate(TagsRequest.START_DATE);
 	}
-	public Date extractEndDate() throws ParseException{
+
+	public Date extractEndDate() throws ParseException {
 		return extractDate(TagsRequest.END_DATE);
 	}
-	
+
 }

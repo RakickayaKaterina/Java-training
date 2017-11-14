@@ -36,7 +36,6 @@ public class Student implements IStudent {
 		this.courses = courses;
 	}
 
-	
 	public List<ICourse> getCourses() {
 		return courses;
 	}
@@ -45,6 +44,5 @@ public class Student implements IStudent {
 	public String toString() {
 		return "Student [id=" + id + ", nameStudent=" + nameStudent + ", courses=" + courses + "]";
 	}
-	
 
 }

@@ -15,7 +15,7 @@ import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
 import com.senla.rakickaya.view.dataExchange.RequestBuilder;
 import com.senla.rakickaya.view.facade.Facade;
 
-public class DetailedDescription implements IAction{
+public class DetailedDescription implements IAction {
 
 	@Override
 	public void execute() {
@@ -26,9 +26,8 @@ public class DetailedDescription implements IAction{
 		Printer.showList(list);
 		Printer.show("Input the number to get detail description the course");
 		int position = input.getInt();
-		IRequest request =  new RequestBuilder()
-				.setHead(TagsRequest.ID_COURSE, String.valueOf(list.get(position-1).getId()))
-				.build();
+		IRequest request = new RequestBuilder()
+				.setHead(TagsRequest.ID_COURSE, String.valueOf(list.get(position - 1).getId())).build();
 		IResponse courseResponse = facade.getDetailedDescription(request);
 		Printer.show(courseResponse.getObject(TagsResponse.MESSAGE).toString());
 		List<IStudent> listStudent = (List<IStudent>) response.getObject(TagsResponse.DATA);

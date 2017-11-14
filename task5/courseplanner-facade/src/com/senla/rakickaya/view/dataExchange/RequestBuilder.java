@@ -13,12 +13,14 @@ public class RequestBuilder {
 		super();
 		map = new HashMap<>();
 	}
-	public RequestBuilder setHead(TagsRequest tag,String obj){
+
+	public RequestBuilder setHead(TagsRequest tag, String obj) {
 		map.put(tag, obj);
 		return this;
 	}
-	public IRequest build(){
+
+	public IRequest build() {
 		return new Request(map);
 	}
-	
+
 }

@@ -23,7 +23,6 @@ public class PrinterInfo implements IAction {
 		Printer.showList(list);
 	}
 
-
 	public interface IListResponse {
 		public IResponse getResponse();
 	}

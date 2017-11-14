@@ -36,8 +36,7 @@ public class LectureRemoval implements IAction {
 
 		IRequest request = new RequestBuilder()
 				.setHead(TagsRequest.ID_LECTURE, String.valueOf(lectures.get(positionLecture - 1).getId()))
-				.setHead(TagsRequest.ID_COURSE, String.valueOf(lectures.get(positionLecture - 1).getId()))
-				.build();
+				.setHead(TagsRequest.ID_COURSE, String.valueOf(lectures.get(positionLecture - 1).getId())).build();
 		IResponse response = facade.removeLectureFromCourse(request);
 		Printer.show(response.getObject(TagsResponse.MESSAGE).toString());
 	}

@@ -12,29 +12,24 @@ public interface IFacade {
 
 	public IResponse getSortedCoursesByAlphabet();
 
-	// 2
 	public IResponse getSortedLectorsByAlphabet();
 
 	public IResponse getSortedLectorsByCountCourses();
 
-	// 3
-	public IResponse getDetailedDescription(IRequest pIdCourse);// id
+	public IResponse getDetailedDescription(IRequest pIdCourse);
 
-	// 4
 	public IResponse getSortedTimeTableByDate();
 
 	public IResponse getSortedTimeTableByAlphabet();
 
-	// 5
-	public IResponse getSortedCoursesByStartDate(IRequest afterDate);// Date
+	public IResponse getSortedCoursesByStartDate(IRequest afterDate);
 
-	public IResponse getSortedCoursesByCountStudents(IRequest afterDate);// Date
+	public IResponse getSortedCoursesByCountStudents(IRequest afterDate);
 
 	public IResponse getSortedCoursesByLectorName(IRequest afterDate);
 
 	public IResponse getSortedCoursesByAlphabet(IRequest afterDate);
 
-	// 6
 	public IResponse getSortedCurrentCoursesByStartDate(IRequest currentDate);
 
 	public IResponse getSortedCurrentCoursesByCountStudents(IRequest currentDate);
@@ -43,52 +38,41 @@ public interface IFacade {
 
 	public IResponse getSortedCurrentCoursesByAlphabet(IRequest currentDate);
 
-	// 7
 	public IResponse getTotalCountCourse();
 
 	public IResponse getTotalCountStudents();
 
 	public IResponse getTotalCountLectors();
 
-	// 8
 	public IResponse getListLessonByDate(IRequest date);
 
-	// 9
-	public IResponse getPastCourses(IRequest interval);// Date,Date
-	// 10
+	public IResponse getPastCourses(IRequest interval);
 
 	public IResponse addCourse(IRequest course);
 
-	// 11
 	public IResponse removeCourse(IRequest idCourse);
 
-	// 12
-	public IResponse addLectureToCourse(IRequest request);// Lecture, idCourse
+	public IResponse addLectureToCourse(IRequest request);
 
-	public IResponse removeLectureFromCourse(IRequest request);// idLecture,
-																// idCourse
+	public IResponse removeLectureFromCourse(IRequest request);
 
-	// 13
 	public IResponse addStudent(IRequest student);
 
-	public IResponse addStudentToCourse(IRequest request);// idStudent, idCourse
+	public IResponse addStudentToCourse(IRequest request);
 
 	public IResponse removeStudent(IRequest idStudent);
 
-	public IResponse removeStudentFromCourse(IRequest request);// idStudent,idCourse
+	public IResponse removeStudentFromCourse(IRequest request);
 
-	// 14
 	public IResponse addLector(IRequest lector);
 
-	public IResponse addLectorToCourse(IRequest request);// idLector, idCourse
+	public IResponse addLectorToCourse(IRequest request);
 
 	public IResponse removeLector(IRequest idLector);
 
-	public IResponse removeLectorFromCourse(IRequest request);// idLector,idCourse
+	public IResponse removeLectorFromCourse(IRequest request);
 
-	// 15
-	public IResponse createTimeTableForLecture(IRequest request);// idLecture,Date
-																	// dateForLecture
+	public IResponse createTimeTableForLecture(IRequest request);
 
 	public IResponse removeTimeTableForLecture(IRequest idLecture);
 

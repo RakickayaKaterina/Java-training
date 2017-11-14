@@ -53,7 +53,7 @@ public class RelationsRepository implements IRelationsRepository {
 	public void save() {
 		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
 		fillerRepositories.writeRelationToFile(mRelations);
-		
+
 	}
 
 }

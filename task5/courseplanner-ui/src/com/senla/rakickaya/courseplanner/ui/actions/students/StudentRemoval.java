@@ -26,8 +26,7 @@ public class StudentRemoval implements IAction {
 		Printer.show("Input the number to remove the Course");
 		int n = input.getInt();
 		IRequest request = new RequestBuilder()
-				.setHead(TagsRequest.ID_STUDENT, String.valueOf(students.get(n-1).getId()))
-				.build();
+				.setHead(TagsRequest.ID_STUDENT, String.valueOf(students.get(n - 1).getId())).build();
 		IResponse studentResponse = facade.removeStudent(request);
 		Printer.show(studentResponse.getObject(TagsResponse.MESSAGE).toString());
 

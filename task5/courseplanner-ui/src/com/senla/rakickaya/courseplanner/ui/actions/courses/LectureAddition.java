@@ -31,7 +31,7 @@ public class LectureAddition implements IAction {
 		int position = input.getInt();
 
 		IRequest request = new RequestBuilder().setHead(TagsRequest.LECTURE_NAME, name)
-				.setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(position-1).getId())).build();
+				.setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(position - 1).getId())).build();
 		IResponse responseLecture = facade.addLectureToCourse(request);
 		Printer.show(responseLecture.getObject(TagsResponse.MESSAGE).toString());
 

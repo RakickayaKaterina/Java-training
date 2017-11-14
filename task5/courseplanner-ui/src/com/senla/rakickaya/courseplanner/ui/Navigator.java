@@ -15,13 +15,13 @@ public class Navigator {
 	public void printMenu() {
 		Printer.showMenu(currentMenu.getListItems());
 	}
-	public void navigate(Integer index){
+
+	public void navigate(Integer index) {
 		List<MenuItem> listItems = currentMenu.getListItems();
 		MenuItem item = listItems.get(index);
-		if(item.getAction()!=null){
+		if (item.getAction() != null) {
 			item.doAction();
-		}
-		else{
+		} else {
 			currentMenu = item.getNextMenu();
 		}
 	}

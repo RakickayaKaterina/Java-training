@@ -10,7 +10,7 @@ import com.senla.rakickaya.courseplanner.ui.api.actions.IAction;
 import com.senla.rakickaya.courseplanner.ui.assembly_request.IAssemblyRequest;
 import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
 
-public class PrinterInfoParam implements IAction{
+public class PrinterInfoParam implements IAction {
 	private IListResponse listResponse;
 	private IAssemblyRequest assemblyRequest;
 
@@ -19,6 +19,7 @@ public class PrinterInfoParam implements IAction{
 		this.listResponse = listResponse;
 		this.assemblyRequest = assemblyRequest;
 	}
+
 	@Override
 	public void execute() {
 		IRequest request = assemblyRequest.assemblyRequest();
@@ -26,7 +27,6 @@ public class PrinterInfoParam implements IAction{
 		List<IEntity> list = (List<IEntity>) response.getObject(TagsResponse.DATA);
 		Printer.showList(list);
 	}
-
 
 	public interface IListResponse {
 		public IResponse getResponse(IRequest request);

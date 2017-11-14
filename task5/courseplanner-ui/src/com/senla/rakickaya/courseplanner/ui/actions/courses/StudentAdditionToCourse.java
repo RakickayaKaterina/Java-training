@@ -27,16 +27,16 @@ public class StudentAdditionToCourse implements IAction {
 		Printer.showList(courses);
 		Printer.show("Input the number of the course,which you want to add the student");
 		int positionCourse = input.getInt();
-		
+
 		IResponse responseStudent = facade.getAllStudents();
 		List<IStudent> students = (List<IStudent>) responseStudent.getObject(TagsResponse.DATA);
 		Printer.showList(students);
 		Printer.show("Input the number of the student to addition");
 		int positionStudent = input.getInt();
 
-		IRequest request = new RequestBuilder().setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(positionCourse-1).getId()))
-				.setHead(TagsRequest.ID_STUDENT, String.valueOf(students.get(positionStudent-1).getId()))
-				.build();
+		IRequest request = new RequestBuilder()
+				.setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(positionCourse - 1).getId()))
+				.setHead(TagsRequest.ID_STUDENT, String.valueOf(students.get(positionStudent - 1).getId())).build();
 		IResponse response = facade.addStudentToCourse(request);
 		Printer.show(response.getObject(TagsResponse.MESSAGE).toString());
 	}

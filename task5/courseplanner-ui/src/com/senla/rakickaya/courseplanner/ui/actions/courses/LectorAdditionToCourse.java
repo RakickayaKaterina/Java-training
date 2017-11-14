@@ -16,7 +16,7 @@ import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
 import com.senla.rakickaya.view.dataExchange.RequestBuilder;
 import com.senla.rakickaya.view.facade.Facade;
 
-public class LectorAdditionToCourse implements IAction{
+public class LectorAdditionToCourse implements IAction {
 
 	@Override
 	public void execute() {
@@ -28,19 +28,19 @@ public class LectorAdditionToCourse implements IAction{
 		Printer.showList(courses);
 		Printer.show("Input the number of the course,which you want to add the lector");
 		int positionCourse = input.getInt();
-		
+
 		IResponse responseLector = facade.getAllLectors();
 		List<ILector> lectors = (List<ILector>) responseLector.getObject(TagsResponse.DATA);
 		Printer.showList(lectors);
 		Printer.show("Input the number of the lector to addition");
 		int positionLector = input.getInt();
 
-		IRequest request = new RequestBuilder().setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(positionCourse-1).getId()))
-				.setHead(TagsRequest.ID_LECTOR, String.valueOf(lectors.get(positionLector-1).getId()))
-				.build();
+		IRequest request = new RequestBuilder()
+				.setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(positionCourse - 1).getId()))
+				.setHead(TagsRequest.ID_LECTOR, String.valueOf(lectors.get(positionLector - 1).getId())).build();
 		IResponse response = facade.addLectorToCourse(request);
 		Printer.show(response.getObject(TagsResponse.MESSAGE).toString());
-		
+
 	}
 
 }

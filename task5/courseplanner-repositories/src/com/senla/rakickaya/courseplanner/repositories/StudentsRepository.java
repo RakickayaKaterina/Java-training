@@ -60,7 +60,7 @@ public class StudentsRepository implements IStudentsRepository {
 	public void save() {
 		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
 		fillerRepositories.writeStudentToFile(mStudents);
-		
+
 	}
 
 }

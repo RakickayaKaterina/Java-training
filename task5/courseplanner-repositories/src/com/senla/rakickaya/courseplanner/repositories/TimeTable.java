@@ -62,7 +62,7 @@ public class TimeTable implements ITimeTable {
 	public void save() {
 		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
 		fillerRepositories.writeLessonToFile(mLessons);
-		
+
 	}
 
 }

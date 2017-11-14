@@ -84,8 +84,10 @@ public class Course implements ICourse {
 	public String toString() {
 		return name;
 	}
-	//"Course [id=%s, name=%s, startDate=%s, endDate=%s, lector=%s, countStudent=%s]", id, name,
-//	DateWorker.dateFormat.format(startDate), DateWorker.dateFormat.format(endDate), lector,
-	//students.size()
+	// "Course [id=%s, name=%s, startDate=%s, endDate=%s, lector=%s,
+	// countStudent=%s]", id, name,
+	// DateWorker.dateFormat.format(startDate),
+	// DateWorker.dateFormat.format(endDate), lector,
+	// students.size()
 
 }

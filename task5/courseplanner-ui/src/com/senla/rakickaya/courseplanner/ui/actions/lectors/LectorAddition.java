@@ -21,9 +21,7 @@ public class LectorAddition implements IAction {
 		Printer.show("Input lector's name : ");
 		String name = input.getString();
 
-		IRequest request = new RequestBuilder()
-				.setHead(TagsRequest.LECTOR_NAME, name)
-				.build();
+		IRequest request = new RequestBuilder().setHead(TagsRequest.LECTOR_NAME, name).build();
 		IResponse response = facade.addLector(request);
 		Printer.show(response.getObject(TagsResponse.MESSAGE).toString());
 	}

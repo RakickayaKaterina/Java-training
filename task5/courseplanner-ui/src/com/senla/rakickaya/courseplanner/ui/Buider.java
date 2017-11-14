@@ -38,7 +38,7 @@ public class Buider {
 		MenuItem backItem = new MenuItem();
 		backItem.setTitle("back");
 		backItem.setNextMenu(prevMenu);
-		
+
 		Menu studentMenu = new Menu();
 		studentMenu.setName("Students");
 		List<MenuItem> list = new ArrayList<>();

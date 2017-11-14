@@ -14,7 +14,7 @@ import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
 import com.senla.rakickaya.view.dataExchange.RequestBuilder;
 import com.senla.rakickaya.view.facade.Facade;
 
-public class CourseRemoval implements IAction{
+public class CourseRemoval implements IAction {
 
 	@Override
 	public void execute() {
@@ -25,12 +25,11 @@ public class CourseRemoval implements IAction{
 		Input input = Input.getInstance();
 		Printer.show("Input the number to remove the course");
 		int n = input.getInt();
-		IRequest request =  new RequestBuilder()
-				.setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(n-1).getId()))
-				.build();
+		IRequest request = new RequestBuilder()
+				.setHead(TagsRequest.ID_COURSE, String.valueOf(courses.get(n - 1).getId())).build();
 		IResponse courseResponse = facade.removeCourse(request);
 		Printer.show(courseResponse.getObject(TagsResponse.MESSAGE).toString());
-		
+
 	}
 
 }

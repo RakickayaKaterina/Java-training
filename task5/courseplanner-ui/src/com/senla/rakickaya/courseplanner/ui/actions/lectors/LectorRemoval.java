@@ -14,7 +14,7 @@ import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
 import com.senla.rakickaya.view.dataExchange.RequestBuilder;
 import com.senla.rakickaya.view.facade.Facade;
 
-public class LectorRemoval implements IAction{
+public class LectorRemoval implements IAction {
 
 	@Override
 	public void execute() {
@@ -25,9 +25,8 @@ public class LectorRemoval implements IAction{
 		Input input = Input.getInstance();
 		Printer.show("Input the number to remove the lector");
 		int n = input.getInt();
-		IRequest request =  new RequestBuilder()
-				.setHead(TagsRequest.ID_LECTOR, String.valueOf(lectors.get(n-1).getId()))
-				.build();
+		IRequest request = new RequestBuilder()
+				.setHead(TagsRequest.ID_LECTOR, String.valueOf(lectors.get(n - 1).getId())).build();
 		IResponse lectorResponse = facade.removeLector(request);
 		Printer.show(lectorResponse.getObject(TagsResponse.MESSAGE).toString());
 	}
