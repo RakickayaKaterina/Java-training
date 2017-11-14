@@ -5,7 +5,7 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.IRelationSC;
 import com.senla.rakickaya.courseplanner.api.repositories.IRelationsRepository;
 import com.senla.rakickaya.courseplanner.repositories.filler.FillerRepositories;
-import com.senla.rakickaya.utils.ListWorker;
+import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class RelationsRepository implements IRelationsRepository {
 	private List<IRelationSC> mRelations;

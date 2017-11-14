@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IResponse;
+import com.senla.rakickaya.courseplanner.facade.Facade;
 import com.senla.rakickaya.courseplanner.ui.actions.ExitAction;
 import com.senla.rakickaya.courseplanner.ui.actions.PrinterInfo;
 import com.senla.rakickaya.courseplanner.ui.actions.PrinterInfoParam;
@@ -29,7 +30,6 @@ import com.senla.rakickaya.courseplanner.ui.actions.timetable.LessonAddition;
 import com.senla.rakickaya.courseplanner.ui.actions.timetable.LessonRemoval;
 import com.senla.rakickaya.courseplanner.ui.assembly_request.AssemblyDateRequest;
 import com.senla.rakickaya.courseplanner.ui.assembly_request.AssemblyIntervalRequest;
-import com.senla.rakickaya.view.facade.Facade;
 
 public class Buider {
 	private Menu rootMenu;

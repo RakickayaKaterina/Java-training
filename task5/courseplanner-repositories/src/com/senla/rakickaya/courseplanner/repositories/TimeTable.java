@@ -6,7 +6,7 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
 import com.senla.rakickaya.courseplanner.api.repositories.ITimeTable;
 import com.senla.rakickaya.courseplanner.repositories.filler.FillerRepositories;
-import com.senla.rakickaya.utils.ListWorker;
+import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class TimeTable implements ITimeTable {
 	private List<ILesson> mLessons;

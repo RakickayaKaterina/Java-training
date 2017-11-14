@@ -6,7 +6,7 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.repositories.ILectorsRepository;
 import com.senla.rakickaya.courseplanner.repositories.filler.FillerRepositories;
-import com.senla.rakickaya.utils.ListWorker;
+import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class LectorsRepository implements ILectorsRepository {
 	private List<ILector> mLectors;

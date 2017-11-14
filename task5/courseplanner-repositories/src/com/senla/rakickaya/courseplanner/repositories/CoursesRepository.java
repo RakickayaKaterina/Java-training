@@ -5,7 +5,7 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.filler.FillerRepositories;
-import com.senla.rakickaya.utils.ListWorker;
+import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class CoursesRepository implements ICoursesRepository {
 	private static CoursesRepository coursesRepository;

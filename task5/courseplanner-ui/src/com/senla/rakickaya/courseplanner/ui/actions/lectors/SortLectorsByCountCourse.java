@@ -6,9 +6,9 @@ import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IResponse;
 import com.senla.rakickaya.courseplanner.api.data_exchange.enums.TagsResponse;
 import com.senla.rakickaya.courseplanner.api.facade.IFacade;
+import com.senla.rakickaya.courseplanner.facade.Facade;
 import com.senla.rakickaya.courseplanner.ui.api.actions.IAction;
 import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
-import com.senla.rakickaya.view.facade.Facade;
 
 public class SortLectorsByCountCourse implements IAction {
 

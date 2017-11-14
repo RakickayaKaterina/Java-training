@@ -13,9 +13,9 @@ import com.senla.rakickaya.courseplanner.beans.Lecture;
 import com.senla.rakickaya.courseplanner.beans.Lesson;
 import com.senla.rakickaya.courseplanner.beans.RelationSC;
 import com.senla.rakickaya.courseplanner.beans.Student;
-import com.senla.rakickaya.utils.DateWorker;
-import com.senla.rakickaya.utils.ListWorker;
-import com.senla.rakickaya.utils.config.PathsToFiles;
+import com.senla.rakickaya.courseplanner.utils.DateWorker;
+import com.senla.rakickaya.courseplanner.utils.ListWorker;
+import com.senla.rakickaya.courseplanner.utils.config.PathsToFiles;
 
 public class FillerRepositories {
 

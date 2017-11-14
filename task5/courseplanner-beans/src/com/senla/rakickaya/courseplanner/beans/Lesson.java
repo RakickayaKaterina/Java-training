@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
-import com.senla.rakickaya.utils.DateWorker;
+import com.senla.rakickaya.courseplanner.utils.DateWorker;
 
 public class Lesson implements ILesson {
 	private long id;
