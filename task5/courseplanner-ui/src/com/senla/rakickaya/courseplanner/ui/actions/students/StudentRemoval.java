@@ -1,8 +1,6 @@
 package com.senla.rakickaya.courseplanner.ui.actions.students;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
@@ -13,7 +11,7 @@ import com.senla.rakickaya.courseplanner.api.facade.IFacade;
 import com.senla.rakickaya.courseplanner.ui.api.actions.IAction;
 import com.senla.rakickaya.courseplanner.ui.util.input.Input;
 import com.senla.rakickaya.courseplanner.ui.util.printer.Printer;
-import com.senla.rakickaya.view.dataExchange.Request;
+import com.senla.rakickaya.view.dataExchange.RequestBuilder;
 import com.senla.rakickaya.view.facade.Facade;
 
 public class StudentRemoval implements IAction {
@@ -22,15 +20,16 @@ public class StudentRemoval implements IAction {
 	public void execute() {
 		IFacade facade = Facade.getInstance();
 		IResponse response = facade.getAllStudents();
-		List<IStudent> students = (List<IStudent>) response.getObject(TagsResponse.data);
+		List<IStudent> students = (List<IStudent>) response.getObject(TagsResponse.DATA);
 		Printer.showList(students);
 		Input input = Input.getInstance();
+		Printer.show("Input the number to remove the Course");
 		int n = input.getInt();
-		Map<TagsRequest, String> map = new HashMap<>();
-		map.put(TagsRequest.idStudent, String.valueOf(students.get(n).getId()));
-		IRequest request = new Request(map);
+		IRequest request = new RequestBuilder()
+				.setHead(TagsRequest.ID_STUDENT, String.valueOf(students.get(n-1).getId()))
+				.build();
 		IResponse studentResponse = facade.removeStudent(request);
-		Printer.show(studentResponse.getObject(TagsResponse.message).toString());
+		Printer.show(studentResponse.getObject(TagsResponse.MESSAGE).toString());
 
 	}
 

@@ -58,4 +58,11 @@ public class TimeTable implements ITimeTable {
 		return mLessons;
 	}
 
+	@Override
+	public void save() {
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeLessonToFile(mLessons);
+		
+	}
+
 }

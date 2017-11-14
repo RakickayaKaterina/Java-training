@@ -24,25 +24,25 @@ public class RequestExtractor {
 		this.mRequest = mRequest;
 	}
 	public IStudent extractStudent(){
-		String studentName = mRequest.getObject(TagsRequest.studentName);
+		String studentName = mRequest.getObject(TagsRequest.STUDENT_NAME);
 		long idStudent = GeneratorId.getInstance().getIdStudent();
 		return new Student(idStudent, studentName);
 	}
 	public ILector extractLector(){
-		String lectorName = mRequest.getObject(TagsRequest.lectorName);
+		String lectorName = mRequest.getObject(TagsRequest.LECTOR_NAME);
 		long idLector = GeneratorId.getInstance().getIdLector();
 		return new Lector(idLector, lectorName);
 	}
 	public ILecture extractLecture(){
-		String lectureName = mRequest.getObject(TagsRequest.lectureName);
+		String lectureName = mRequest.getObject(TagsRequest.LECTURE_NAME);
 		long idLecture = GeneratorId.getInstance().getIdLecture();
 		return new Lecture(idLecture, lectureName);
 	}
 	public ICourse extractCourse() throws ParseException{
-		String courseName = mRequest.getObject(TagsRequest.courseName);
-		String descriptionCourse = mRequest.getObject(TagsRequest.descriptionCourse);
-		Date startDate = DateWorker.createDate(mRequest.getObject(TagsRequest.startDateCourse));
-		Date endDate = DateWorker.createDate(mRequest.getObject(TagsRequest.endDateCourse));
+		String courseName = mRequest.getObject(TagsRequest.COURSE_NAME);
+		String descriptionCourse = mRequest.getObject(TagsRequest.DESCRIPTION_COURSE);
+		Date startDate = DateWorker.createDate(mRequest.getObject(TagsRequest.START_DATE_COURSE));
+		Date endDate = DateWorker.createDate(mRequest.getObject(TagsRequest.END_DATE_COURSE));
 		long idCourse = GeneratorId.getInstance().getIdCourse();
 		return new Course(idCourse, courseName, descriptionCourse, startDate, endDate);
 	}
@@ -51,29 +51,29 @@ public class RequestExtractor {
 		return id;
 	}
 	public long extractIdCourse(){
-		return extractId(TagsRequest.idCourse);
+		return extractId(TagsRequest.ID_COURSE);
 	}
 	public long extractIdStudent(){
-		return extractId(TagsRequest.idStudent);
+		return extractId(TagsRequest.ID_STUDENT);
 	}
 	public long extractIdLector(){
-		return extractId(TagsRequest.idLector);
+		return extractId(TagsRequest.ID_LECTOR);
 	}
 	public long extractIdLecture(){
-		return extractId(TagsRequest.idLecture);
+		return extractId(TagsRequest.ID_LECTURE);
 	}
 	private Date extractDate(TagsRequest el) throws ParseException{
 		Date date = DateWorker.createDate(mRequest.getObject(el));
 		return date;
 	}
 	public Date extractDate() throws ParseException{
-		return extractDate(TagsRequest.date);
+		return extractDate(TagsRequest.DATE);
 	}
 	public Date extractStartDate() throws ParseException{
-		return extractDate(TagsRequest.startDate);
+		return extractDate(TagsRequest.START_DATE);
 	}
 	public Date extractEndDate() throws ParseException{
-		return extractDate(TagsRequest.endDate);
+		return extractDate(TagsRequest.END_DATE);
 	}
 	
 }

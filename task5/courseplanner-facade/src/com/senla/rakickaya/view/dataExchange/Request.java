@@ -11,23 +11,12 @@ public class Request implements IRequest {
 
 	public Request(Map<TagsRequest, String> map) {
 		super();
-		map = new HashMap<>();
-	}
-
-	@Override
-	public void addEl(TagsRequest el, String object) {
-		map.put(el, object);
+		this.map = map;
 	}
 
 	@Override
 	public String getObject(TagsRequest el) {
 		return map.get(el);
 	}
-
-	@Override
-	public Map<TagsRequest, String> getMap() {
-		return map;
-	}
-
 
 }

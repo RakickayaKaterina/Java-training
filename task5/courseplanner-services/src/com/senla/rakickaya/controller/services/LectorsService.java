@@ -106,5 +106,8 @@ public class LectorsService implements ILectorsService {
 	public int getTotalCountLectors() {
 		return mRepositoryLectors.getListLectors().size();
 	}
+	public void save(){
+		mRepositoryLectors.save();
+	}
 
 }

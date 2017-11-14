@@ -15,4 +15,5 @@ public interface IRelationsRepository {
 
 	public List<IRelationSC> getListRelations();
 
+	public void save();
 }

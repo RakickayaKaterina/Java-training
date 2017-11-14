@@ -26,4 +26,6 @@ public interface ILectorsService {
 
 	public int getTotalCountLectors();
 
+	public void save();
+
 }

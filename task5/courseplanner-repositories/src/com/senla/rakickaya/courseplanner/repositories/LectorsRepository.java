@@ -57,4 +57,11 @@ public class LectorsRepository implements ILectorsRepository {
 		return mLectors;
 	}
 
+	@Override
+	public void save() {
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeLectorToFile(mLectors);
+		
+	}
+
 }

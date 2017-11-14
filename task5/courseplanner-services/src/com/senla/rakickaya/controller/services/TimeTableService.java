@@ -106,5 +106,8 @@ public class TimeTableService implements ITimeTableService {
 		return listLesson;
 
 	}
+	public void save(){
+		mTimeTable.save();
+	}
 
 }

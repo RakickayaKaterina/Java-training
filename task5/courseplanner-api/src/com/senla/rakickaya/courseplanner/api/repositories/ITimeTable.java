@@ -15,4 +15,5 @@ public interface ITimeTable {
 
 	public List<ILesson> getListLessons();
 
+	public void save();
 }

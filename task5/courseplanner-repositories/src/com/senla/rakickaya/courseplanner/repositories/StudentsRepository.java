@@ -56,4 +56,11 @@ public class StudentsRepository implements IStudentsRepository {
 		return mStudents;
 	}
 
+	@Override
+	public void save() {
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeStudentToFile(mStudents);
+		
+	}
+
 }

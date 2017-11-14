@@ -97,4 +97,10 @@ public interface IFacade {
 	public IResponse getAllLectors();
 
 	public IResponse getAllCourses();
+
+	IResponse getAllLectures();
+
+	IResponse getLecturesByCourse(int n);
+
+	public void save();
 }

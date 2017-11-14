@@ -17,4 +17,6 @@ public interface IStudentsService {
 	public List<IStudent> getListStudents();
 
 	public int getTotalCountStudents();
+
+	public void save();
 }

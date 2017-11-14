@@ -15,4 +15,5 @@ public interface IStudentsRepository {
 
 	public List<IStudent> getListStudents();
 
+	public void save();
 }

@@ -51,4 +51,11 @@ public class CoursesRepository implements ICoursesRepository {
 		return mCourses;
 	}
 
+	@Override
+	public void save() {
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeCourseToFile(mCourses);
+		
+	}
+
 }

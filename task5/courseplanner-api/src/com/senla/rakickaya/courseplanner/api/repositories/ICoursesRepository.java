@@ -15,4 +15,6 @@ public interface ICoursesRepository {
 
 	public List<ICourse> getListCourses();
 
+	public void save();
+
 }

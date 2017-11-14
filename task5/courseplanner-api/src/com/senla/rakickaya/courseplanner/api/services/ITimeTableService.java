@@ -23,4 +23,6 @@ public interface ITimeTableService {
 	public List<ILesson> getListLessons(Date pDate);
 
 	public void removeLessonByLecture(long pIdLecture) throws EntityNotFoundException;
+
+	public void save();
 }

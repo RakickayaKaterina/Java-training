@@ -16,4 +16,6 @@ public interface ILectorsRepository {
 
 	public List<ILector> getListLectors();
 
+	public void save();
+
 }

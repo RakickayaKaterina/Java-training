@@ -25,7 +25,6 @@ import com.senla.rakickaya.utils.DateWorker;
 import com.senla.rakickaya.utils.GeneratorId;
 import com.senla.rakickaya.utils.ListWorker;
 
-
 public class CoursesService implements ICoursesService {
 	private final ICoursesRepository mRepositoryCourses;
 	private final IStudentsRepository mRepositoryStudents;
@@ -34,7 +33,7 @@ public class CoursesService implements ICoursesService {
 
 	public CoursesService() {
 		super();
-		this.mRepositoryCourses =CoursesRepository.getInstance();
+		this.mRepositoryCourses = CoursesRepository.getInstance();
 		this.mRepositoryStudents = StudentsRepository.getInstance();
 		this.mRepositoryRelations = RelationsRepository.getInstance();
 		this.mRepositoryLectors = LectorsRepository.getInstance();
@@ -47,9 +46,9 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public void removeCourse(long pId) throws EntityNotFoundException{
+	public void removeCourse(long pId) throws EntityNotFoundException {
 		ICourse course = mRepositoryCourses.removeCourse(pId);
-		if(course==null)
+		if (course == null)
 			throw new EntityNotFoundException();
 		List<IStudent> students = mRepositoryStudents.getListStudents();
 		for (int i = 0; i < students.size(); i++) {
@@ -86,18 +85,17 @@ public class CoursesService implements ICoursesService {
 		IStudent student = mRepositoryStudents.getStudent(pIdStudent);
 		course.getStudents().add(student);
 		student.getCourses().add(course);
-		mRepositoryRelations
-				.addRelation(new RelationSC(GeneratorId.getInstance().getIdRelation(), student, course));
+		mRepositoryRelations.addRelation(new RelationSC(GeneratorId.getInstance().getIdRelation(), student, course));
 	}
 
 	@Override
 	public void removeStudentFromCourse(long pIdStudent, long pIdCourse) throws EntityNotFoundException {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
-		if(course == null){
+		if (course == null) {
 			throw new EntityNotFoundException();
 		}
 		IStudent student = ListWorker.removeItemById(course.getStudents(), pIdStudent);
-		if(student == null){
+		if (student == null) {
 			throw new EntityNotFoundException();
 		}
 		List<IRelationSC> relations = mRepositoryRelations.getListRelations();
@@ -116,14 +114,15 @@ public class CoursesService implements ICoursesService {
 		course.setLector(lector);
 
 	}
+
 	@Override
 	public void removeLectorFromCourse(long pIdLector, long pIdCourse) throws EntityNotFoundException {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
-		if(course ==null){
+		if (course == null) {
 			throw new EntityNotFoundException();
 		}
 		ILector lector = course.getLector();
-		if(lector == null){
+		if (lector == null) {
 			throw new EntityNotFoundException();
 		}
 		if (lector != null && lector.getId() == pIdLector) {
@@ -141,16 +140,15 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public void removeLectureFromCourse(long pIdLecture, long pIdCourse) throws EntityNotFoundException{
+	public void removeLectureFromCourse(long pIdLecture, long pIdCourse) throws EntityNotFoundException {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
-		if(course == null){
+		if (course == null) {
 			throw new EntityNotFoundException();
 		}
 		ILecture lecture = ListWorker.removeItemById(course.getLectures(), pIdLecture);
-		if(lecture == null){
+		if (lecture == null) {
 			throw new EntityNotFoundException();
 		}
-			
 
 	}
 
@@ -203,6 +201,23 @@ public class CoursesService implements ICoursesService {
 			}
 		}
 		return resultList;
+	}
+
+	@Override
+	public List<ILecture> getAllLectures() {
+		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<ILecture> resultList = new ArrayList<>();
+		for (int i = 0; i < courses.size(); i++) {
+			resultList.addAll(courses.get(i).getLectures());
+		}
+		return resultList;
+	}
+
+	@Override
+	public void save() {
+		mRepositoryCourses.save();
+		mRepositoryRelations.save();
+		
 	}
 
 }

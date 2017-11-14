@@ -41,4 +41,8 @@ public interface ICoursesService {
 
 	public List<ICourse> getPastCourses(Date startDateSub, Date endDateSub);
 
+	List<ILecture> getAllLectures();
+
+	public void save();
+
 }

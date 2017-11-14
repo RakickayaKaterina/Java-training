@@ -18,14 +18,14 @@ public class Printer {
 
 	public static void showMenu(List<MenuItem> items) {
 		for (int i = 0; i < items.size(); i++) {
-			show((i + 1) + ". " + items.get(i).getTitle());
+			show((i) + ". " + items.get(i).getTitle());
 		}
 
 	}
 
 	public static void showList(List<? extends IEntity> array) {
 		for (int i = 0; i < array.size(); i++) {
-			show((i + 1) + "." + array.get(i));
+			show((i + 1) + "." + array.get(i).toString());
 		}
 	}
 

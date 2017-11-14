@@ -49,4 +49,11 @@ public class RelationsRepository implements IRelationsRepository {
 		return mRelations;
 	}
 
+	@Override
+	public void save() {
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeRelationToFile(mRelations);
+		
+	}
+
 }

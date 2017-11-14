@@ -20,8 +20,8 @@ public class ListWorker {
 		int index = ListWorker.getIndexById(pEntities, pId);
 		T removedEntity = null;
 		if (index != -1) {
-			pEntities.remove(index);
-			removedEntity = pEntities.get(index);
+			
+			removedEntity =pEntities.remove(index);
 		}
 		return removedEntity;
 	}

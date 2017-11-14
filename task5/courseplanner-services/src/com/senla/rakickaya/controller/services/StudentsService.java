@@ -71,5 +71,8 @@ public class StudentsService implements IStudentsService {
 	public int getTotalCountStudents() {
 		return mRepositoryStudents.getListStudents().size();
 	}
+	public void save(){
+		mRepositoryStudents.save();
+	}
 
 }
