@@ -2,7 +2,8 @@ package com.senla.rakickaya.courseplanner.facade;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
@@ -32,7 +33,7 @@ public class Facade implements IFacade {
 
 	private static Facade facade;
 
-	private Logger logger = Logger.getLogger(Facade.class.getName());
+	private static final Logger logger = Logger.getLogger(Facade.class.getName());
 
 	public static Facade getInstance() {
 		if (facade == null) {
@@ -132,9 +133,8 @@ public class Facade implements IFacade {
 			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
 					new DateCourseComparator()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 
@@ -148,9 +148,8 @@ public class Facade implements IFacade {
 			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
 					new CountStudentsComparator()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -163,9 +162,8 @@ public class Facade implements IFacade {
 			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
 					new LectorNameComparator()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -178,9 +176,8 @@ public class Facade implements IFacade {
 			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
 					new AlphabetCourseComparator()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -193,9 +190,8 @@ public class Facade implements IFacade {
 			response.addHead(TagsResponse.DATA,
 					mCoursesService.getListCurrentCourses(requestExtractor.extractDate(), new DateCourseComparator()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -210,9 +206,8 @@ public class Facade implements IFacade {
 					new CountStudentsComparator()));
 
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -226,9 +221,8 @@ public class Facade implements IFacade {
 					mCoursesService.getListCurrentCourses(requestExtractor.extractDate(), new LectorNameComparator()));
 
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -241,9 +235,8 @@ public class Facade implements IFacade {
 			response.addHead(TagsResponse.DATA, mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
 					new AlphabetCourseComparator()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -276,9 +269,8 @@ public class Facade implements IFacade {
 		try {
 			response.addHead(TagsResponse.DATA, mTimeTableService.getListLessons(requestExtractor.extractDate()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 
 		return response;
@@ -292,9 +284,8 @@ public class Facade implements IFacade {
 			response.addHead(TagsResponse.DATA, mCoursesService.getPastCourses(requestExtractor.extractStartDate(),
 					requestExtractor.extractEndDate()));
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -308,10 +299,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The course was added successfully");
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Incorrect date format");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -325,7 +315,7 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The course was removed successfully");
 		} catch (Exception e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Course not found");
 		}
@@ -351,10 +341,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The lecture was removed from the course successfully");
 		} catch (EntityNotFoundException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Course or lecture not found");
-			e.printStackTrace();
 		}
 		return response;
 
@@ -387,10 +376,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The student was removed successfully");
 		} catch (EntityNotFoundException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Student not found");
-			e.printStackTrace();
 		}
 		return response;
 
@@ -406,10 +394,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The student was removed from the course successfully");
 		} catch (EntityNotFoundException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Course or student not found");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -441,10 +428,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The lector was removed successfully");
 		} catch (EntityNotFoundException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Lector not found");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -459,10 +445,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The lector was removed from the course successfully");
 		} catch (EntityNotFoundException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Course or lector not found");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -476,10 +461,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The time table was created successfully");
 		} catch (ParseException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Incorrect date format");
-			e.printStackTrace();
 		}
 		return response;
 	}
@@ -493,10 +477,9 @@ public class Facade implements IFacade {
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The lesson was removed from the table successfully");
 		} catch (EntityNotFoundException e) {
-			logger.info(new Date() + " " + e.getMessage());
+			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Lesson not found");
-			e.printStackTrace();
 		}
 		return response;
 	}
