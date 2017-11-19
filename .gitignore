@@ -22,5 +22,5 @@ hs_err_pid*
 *.prefs
 *.project
 *.classpath
-task5/.metadata
-task5/.recommenders
+*.metadata
+*.recommenders
