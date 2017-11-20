@@ -1,6 +1,7 @@
 package com.senla.rakickaya.courseplanner.beans;
 
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
+import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 
 public class Lecture implements ILecture {
 	/**
@@ -33,6 +34,12 @@ public class Lecture implements ILecture {
 	@Override
 	public String toString() {
 		return "Lecture [ name=" + name + "]";
+	}
+	@Override
+	public ILecture clone() throws CloneNotSupportedException {
+		ILecture lecture = (ILecture)super.clone();
+		lecture.setId(GeneratorId.getInstance().getIdLecture());
+		return lecture;
 	}
 	
 }

@@ -3,7 +3,7 @@ package com.senla.rakickaya.courseplanner.api.beans;
 import java.util.Date;
 import java.util.List;
 
-public interface ICourse extends IEntity {
+public interface ICourse extends IEntity, Cloneable {
 	public String getName();
 
 	public String getDescription();
@@ -23,4 +23,10 @@ public interface ICourse extends IEntity {
 	public List<IStudent> getStudents();
 
 	public void setStudents(List<IStudent> students);
+
+	public ICourse clone() throws CloneNotSupportedException;
+
+	void setStartDate(Date startDate);
+
+	void setEndDate(Date endDate);
 }

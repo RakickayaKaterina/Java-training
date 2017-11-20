@@ -10,6 +10,7 @@ import com.senla.rakickaya.courseplanner.ui.actions.ExitAction;
 import com.senla.rakickaya.courseplanner.ui.actions.PrinterInfo;
 import com.senla.rakickaya.courseplanner.ui.actions.PrinterInfoParam;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseAddition;
+import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseCloning;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseRemoval;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.DetailedDescription;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.LectorAdditionToCourse;
@@ -259,6 +260,11 @@ public class Buider {
 				return Facade.getInstance().getPastCourses(request);
 			}
 		}, new AssemblyIntervalRequest("Input interval date")));
+		
+		MenuItem cloneItem = new MenuItem();
+		cloneItem.setTitle("Clone course");
+		cloneItem.setAction(new CourseCloning());
+		
 		list.add(backItem);
 		list.add(addItem);
 		list.add(remItem);
@@ -283,6 +289,7 @@ public class Buider {
 		list.add(itemSortCurrentCourseByLector);
 		list.add(itemSortCurrentCourseByCount);
 		list.add(itemPastCourseInInterval);
+		list.add(cloneItem);
 		courseMenu.setListItems(list);
 		return courseMenu;
 

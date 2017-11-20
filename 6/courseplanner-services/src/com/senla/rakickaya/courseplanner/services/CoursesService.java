@@ -212,6 +212,16 @@ public class CoursesService implements ICoursesService {
 		}
 		return resultList;
 	}
+  @Override
+	public void cloneCourseById(long pId) throws CloneNotSupportedException, EntityNotFoundException {
+		ICourse course = mRepositoryCourses.getCourse(pId);
+		if (course == null) {
+			throw new EntityNotFoundException();
+		}
+		ICourse cloneCourse = course.clone();
+		mRepositoryCourses.addCourse(cloneCourse);
+
+	}
 
 	@Override
 	public void save() {

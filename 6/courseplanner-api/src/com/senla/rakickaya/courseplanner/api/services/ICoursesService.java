@@ -45,4 +45,6 @@ public interface ICoursesService {
 
 	public void save();
 
+	void cloneCourseById(long pId) throws CloneNotSupportedException, EntityNotFoundException;
+
 }

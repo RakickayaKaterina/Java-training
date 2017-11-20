@@ -520,6 +520,21 @@ public class Facade implements IFacade {
 		response.addHead(TagsResponse.DATA, mCoursesService.getListCourses().get(n).getLectures());
 		return response;
 	}
+@Override
+	public IResponse cloneCourse(IRequest idCourse) {
+		IResponse response;
+		try {
+			RequestExtractor requestExtractor = new RequestExtractor(idCourse);
+			mCoursesService.cloneCourseById(requestExtractor.extractIdCourse());
+			response = new Response();
+			response.addHead(TagsResponse.MESSAGE, "The course was cloned successfully");
+		} catch (CloneNotSupportedException | EntityNotFoundException e) {
+			logger.error(new Date() + " " + e.getMessage());
+			response = new Response();
+			response.addHead(TagsResponse.MESSAGE, "Course wasn't cloned");
+		}
+		return response;
+	}
 
 	@Override
 	public void save() {
@@ -530,9 +545,9 @@ public class Facade implements IFacade {
 			mTimeTableService.save();
 			GeneratorId.getInstance().saveState();
 		} catch (IOException e) {
-			// TODO logger
+			logger.error(new Date() + " " + e.getMessage());
 			e.printStackTrace();
-		} 
+		}
 
 	}
 

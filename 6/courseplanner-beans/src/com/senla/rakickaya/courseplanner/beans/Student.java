@@ -46,7 +46,7 @@ public class Student implements IStudent {
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", nameStudent=" + nameStudent + ", courses=" + courses + "]";
+		return "Student [id=" + id + ", nameStudent=" + nameStudent +"]";
 	}
 
 }

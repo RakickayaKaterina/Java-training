@@ -8,6 +8,7 @@ import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
+import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 
 public class Course implements ICourse {
 	/**
@@ -88,10 +89,28 @@ public class Course implements ICourse {
 	public String toString() {
 		return name;
 	}
-	// "Course [id=%s, name=%s, startDate=%s, endDate=%s, lector=%s,
-	// countStudent=%s]", id, name,
-	// DateWorker.dateFormat.format(startDate),
-	// DateWorker.dateFormat.format(endDate), lector,
-	// students.size()
 
+	@Override
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	@Override
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	@Override
+	public ICourse clone() throws CloneNotSupportedException {
+		ICourse course = (ICourse)super.clone();
+		course.setStudents(new ArrayList<>());
+		Date cloneStartDate = startDate !=null ? (Date)startDate.clone() : null;
+		Date cloneEndDate = endDate !=null ? (Date)endDate.clone() : null;
+		ArrayList<ILecture> cloneLectures = (ArrayList<ILecture>)((ArrayList<ILecture>)lectures).clone();
+		course.setId(GeneratorId.getInstance().getIdCourse());
+		course.setStartDate(cloneStartDate);
+		course.setEndDate(cloneEndDate);
+		course.setLectures(cloneLectures);
+		return course;
+	}
 }

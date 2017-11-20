@@ -87,4 +87,6 @@ public interface IFacade {
 	IResponse getLecturesByCourse(int n);
 
 	public void save();
+
+	IResponse cloneCourse(IRequest idCourse);
 }
