@@ -8,7 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import com.senla.rakickaya.courseplanner.utils.config.PathsToFiles;
+import com.senla.rakickaya.courseplanner.configuration.Config;
+
 
 public class GeneratorId implements Serializable {
 	/**
@@ -27,7 +28,8 @@ public class GeneratorId implements Serializable {
 
 	public static GeneratorId getInstance() {
 		if (generatorId == null) {
-			generatorId = restore(PathsToFiles.GENERATOR_FILE);
+			Config conf = Config.getInstance();
+			generatorId = restore(conf.getPathId());
 		}
 		return generatorId;
 	}
@@ -47,13 +49,6 @@ public class GeneratorId implements Serializable {
 	}
 
 	public void saveState() throws IOException {
-		/*
-		 * if (pathSave != null) { TextFileWorker textFileWorker = new
-		 * TextFileWorker(pathSave); textFileWorker.writeToFile( new String[] {
-		 * String.valueOf(idCourse), String.valueOf(idLector),
-		 * String.valueOf(idLecture), String.valueOf(idLesson),
-		 * String.valueOf(idStudent), String.valueOf(idRelation) }); }
-		 */
 		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File(pathSave)))) {
 			objectOutputStream.writeObject(this);
 		}
@@ -61,27 +56,11 @@ public class GeneratorId implements Serializable {
 	}
 
 	private static GeneratorId restore(String path) {
-		/*
-		 * try {
-		 * 
-		 * TextFileWorker textFileWorker = new TextFileWorker(path); String[]
-		 * objects = textFileWorker.readFromFile(); long idCourse =
-		 * Long.parseLong(objects[0]); long idLector =
-		 * Long.parseLong(objects[1]); long idLecture =
-		 * Long.parseLong(objects[2]); long idLesson =
-		 * Long.parseLong(objects[3]); long idStudent =
-		 * Long.parseLong(objects[4]); long idRelation =
-		 * Long.parseLong(objects[5]); GeneratorId generatorId = new
-		 * GeneratorId(idCourse, idLector, idLecture, idLesson, idStudent,
-		 * idRelation); generatorId.pathSave = path; return generatorId;
-		 * 
-		 * } catch (Exception e) { //LOGGER return new GeneratorId(); }
-		 */
 		GeneratorId generatorId = null;
 		try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(path)))) {
 			generatorId = (GeneratorId) objectInputStream.readObject();
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO logger
+			
 			generatorId = new GeneratorId();
 		}
 		generatorId.pathSave = path;

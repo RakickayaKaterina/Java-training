@@ -15,8 +15,8 @@ import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
 import com.senla.rakickaya.courseplanner.api.beans.IRelationSC;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
+import com.senla.rakickaya.courseplanner.configuration.Config;
 import com.senla.rakickaya.courseplanner.utils.ListWorker;
-import com.senla.rakickaya.courseplanner.utils.config.PathsToFiles;
 
 public class FillerRepositories {
 
@@ -36,8 +36,9 @@ public class FillerRepositories {
 
 	public static FillerRepositories getInstance() {
 		if (fillerRepositories == null) {
-			fillerRepositories = new FillerRepositories(PathsToFiles.STUDENTS_FILE, PathsToFiles.LECTORS_FILE,
-					PathsToFiles.COURSES_FILE, PathsToFiles.RELATIONS_FILE, PathsToFiles.TIME_TABLE_FILE);
+			Config conf = Config.getInstance();
+			fillerRepositories = new FillerRepositories(conf.getPathStudent(), conf.getPathLector(),
+					conf.getPathCourse(), conf.getPathRelation(), conf.getPathTimeTable());
 		}
 		return fillerRepositories;
 	}

@@ -29,4 +29,10 @@ public class Lecture implements ILecture {
 	public String getName() {
 		return name;
 	}
+
+	@Override
+	public String toString() {
+		return "Lecture [ name=" + name + "]";
+	}
+	
 }
