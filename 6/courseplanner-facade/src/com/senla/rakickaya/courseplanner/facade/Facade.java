@@ -459,13 +459,18 @@ public class Facade implements IFacade {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
 		IResponse response = null;
 		try {
-			mTimeTableService.createLesson(requestExtractor.extractIdLecture(), requestExtractor.extractDate());
+			mTimeTableService.createLesson(requestExtractor.extractIdLecture(), requestExtractor.extractDate(),
+					requestExtractor.extractCountStudent());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "The time table was created successfully");
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
 			response = new Response();
 			response.addHead(TagsResponse.MESSAGE, "Incorrect date format");
+		} catch (Exception e) {
+			logger.error(new Date() + " " + e.getMessage());
+			response = new Response();
+			response.addHead(TagsResponse.MESSAGE, e.getMessage());
 		}
 		return response;
 	}
@@ -520,7 +525,8 @@ public class Facade implements IFacade {
 		response.addHead(TagsResponse.DATA, mCoursesService.getListCourses().get(n).getLectures());
 		return response;
 	}
-@Override
+
+	@Override
 	public IResponse cloneCourse(IRequest idCourse) {
 		IResponse response;
 		try {

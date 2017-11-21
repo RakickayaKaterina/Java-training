@@ -2,6 +2,7 @@ package com.senla.rakickaya.courseplanner.ui.actions.timetable;
 
 import java.util.List;
 
+import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IResponse;
@@ -21,8 +22,13 @@ public class LessonAddition implements IAction {
 		Input input = Input.getInstance();
 		IFacade facade = Facade.getInstance();
 
-		IResponse responseLecture = facade.getAllLectures();
-		List<ILecture> lectures = (List<ILecture>) responseLecture.getObject(TagsResponse.DATA);
+		IResponse response = facade.getAllCourses();
+		List<ICourse> courses = (List<ICourse>) response.getObject(TagsResponse.DATA);
+		Printer.showList(courses);
+		Printer.show("Input the number of the course to create time table");
+		int positionCourse = input.getInt();
+
+		List<ILecture> lectures = courses.get(positionCourse - 1).getLectures();
 		Printer.showList(lectures);
 		Printer.show("Input the number of the lecture to create time table");
 		int positionLecture = input.getInt();
@@ -32,9 +38,11 @@ public class LessonAddition implements IAction {
 
 		IRequest request = new RequestBuilder()
 				.setHead(TagsRequest.ID_LECTURE, String.valueOf(lectures.get(positionLecture - 1).getId()))
-				.setHead(TagsRequest.DATE, date).build();
-		IResponse response = facade.createTimeTableForLecture(request);
-		Printer.show(response.getObject(TagsResponse.MESSAGE).toString());
+				.setHead(TagsRequest.DATE, date)
+				.setHead(TagsRequest.COUNT_STUDENT, String.valueOf(courses.get(positionCourse - 1).getStudents().size()))
+				.build();
+		IResponse responseLesson = facade.createTimeTableForLecture(request);
+		Printer.show(responseLesson.getObject(TagsResponse.MESSAGE).toString());
 
 	}
 }

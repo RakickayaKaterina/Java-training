@@ -8,4 +8,8 @@ public interface ILesson extends IEntity {
 	public void setLecture(ILecture mLecture);
 
 	public Date getDate();
+
+	public int getCountStudent();
+
+	public void setCountStudent(int countStudent);
 }

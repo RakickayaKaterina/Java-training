@@ -12,6 +12,7 @@ import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.ITimeTable;
 import com.senla.rakickaya.courseplanner.api.services.ITimeTableService;
 import com.senla.rakickaya.courseplanner.beans.Lesson;
+import com.senla.rakickaya.courseplanner.configuration.Config;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.TimeTable;
@@ -36,10 +37,19 @@ public class TimeTableService implements ITimeTableService {
 	}
 
 	@Override
-	public void createLesson(long idLecture, Date dateForLecture) {
+	public void createLesson(long idLecture, Date dateForLecture, int countStudent) throws Exception {
 		ILecture lecture = getLectureCourse(idLecture);
-		if (lecture != null)
-			mTimeTable.addLesson(new Lesson(GeneratorId.getInstance().getIdLesson(), lecture, dateForLecture));
+		List<ILesson> timeTable = getListLessons(dateForLecture);
+		int amount = 0;
+		for (ILesson lesson : timeTable) {
+			amount += lesson.getCountStudent();
+		}
+		if (lecture != null && amount + countStudent <= Config.getInstance().getAmountStudents()) {
+			mTimeTable.addLesson(
+					new Lesson(GeneratorId.getInstance().getIdLesson(), lecture, dateForLecture, countStudent));
+		} else {
+			throw new Exception("Limit Students");
+		}
 
 	}
 

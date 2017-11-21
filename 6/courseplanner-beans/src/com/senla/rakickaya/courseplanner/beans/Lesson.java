@@ -14,12 +14,22 @@ public class Lesson implements ILesson {
 	private long id;
 	private ILecture mLecture;
 	private Date mDate;
+	private int countStudent;
 
-	public Lesson(long id, ILecture mLecture, Date pDate) {
+	public Lesson(long id, ILecture mLecture, Date pDate, int countStudent) {
 		super();
 		this.id = id;
 		this.mLecture = mLecture;
 		this.mDate = pDate;
+		this.countStudent = countStudent;
+	}
+
+	public int getCountStudent() {
+		return countStudent;
+	}
+
+	public void setCountStudent(int countStudent) {
+		this.countStudent = countStudent;
 	}
 
 	@Override
