@@ -84,7 +84,6 @@ public class LectorsService implements ILectorsService {
 
 	@Override
 	public Map<ILector, Integer> getLectorsInformation() {
-		// TODO
 		Map<ILector, Integer> map = new LinkedHashMap<>();
 		Comparator<ILector> comparator = new Comparator<ILector>() {
 

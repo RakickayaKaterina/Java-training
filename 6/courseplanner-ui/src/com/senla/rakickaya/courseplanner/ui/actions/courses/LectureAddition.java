@@ -25,6 +25,7 @@ public class LectureAddition implements IAction {
 		String name = input.getString();
 
 		IResponse response = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> courses = (List<ICourse>) response.getObject(TagsResponse.DATA);
 		Printer.showList(courses);
 		Printer.show("Input the number of the course,which you want to add new lecture");

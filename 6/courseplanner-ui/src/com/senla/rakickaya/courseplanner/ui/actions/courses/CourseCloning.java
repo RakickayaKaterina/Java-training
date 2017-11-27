@@ -20,6 +20,7 @@ public class CourseCloning implements IAction{
 	public void execute() {
 		IFacade facade = Facade.getInstance();
 		IResponse response = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> courses = (List<ICourse>) response.getObject(TagsResponse.DATA);
 		Printer.showList(courses);
 		Input input = Input.getInstance();

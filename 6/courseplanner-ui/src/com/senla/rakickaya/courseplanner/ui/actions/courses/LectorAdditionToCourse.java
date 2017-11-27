@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
-import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IResponse;
 import com.senla.rakickaya.courseplanner.api.data_exchange.enums.TagsRequest;
@@ -24,12 +23,14 @@ public class LectorAdditionToCourse implements IAction {
 		IFacade facade = Facade.getInstance();
 
 		IResponse responseCourse = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> courses = (List<ICourse>) responseCourse.getObject(TagsResponse.DATA);
 		Printer.showList(courses);
 		Printer.show("Input the number of the course,which you want to add the lector");
 		int positionCourse = input.getInt();
 
 		IResponse responseLector = facade.getAllLectors();
+		@SuppressWarnings("unchecked")
 		List<ILector> lectors = (List<ILector>) responseLector.getObject(TagsResponse.DATA);
 		Printer.showList(lectors);
 		Printer.show("Input the number of the lector to addition");

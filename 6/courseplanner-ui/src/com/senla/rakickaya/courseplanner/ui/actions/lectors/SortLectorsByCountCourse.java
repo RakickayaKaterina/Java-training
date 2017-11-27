@@ -16,6 +16,7 @@ public class SortLectorsByCountCourse implements IAction {
 	public void execute() {
 		IFacade facade = Facade.getInstance();
 		IResponse response = facade.getSortedLectorsByCountCourses();
+		@SuppressWarnings("unchecked")
 		Map<ILector, Integer> map = (Map<ILector, Integer>) response.getObject(TagsResponse.DATA);
 		for (ILector lector : map.keySet()) {
 			Printer.show(lector.toString() + " : " + map.get(lector));

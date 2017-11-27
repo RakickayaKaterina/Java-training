@@ -22,6 +22,7 @@ public class LessonRemoval implements IAction {
 		IFacade facade = Facade.getInstance();
 
 		IResponse responseLecture = facade.getAllLectures();
+		@SuppressWarnings("unchecked")
 		List<ILecture> lectures = (List<ILecture>) responseLecture.getObject(TagsResponse.DATA);
 		Printer.showList(lectures);
 		Printer.show("Input the number of the lecture to remove time table");

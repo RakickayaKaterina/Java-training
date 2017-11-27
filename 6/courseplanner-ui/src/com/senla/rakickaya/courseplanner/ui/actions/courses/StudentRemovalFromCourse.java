@@ -23,12 +23,14 @@ public class StudentRemovalFromCourse implements IAction {
 		IFacade facade = Facade.getInstance();
 
 		IResponse responseCourse = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> courses = (List<ICourse>) responseCourse.getObject(TagsResponse.DATA);
 		Printer.showList(courses);
 		Printer.show("Input the number of the course,which you want to remove the student");
 		int positionCourse = input.getInt();
 
 		IResponse responseStudent = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<IStudent> students = (List<IStudent>) responseStudent.getObject(TagsResponse.DATA);
 		Printer.showList(students);
 		Printer.show("Input the number of the student to removal");

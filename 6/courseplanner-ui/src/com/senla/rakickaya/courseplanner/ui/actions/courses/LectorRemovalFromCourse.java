@@ -23,12 +23,14 @@ public class LectorRemovalFromCourse implements IAction {
 		IFacade facade = Facade.getInstance();
 
 		IResponse responseCourse = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> courses = (List<ICourse>) responseCourse.getObject(TagsResponse.DATA);
 		Printer.showList(courses);
 		Printer.show("Input the number of the course,which you want to remove the lector");
 		int positionCourse = input.getInt();
 
 		IResponse responseLector = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ILector> lectors = (List<ILector>) responseLector.getObject(TagsResponse.DATA);
 		Printer.showList(lectors);
 		Printer.show("Input the number of the lector to removal");

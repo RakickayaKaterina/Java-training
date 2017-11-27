@@ -8,7 +8,7 @@ public class ExitAction implements IAction {
 
 	@Override
 	public void execute() {
-		Printer.show("Aufviedersein");
+		Printer.show("Auf Wiedersehen");
 		MenuController.isRun = false;
 
 	}

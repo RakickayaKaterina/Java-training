@@ -22,6 +22,7 @@ public class DetailedDescription implements IAction {
 		Input input = Input.getInstance();
 		IFacade facade = Facade.getInstance();
 		IResponse response = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> list = (List<ICourse>) response.getObject(TagsResponse.DATA);
 		Printer.showList(list);
 		Printer.show("Input the number to get detail description the course");
@@ -30,6 +31,7 @@ public class DetailedDescription implements IAction {
 				.setHead(TagsRequest.ID_COURSE, String.valueOf(list.get(position - 1).getId())).build();
 		IResponse courseResponse = facade.getDetailedDescription(request);
 		Printer.show(courseResponse.getObject(TagsResponse.MESSAGE).toString());
+		@SuppressWarnings("unchecked")
 		List<IStudent> listStudent = (List<IStudent>) courseResponse.getObject(TagsResponse.DATA);
 		Printer.show("Students: ");
 		Printer.showList(listStudent);

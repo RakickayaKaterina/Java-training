@@ -20,6 +20,7 @@ public class StudentRemoval implements IAction {
 	public void execute() {
 		IFacade facade = Facade.getInstance();
 		IResponse response = facade.getAllStudents();
+		@SuppressWarnings("unchecked")
 		List<IStudent> students = (List<IStudent>) response.getObject(TagsResponse.DATA);
 		Printer.showList(students);
 		Input input = Input.getInstance();

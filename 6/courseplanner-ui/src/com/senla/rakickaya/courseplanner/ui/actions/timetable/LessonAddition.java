@@ -23,6 +23,7 @@ public class LessonAddition implements IAction {
 		IFacade facade = Facade.getInstance();
 
 		IResponse response = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> courses = (List<ICourse>) response.getObject(TagsResponse.DATA);
 		Printer.showList(courses);
 		Printer.show("Input the number of the course to create time table");

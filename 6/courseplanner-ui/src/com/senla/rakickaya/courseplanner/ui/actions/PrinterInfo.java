@@ -19,6 +19,7 @@ public class PrinterInfo implements IAction {
 	@Override
 	public void execute() {
 		IResponse response = listResponse.getResponse();
+		@SuppressWarnings("unchecked")
 		List<IEntity> list = (List<IEntity>) response.getObject(TagsResponse.DATA);
 		Printer.showList(list);
 	}

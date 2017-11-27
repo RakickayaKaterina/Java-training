@@ -24,6 +24,7 @@ public class PrinterInfoParam implements IAction {
 	public void execute() {
 		IRequest request = assemblyRequest.assemblyRequest();
 		IResponse response = listResponse.getResponse(request);
+		@SuppressWarnings("unchecked")
 		List<IEntity> list = (List<IEntity>) response.getObject(TagsResponse.DATA);
 		Printer.showList(list);
 	}

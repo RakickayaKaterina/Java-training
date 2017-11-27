@@ -20,6 +20,7 @@ public class LectorRemoval implements IAction {
 	public void execute() {
 		IFacade facade = Facade.getInstance();
 		IResponse response = facade.getAllLectors();
+		@SuppressWarnings("unchecked")
 		List<ILector> lectors = (List<ILector>) response.getObject(TagsResponse.DATA);
 		Printer.showList(lectors);
 		Input input = Input.getInstance();
