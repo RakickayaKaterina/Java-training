@@ -1,10 +1,8 @@
-package  com.senla.rakickaya.courseplanner.facade.comparators.lector;
+package com.senla.rakickaya.courseplanner.facade.comparators.lector;
 
 import java.util.Comparator;
 
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
-
-
 
 public class AlphabetLectorComparator implements Comparator<ILector> {
 	@Override

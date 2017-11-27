@@ -7,15 +7,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
-import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.configuration.Config;
-import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class FillerRepositories {
 
@@ -30,6 +31,8 @@ public class FillerRepositories {
 	private List<ILesson> timeTable;
 
 	private static FillerRepositories fillerRepositories;
+
+	private static final Logger logger = Logger.getLogger(FillerRepositories.class.getName());
 
 	public static FillerRepositories getInstance() {
 		if (fillerRepositories == null) {
@@ -57,86 +60,95 @@ public class FillerRepositories {
 		timeTable = new ArrayList<>();
 	}
 
-	public void writeLectorToFile(List<ILector> pLector) throws IOException {
+	public void writeLectorToFile(List<ILector> pLector) {
 		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 				new FileOutputStream(new File(pathLectorsFile)))) {
 			objectOutputStream.writeObject(pLector);
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
 		}
 	}
 
-	private void readLectorsFromFile() throws IOException, ClassNotFoundException {
+	@SuppressWarnings("unchecked")
+	private void readLectorsFromFile() {
 		try (ObjectInputStream objectInputStream = new ObjectInputStream(
 				new FileInputStream(new File(pathLectorsFile)))) {
 			lectors = (List<ILector>) objectInputStream.readObject();
+		} catch (ClassNotFoundException e) {
+			logger.error(new Date() + " " + e.getMessage());
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
 		}
 	}
 
-	public void writeCourseToFile(List<ICourse> pCourse) throws IOException {
+	public void writeCourseToFile(List<ICourse> pCourse) {
 		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 				new FileOutputStream(new File(pathCoursesFile)))) {
 			objectOutputStream.writeObject(pCourse);
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
 		}
 	}
 
-	private void readCoursesFromFile() throws ClassNotFoundException, IOException {
+	@SuppressWarnings("unchecked")
+	private void readCoursesFromFile() {
 		try (ObjectInputStream objectInputStream = new ObjectInputStream(
 				new FileInputStream(new File(pathCoursesFile)))) {
 			courses = (List<ICourse>) objectInputStream.readObject();
+		} catch (ClassNotFoundException e) {
+			logger.error(new Date() + " " + e.getMessage());
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
 		}
 	}
 
-	public void writeLessonToFile(List<ILesson> pLesson) throws IOException {
+	public void writeLessonToFile(List<ILesson> pLesson) {
 		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 				new FileOutputStream(new File(pathTimeTableFile)))) {
 			objectOutputStream.writeObject(pLesson);
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
 		}
 	}
 
-	private ILecture getLectureById(long id) {
-		for (ICourse course : courses) {
-			if (course == null) {
-				continue;
-			}
-			int position = ListWorker.getIndexById(courses, id);
-			if (position >= 0) {
-				return course.getLectures().get(position);
-			}
-		}
-		return null;
-	}
-
-	private void readLessonsFromFile() throws ClassNotFoundException, IOException {
+	@SuppressWarnings("unchecked")
+	private void readLessonsFromFile() {
 		try (ObjectInputStream objectInputStream = new ObjectInputStream(
 				new FileInputStream(new File(pathTimeTableFile)))) {
 			timeTable = (List<ILesson>) objectInputStream.readObject();
+		} catch (ClassNotFoundException e) {
+			logger.error(new Date() + " " + e.getMessage());
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
+		}
+	}
+
+	public void writeStudentToFile(List<IStudent> pStudent) {
+		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+				new FileOutputStream(new File(pathStudentFile)))) {
+			objectOutputStream.writeObject(pStudent);
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void readStudents() {
+		try (ObjectInputStream objectInputStream = new ObjectInputStream(
+				new FileInputStream(new File(pathStudentFile)))) {
+			students = (List<IStudent>) objectInputStream.readObject();
+		} catch (ClassNotFoundException e) {
+			logger.error(new Date() + " " + e.getMessage());
+		} catch (IOException e) {
+			logger.error(new Date() + " " + e.getMessage());
 		}
 	}
 
 	public void fillAll() {
-		try {
-			readStudents();
-			readLectorsFromFile();
-			readCoursesFromFile();
-			readLessonsFromFile();
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO logger
-			e.printStackTrace();
-		}
-
-	}
-
-	public void writeStudentToFile(List<IStudent> pStudent) throws IOException {
-		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new FileOutputStream(new File(pathStudentFile)))) {
-			objectOutputStream.writeObject(pStudent);
-		}
-	}
-
-	private void readStudents() throws ClassNotFoundException, IOException {
-		try (ObjectInputStream objectInputStream = new ObjectInputStream(
-				new FileInputStream(new File(pathStudentFile)))) {
-			students = (List<IStudent>) objectInputStream.readObject();
-		}
+		readStudents();
+		readLectorsFromFile();
+		readCoursesFromFile();
+		readLessonsFromFile();
 	}
 
 	public List<IStudent> getStudents() {

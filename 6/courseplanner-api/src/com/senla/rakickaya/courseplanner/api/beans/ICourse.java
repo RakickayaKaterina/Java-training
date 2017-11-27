@@ -4,27 +4,27 @@ import java.util.Date;
 import java.util.List;
 
 public interface ICourse extends IEntity, Cloneable {
-	public String getName();
+	String getName();
 
-	public String getDescription();
+	String getDescription();
 
-	public Date getStartDate();
+	Date getStartDate();
 
-	public Date getEndDate();
+	Date getEndDate();
 
-	public ILector getLector();
+	ILector getLector();
 
-	public List<ILecture> getLectures();
+	List<ILecture> getLectures();
 
-	public void setLectures(List<ILecture> lectures);
+	void setLectures(List<ILecture> lectures);
 
-	public void setLector(ILector lector);
+	void setLector(ILector lector);
 
-	public List<IStudent> getStudents();
+	List<IStudent> getStudents();
 
-	public void setStudents(List<IStudent> students);
+	void setStudents(List<IStudent> students);
 
-	public ICourse clone() throws CloneNotSupportedException;
+	ICourse clone() throws CloneNotSupportedException;
 
 	void setStartDate(Date startDate);
 

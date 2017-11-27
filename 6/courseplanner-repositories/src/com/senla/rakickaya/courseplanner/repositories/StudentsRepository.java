@@ -1,6 +1,5 @@
 package com.senla.rakickaya.courseplanner.repositories;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,20 +62,14 @@ public class StudentsRepository implements IStudentsRepository {
 	}
 
 	@Override
-	public List<IStudent> getListStudents() {
+	public List<IStudent> getStudents() {
 		return mStudents;
 	}
 
 	@Override
 	public void save() {
-		try {
-			FillerRepositories fillerRepositories = FillerRepositories.getInstance();
-			fillerRepositories.writeStudentToFile(mStudents);
-		} catch (IOException e) {
-			// TODO LOGGER
-			e.printStackTrace();
-		}
-
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeStudentToFile(mStudents);
 	}
 
 }

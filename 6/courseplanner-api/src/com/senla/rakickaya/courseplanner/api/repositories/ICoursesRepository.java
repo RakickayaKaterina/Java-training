@@ -6,17 +6,17 @@ import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 
 public interface ICoursesRepository {
-	public boolean addCourse(ICourse pCourse);
+	boolean addCourse(ICourse pCourse);
 
-	public ICourse removeCourse(long pId);
+	ICourse removeCourse(long pId);
 
-	public void updateCourse(ICourse pCourse);
+	void updateCourse(ICourse pCourse);
 
-	public ICourse getCourse(long pId);
+	ICourse getCourse(long pId);
 
-	public List<ICourse> getListCourses();
+	List<ICourse> getCourses();
 
-	public void save();
+	void save();
 
 	List<ILecture> getAllLectures();
 

@@ -9,37 +9,37 @@ import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 
 public interface ICoursesService {
-	public void addCourse(ICourse pCourse);
+	void addCourse(ICourse pCourse);
 
-	public void removeCourse(long pId) throws EntityNotFoundException;
+	void removeCourse(long pId) throws EntityNotFoundException;
 
-	public void updateCourse(ICourse pCourse);
+	void updateCourse(ICourse pCourse);
 
-	public ICourse getCourse(long pId);
+	ICourse getCourse(long pId);
 
-	public List<ICourse> getListCourses();
+	List<ICourse> getCourses();
 
-	public void addStudentToCourse(long pIdStudent, long pIdCourse);
+	void addStudentToCourse(long pIdStudent, long pIdCourse);
 
-	public void removeStudentFromCourse(long pIdStudent, long pIdCourse) throws EntityNotFoundException;
+	void removeStudentFromCourse(long pIdStudent, long pIdCourse) throws EntityNotFoundException;
 
-	public void addLectorToCourse(long pIdLector, long pIdCourse);
+	void addLectorToCourse(long pIdLector, long pIdCourse);
 
-	public void removeLectorFromCourse(long pIdLector, long pIdCourse) throws EntityNotFoundException;
+	void removeLectorFromCourse(long pIdLector, long pIdCourse) throws EntityNotFoundException;
 
-	public void addLectureToCourse(ILecture pLecture, long pIdCourse);
+	void addLectureToCourse(ILecture pLecture, long pIdCourse);
 
-	public void removeLectureFromCourse(long pIdLecture, long pIdCourse) throws EntityNotFoundException;
+	void removeLectureFromCourse(long pIdLecture, long pIdCourse) throws EntityNotFoundException;
 
-	public List<ICourse> getSortedList(Comparator<ICourse> pComparator);
+	List<ICourse> getSortedList(Comparator<ICourse> pComparator);
 
-	public List<ICourse> getListCoursesAfterDate(Date pDate, Comparator<ICourse> pComparator);
+	List<ICourse> getCoursesAfterDate(Date pDate, Comparator<ICourse> pComparator);
 
-	public List<ICourse> getListCurrentCourses(Date pCurrentDate, Comparator<ICourse> pComparator);
+	List<ICourse> getCurrentCourses(Date pCurrentDate, Comparator<ICourse> pComparator);
 
-	public int getTotalCountCourses();
+	int getTotalCountCourses();
 
-	public List<ICourse> getPastCourses(Date startDateSub, Date endDateSub);
+	List<ICourse> getPastCourses(Date startDateSub, Date endDateSub);
 
 	List<ILecture> getAllLectures();
 

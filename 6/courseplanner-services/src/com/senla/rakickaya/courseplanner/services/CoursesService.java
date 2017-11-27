@@ -20,9 +20,7 @@ import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.LectorsRepository;
 import com.senla.rakickaya.courseplanner.repositories.StudentsRepository;
-import com.senla.rakickaya.courseplanner.utils.DateWorker;
-import com.senla.rakickaya.courseplanner.utils.GeneratorId;
-import com.senla.rakickaya.courseplanner.utils.ListWorker;
+import com.senla.rakickaya.courseplanner.utils.*;
 
 public class CoursesService implements ICoursesService {
 	private final ICoursesRepository mRepositoryCourses;
@@ -47,7 +45,7 @@ public class CoursesService implements ICoursesService {
 		ICourse course = mRepositoryCourses.removeCourse(pId);
 		if (course == null)
 			throw new EntityNotFoundException();
-		List<IStudent> students = mRepositoryStudents.getListStudents();
+		List<IStudent> students = mRepositoryStudents.getStudents();
 		for (int i = 0; i < students.size(); i++) {
 			ListWorker.removeItemById(students.get(i).getCourses(), pId);
 		}
@@ -65,8 +63,8 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public List<ICourse> getListCourses() {
-		return mRepositoryCourses.getListCourses();
+	public List<ICourse> getCourses() {
+		return mRepositoryCourses.getCourses();
 	}
 
 	@Override
@@ -138,15 +136,15 @@ public class CoursesService implements ICoursesService {
 
 	@Override
 	public List<ICourse> getSortedList(Comparator<ICourse> mComparator) {
-		List<ICourse> listCourses = mRepositoryCourses.getListCourses();
+		List<ICourse> listCourses = mRepositoryCourses.getCourses();
 		listCourses.sort(mComparator);
 		return listCourses;
 	}
 
 	@Override
-	public List<ICourse> getListCoursesAfterDate(Date pDate, Comparator<ICourse> pComparator) {
+	public List<ICourse> getCoursesAfterDate(Date pDate, Comparator<ICourse> pComparator) {
 		List<ICourse> resultList = new ArrayList<>();
-		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<ICourse> courses = mRepositoryCourses.getCourses();
 		for (int i = 0; i < courses.size(); i++) {
 			if (DateWorker.isAfterDate(pDate, courses.get(i).getStartDate())) {
 				resultList.add(courses.get(i));
@@ -157,9 +155,9 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public List<ICourse> getListCurrentCourses(Date pCurrentDate, Comparator<ICourse> pComparator) {
+	public List<ICourse> getCurrentCourses(Date pCurrentDate, Comparator<ICourse> pComparator) {
 		List<ICourse> resultList = new ArrayList<>();
-		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<ICourse> courses = mRepositoryCourses.getCourses();
 		for (int i = 0; i < courses.size(); i++) {
 			if (DateWorker.isBetweenDate(pCurrentDate, courses.get(i).getStartDate(), courses.get(i).getEndDate())) {
 				resultList.add(courses.get(i));
@@ -171,13 +169,13 @@ public class CoursesService implements ICoursesService {
 
 	@Override
 	public int getTotalCountCourses() {
-		return mRepositoryCourses.getListCourses().size();
+		return mRepositoryCourses.getCourses().size();
 	}
 
 	@Override
 	public List<ICourse> getPastCourses(Date startDateSub, Date endDateSub) {
 		List<ICourse> resultList = new ArrayList<>();
-		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<ICourse> courses = mRepositoryCourses.getCourses();
 		for (int i = 0; i < courses.size(); i++) {
 			if (DateWorker.isSubInterval(courses.get(i).getStartDate(), courses.get(i).getEndDate(), startDateSub,
 					endDateSub)) {
@@ -206,7 +204,7 @@ public class CoursesService implements ICoursesService {
 	@Override
 	public void exportCSV(String path) {
 		CSVWorker worker = new CSVWorker(path);
-		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<ICourse> courses = mRepositoryCourses.getCourses();
 		List<CSVObject> objects = new ArrayList<CSVObject>();
 		for (ICourse course : courses) {
 			objects.add(CSVObject.valueOf(course));
@@ -220,17 +218,16 @@ public class CoursesService implements ICoursesService {
 		List<CSVObject> objects = worker.readCSV();
 		List<ICourse> courses = new ArrayList<>();
 		for (CSVObject obj : objects) {
-			courses.add(CSVConverter.parseCourse(obj, mRepositoryStudents.getListStudents(),
-					mRepositoryLectors.getListLectors()));
+			courses.add(
+					CSVConverter.parseCourse(obj, mRepositoryStudents.getStudents(), mRepositoryLectors.getLectors()));
 		}
 		for (ICourse course : courses) {
 			if (!mRepositoryCourses.addCourse(course)) {
 				mRepositoryCourses.updateCourse(course);
-			}
-			else{
+			} else {
 				GeneratorId generatorId = GeneratorId.getInstance();
 				long id = generatorId.getIdCourse();
-				if(course.getId() > id){
+				if (course.getId() > id) {
 					generatorId.setIdCourse(id);
 				}
 			}

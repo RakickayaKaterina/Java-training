@@ -1,6 +1,5 @@
 package com.senla.rakickaya.courseplanner.repositories;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class TimeTable implements ITimeTable {
 	@Override
 	public ILesson removeLesson(long pId) {
 		ILesson lesson = ListWorker.removeItemById(mLessons, pId);
-		if(lesson!=null){
+		if (lesson != null) {
 			save();
 		}
 		return lesson;
@@ -55,7 +54,6 @@ public class TimeTable implements ITimeTable {
 	public void updateLesson(ILesson pLesson) {
 		ListWorker.updateItem(mLessons, pLesson);
 		save();
-		 
 
 	}
 
@@ -65,19 +63,14 @@ public class TimeTable implements ITimeTable {
 	}
 
 	@Override
-	public List<ILesson> getListLessons() {
+	public List<ILesson> getLessons() {
 		return mLessons;
 	}
 
 	@Override
 	public void save() {
-		try {
-			FillerRepositories fillerRepositories = FillerRepositories.getInstance();
-			fillerRepositories.writeLessonToFile(mLessons);
-		} catch (IOException e) {
-			// TODO LOGGER
-			e.printStackTrace();
-		}
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeLessonToFile(mLessons);
 
 	}
 

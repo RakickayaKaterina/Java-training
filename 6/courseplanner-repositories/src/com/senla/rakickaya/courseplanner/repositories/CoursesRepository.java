@@ -1,6 +1,5 @@
 package com.senla.rakickaya.courseplanner.repositories;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class CoursesRepository implements ICoursesRepository {
 	@Override
 	public ICourse removeCourse(long pId) {
 		ICourse course = ListWorker.removeItemById(mCourses, pId);
-		if(course!=null){
+		if (course != null) {
 			save();
 		}
 		return course;
@@ -60,13 +59,13 @@ public class CoursesRepository implements ICoursesRepository {
 	}
 
 	@Override
-	public List<ICourse> getListCourses() {
+	public List<ICourse> getCourses() {
 		return mCourses;
 	}
 
 	@Override
 	public List<ILecture> getAllLectures() {
-		List<ICourse> courses = getListCourses();
+		List<ICourse> courses = getCourses();
 		List<ILecture> resultList = new ArrayList<>();
 		for (int i = 0; i < courses.size(); i++) {
 			resultList.addAll(courses.get(i).getLectures());
@@ -76,14 +75,8 @@ public class CoursesRepository implements ICoursesRepository {
 
 	@Override
 	public void save() {
-		try {
-			FillerRepositories fillerRepositories = FillerRepositories.getInstance();
-			fillerRepositories.writeCourseToFile(mCourses);
-		} catch (IOException e) {
-			// TODO LOGGER
-			e.printStackTrace();
-		}
-
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeCourseToFile(mCourses);
 	}
 
 }

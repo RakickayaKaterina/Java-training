@@ -1,6 +1,5 @@
 package com.senla.rakickaya.courseplanner.facade;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -9,7 +8,6 @@ import org.apache.log4j.Logger;
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IRequest;
 import com.senla.rakickaya.courseplanner.api.data_exchange.IResponse;
-import com.senla.rakickaya.courseplanner.api.data_exchange.enums.TagsResponse;
 import com.senla.rakickaya.courseplanner.api.facade.IFacade;
 import com.senla.rakickaya.courseplanner.api.services.ICoursesService;
 import com.senla.rakickaya.courseplanner.api.services.ILectorsService;
@@ -24,14 +22,41 @@ import com.senla.rakickaya.courseplanner.facade.comparators.lector.AlphabetLecto
 import com.senla.rakickaya.courseplanner.facade.comparators.lesson.AlphabetLessonComparator;
 import com.senla.rakickaya.courseplanner.facade.comparators.lesson.DateLessonComparator;
 import com.senla.rakickaya.courseplanner.facade.dataExchange.RequestExtractor;
-import com.senla.rakickaya.courseplanner.facade.dataExchange.Response;
+import com.senla.rakickaya.courseplanner.facade.dataExchange.ResponseBuilder;
 import com.senla.rakickaya.courseplanner.services.CoursesService;
 import com.senla.rakickaya.courseplanner.services.LectorsService;
 import com.senla.rakickaya.courseplanner.services.StudentsService;
 import com.senla.rakickaya.courseplanner.services.TimeTableService;
-import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 
 public class Facade implements IFacade {
+
+	private static final String OK = "OK";
+
+	private static final String CLONED_BAD = "Course wasn't cloned";
+
+	private static final String CLONED_SUCCESSFULLY = "The course was cloned successfully";
+
+	private static final String LESSON_NOT_FOUND = "Lesson not found";
+
+	private static final String COURSE_OR_LECTOR_NOT_FOUND = "Course or lector not found";
+
+	private static final String LECTOR_NOT_FOUND = "Lector not found";
+
+	private static final String COURSE_OR_STUDENT_NOT_FOUND = "Course or student not found";
+
+	private static final String STUDENT_NOT_FOUND = "Student not found";
+
+	private static final String COURSE_OR_LECTURE_NOT_FOUND = "Course or lecture not found";
+
+	private static final String COURSE_NOT_FOUND = "Course not found";
+
+	private static final String REMOVED_SUCCESSFULLY = "The course was removed successfully";
+
+	private static final String ADDED_SUCCESSFULLY = "The course was added successfully";
+
+	private static final String BAD_REQUEST = "Bad request(Incorrect date format)";
+
+	private static final String LIST_IS_EMPTY = "List is Empty";
 
 	private static Facade facade;
 
@@ -62,557 +87,499 @@ public class Facade implements IFacade {
 
 	@Override
 	public IResponse getSortedCoursesByStartDate() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mCoursesService.getSortedList(new DateCourseComparator()));
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mCoursesService.getSortedList(new DateCourseComparator()), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedCoursesByCountStudents() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mCoursesService.getSortedList(new CountStudentsComparator()));
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mCoursesService.getSortedList(new CountStudentsComparator()), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedCoursesByLectorName() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mCoursesService.getSortedList(new LectorNameComparator()));
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mCoursesService.getSortedList(new LectorNameComparator()), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedCoursesByAlphabet() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mCoursesService.getSortedList(new AlphabetCourseComparator()));
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mCoursesService.getSortedList(new AlphabetCourseComparator()), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedLectorsByAlphabet() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mLectorsService.getSortedList(new AlphabetLectorComparator()));
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mLectorsService.getSortedList(new AlphabetLectorComparator()), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedLectorsByCountCourses() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mLectorsService.getLectorsInformation());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mLectorsService.getLectorsInformation(), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getDetailedDescription(IRequest pIdCourse) {
+
 		RequestExtractor requestExtractor = new RequestExtractor(pIdCourse);
-		IResponse response = new Response();
 		ICourse course = mCoursesService.getCourse(requestExtractor.extractIdCourse());
-		response.addHead(TagsResponse.MESSAGE, String.format("Detailed description:\ndescription=%s\nlector=%s\n",
-				course.getDescription(), course.getLector().getName()));
-		response.addHead(TagsResponse.DATA, course.getStudents());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(course.getStudents(),
+				String.format("Detailed description:\ndescription=%s\nlector=%s\n", course.getDescription(),
+						course.getLector().getName()),
+				LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedTimeTableByDate() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mTimeTableService.getSortedList(new DateLessonComparator()));
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mTimeTableService.getSortedList(new DateLessonComparator()), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedTimeTableByAlphabet() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mTimeTableService.getSortedList(new AlphabetLessonComparator()));
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mTimeTableService.getSortedList(new AlphabetLessonComparator()), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getSortedCoursesByStartDate(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new DateCourseComparator()));
+			return responseBuilder.build(
+					mCoursesService.getCoursesAfterDate(requestExtractor.extractDate(), new DateCourseComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
+
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 
 	}
 
 	@Override
 	public IResponse getSortedCoursesByCountStudents(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new CountStudentsComparator()));
+			return responseBuilder.build(
+					mCoursesService.getCoursesAfterDate(requestExtractor.extractDate(), new CountStudentsComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getSortedCoursesByLectorName(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new LectorNameComparator()));
+			return responseBuilder.build(
+					mCoursesService.getCoursesAfterDate(requestExtractor.extractDate(), new LectorNameComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getSortedCoursesByAlphabet(IRequest afterDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(afterDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA, mCoursesService.getListCoursesAfterDate(requestExtractor.extractDate(),
-					new AlphabetCourseComparator()));
+			return responseBuilder.build(
+					mCoursesService.getCoursesAfterDate(requestExtractor.extractDate(), new AlphabetCourseComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getSortedCurrentCoursesByStartDate(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA,
-					mCoursesService.getListCurrentCourses(requestExtractor.extractDate(), new DateCourseComparator()));
+			return responseBuilder.build(
+					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new DateCourseComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getSortedCurrentCoursesByCountStudents(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-
-			response.addHead(TagsResponse.DATA, mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
-					new CountStudentsComparator()));
-
+			return responseBuilder.build(
+					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new CountStudentsComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getSortedCurrentCoursesByLectorName(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA,
-					mCoursesService.getListCurrentCourses(requestExtractor.extractDate(), new LectorNameComparator()));
-
+			return responseBuilder.build(
+					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new LectorNameComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getSortedCurrentCoursesByAlphabet(IRequest currentDate) {
 		RequestExtractor requestExtractor = new RequestExtractor(currentDate);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA, mCoursesService.getListCurrentCourses(requestExtractor.extractDate(),
-					new AlphabetCourseComparator()));
+			return responseBuilder.build(
+					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new AlphabetCourseComparator()),
+					LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getTotalCountCourse() {
-		Response response = new Response();
-		response.addHead(TagsResponse.TOTAL_COUNT, mCoursesService.getTotalCountCourses());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mCoursesService.getTotalCountCourses());
 	}
 
 	@Override
 	public IResponse getTotalCountStudents() {
-		Response response = new Response();
-		response.addHead(TagsResponse.TOTAL_COUNT, mStudentsService.getTotalCountStudents());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mStudentsService.getTotalCountStudents());
 	}
 
 	@Override
 	public IResponse getTotalCountLectors() {
-		Response response = new Response();
-		response.addHead(TagsResponse.TOTAL_COUNT, mLectorsService.getTotalCountLectors());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mLectorsService.getTotalCountLectors());
 	}
 
 	@Override
-	public IResponse getListLessonByDate(IRequest date) {
+	public IResponse getLessonsByDate(IRequest date) {
 		RequestExtractor requestExtractor = new RequestExtractor(date);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA, mTimeTableService.getListLessons(requestExtractor.extractDate()));
+			return responseBuilder.build(mTimeTableService.getLessons(requestExtractor.extractDate()), LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse getPastCourses(IRequest interval) {
 		RequestExtractor requestExtractor = new RequestExtractor(interval);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
-			response.addHead(TagsResponse.DATA, mCoursesService.getPastCourses(requestExtractor.extractStartDate(),
-					requestExtractor.extractEndDate()));
+			return responseBuilder.build(mCoursesService.getPastCourses(requestExtractor.extractStartDate(),
+					requestExtractor.extractEndDate()), LIST_IS_EMPTY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response.addHead(TagsResponse.MESSAGE, "Bad request(Incorrect date format)");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse addCourse(IRequest course) {
 		RequestExtractor requestExtractor = new RequestExtractor(course);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
+
 			mCoursesService.addCourse(requestExtractor.extractCourse());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The course was added successfully");
+			return responseBuilder.build(ADDED_SUCCESSFULLY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Incorrect date format");
 		}
-		return response;
+		return responseBuilder.build(BAD_REQUEST);
 	}
 
 	@Override
 	public IResponse removeCourse(IRequest idCourse) {
+
 		RequestExtractor requestExtractor = new RequestExtractor(idCourse);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			mCoursesService.removeCourse(requestExtractor.extractIdCourse());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The course was removed successfully");
+			return responseBuilder.build(REMOVED_SUCCESSFULLY);
 		} catch (Exception e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Course not found");
 		}
-		return response;
+		return responseBuilder.build(COURSE_NOT_FOUND);
 	}
 
 	@Override
 	public IResponse addLectureToCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		mCoursesService.addLectureToCourse(requestExtractor.extractLecture(), requestExtractor.extractIdCourse());
-		response.addHead(TagsResponse.MESSAGE, "The lecture was added to the course successfully");
-		return response;
+		return responseBuilder.build(ADDED_SUCCESSFULLY);
+
 	}
 
 	@Override
 	public IResponse removeLectureFromCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			mCoursesService.removeLectureFromCourse(requestExtractor.extractIdLecture(),
 					requestExtractor.extractIdCourse());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The lecture was removed from the course successfully");
+			return responseBuilder.build(REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Course or lecture not found");
 		}
-		return response;
+		return responseBuilder.build(COURSE_OR_LECTURE_NOT_FOUND);
 
 	}
 
 	@Override
 	public IResponse addStudent(IRequest student) {
 		RequestExtractor requestExtractor = new RequestExtractor(student);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		mStudentsService.addStudent(requestExtractor.extractStudent());
-		response.addHead(TagsResponse.MESSAGE, "The student was added  successfully");
-		return response;
+		return responseBuilder.build(ADDED_SUCCESSFULLY);
 	}
 
 	@Override
 	public IResponse addStudentToCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		mCoursesService.addStudentToCourse(requestExtractor.extractIdStudent(), requestExtractor.extractIdCourse());
-		response.addHead(TagsResponse.MESSAGE, "The student was added to the course successfully");
-		return response;
+		return responseBuilder.build(ADDED_SUCCESSFULLY);
 	}
 
 	@Override
 	public IResponse removeStudent(IRequest idStudent) {
 		RequestExtractor requestExtractor = new RequestExtractor(idStudent);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			mStudentsService.removeStudent(requestExtractor.extractIdStudent());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The student was removed successfully");
+			return responseBuilder.build(REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Student not found");
 		}
-		return response;
+		return responseBuilder.build(STUDENT_NOT_FOUND);
 
 	}
 
 	@Override
 	public IResponse removeStudentFromCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			mCoursesService.removeStudentFromCourse(requestExtractor.extractIdStudent(),
 					requestExtractor.extractIdCourse());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The student was removed from the course successfully");
+			return responseBuilder.build(REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Course or student not found");
 		}
-		return response;
+		return responseBuilder.build(COURSE_OR_STUDENT_NOT_FOUND);
 	}
 
 	@Override
 	public IResponse addLector(IRequest lector) {
 		RequestExtractor requestExtractor = new RequestExtractor(lector);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		mLectorsService.addLector(requestExtractor.extractLector());
-		response.addHead(TagsResponse.MESSAGE, "The lector was added  successfully");
-		return response;
+		return responseBuilder.build(ADDED_SUCCESSFULLY);
 	}
 
 	@Override
 	public IResponse addLectorToCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = new Response();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		mCoursesService.addLectorToCourse(requestExtractor.extractIdLector(), requestExtractor.extractIdCourse());
-		response.addHead(TagsResponse.MESSAGE, "The lector was added to the course successfully");
-		return response;
+		return responseBuilder.build(ADDED_SUCCESSFULLY);
 	}
 
 	@Override
 	public IResponse removeLector(IRequest idLector) {
 		RequestExtractor requestExtractor = new RequestExtractor(idLector);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			mLectorsService.removeLector(requestExtractor.extractIdLector());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The lector was removed successfully");
+			return responseBuilder.build(REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Lector not found");
 		}
-		return response;
+		return responseBuilder.build(LECTOR_NOT_FOUND);
 	}
 
 	@Override
 	public IResponse removeLectorFromCourse(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			mCoursesService.removeLectorFromCourse(requestExtractor.extractIdLector(),
 					requestExtractor.extractIdCourse());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The lector was removed from the course successfully");
+			return responseBuilder.build(REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Course or lector not found");
 		}
-		return response;
+		return responseBuilder.build(COURSE_OR_LECTOR_NOT_FOUND);
 	}
 
 	@Override
 	public IResponse createTimeTableForLecture(IRequest request) {
 		RequestExtractor requestExtractor = new RequestExtractor(request);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		String message;
 		try {
 			mTimeTableService.createLesson(requestExtractor.extractIdLecture(), requestExtractor.extractDate(),
 					requestExtractor.extractCountStudent());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The time table was created successfully");
+			return responseBuilder.build(ADDED_SUCCESSFULLY);
 		} catch (ParseException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Incorrect date format");
+			message = BAD_REQUEST;
 		} catch (Exception e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, e.getMessage());
+			message = e.getMessage();
 		}
-		return response;
+		return responseBuilder.build(message);
 	}
 
 	@Override
 	public IResponse removeTimeTableForLecture(IRequest idLecture) {
 		RequestExtractor requestExtractor = new RequestExtractor(idLecture);
-		IResponse response = null;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			mTimeTableService.removeLessonByLecture(requestExtractor.extractIdLecture());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The lesson was removed from the table successfully");
+			return responseBuilder.build(REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Lesson not found");
 		}
-		return response;
+		return responseBuilder.build(LESSON_NOT_FOUND);
 	}
 
 	@Override
 	public IResponse getAllStudents() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mStudentsService.getListStudents());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mStudentsService.getStudents(), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getAllLectors() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mLectorsService.getListLectors());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mLectorsService.getLectors(), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getAllCourses() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mCoursesService.getListCourses());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mCoursesService.getCourses(), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse getAllLectures() {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mCoursesService.getAllLectures());
-		return response;
-	}
-
-	@Override
-	public IResponse getLecturesByCourse(int n) {
-		IResponse response = new Response();
-		response.addHead(TagsResponse.DATA, mCoursesService.getListCourses().get(n).getLectures());
-		return response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		return responseBuilder.build(mCoursesService.getAllLectures(), LIST_IS_EMPTY);
 	}
 
 	@Override
 	public IResponse cloneCourse(IRequest idCourse) {
-		IResponse response;
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		try {
 			RequestExtractor requestExtractor = new RequestExtractor(idCourse);
 			mCoursesService.cloneCourseById(requestExtractor.extractIdCourse());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "The course was cloned successfully");
+			return responseBuilder.build(CLONED_SUCCESSFULLY);
 		} catch (CloneNotSupportedException | EntityNotFoundException e) {
 			logger.error(new Date() + " " + e.getMessage());
-			response = new Response();
-			response.addHead(TagsResponse.MESSAGE, "Course wasn't cloned");
 		}
-		return response;
+		return responseBuilder.build(CLONED_BAD);
 	}
+
 	@Override
-	public IResponse exportCourse(IRequest request){
-		IResponse response = new Response();
+	public IResponse exportCourse(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mCoursesService.exportCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
+
 	@Override
-	public IResponse exportLector(IRequest request){
-		IResponse response = new Response();
+	public IResponse exportLector(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mLectorsService.exportCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
+
 	@Override
-	public IResponse exportStudent(IRequest request){
-		IResponse response = new Response();
+	public IResponse exportStudent(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mStudentsService.exportCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
+
 	@Override
-	public IResponse exportTimeTable(IRequest request){
-		IResponse response = new Response();
+	public IResponse exportTimeTable(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mTimeTableService.exportCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
+
 	@Override
-	public IResponse importCourse(IRequest request){
-		IResponse response = new Response();
+	public IResponse importCourse(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mCoursesService.importCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
+
 	@Override
-	public IResponse importLector(IRequest request){
-		IResponse response = new Response();
+	public IResponse importLector(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mLectorsService.importCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
+
 	@Override
-	public IResponse importStudent(IRequest request){
-		IResponse response = new Response();
+	public IResponse importStudent(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mStudentsService.importCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
+
 	@Override
-	public IResponse importTimeTable(IRequest request){
-		IResponse response = new Response();
+	public IResponse importTimeTable(IRequest request) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
 		RequestExtractor extractor = new RequestExtractor(request);
 		String path = extractor.extractPath();
 		mTimeTableService.importCSV(path);
-		response.addHead(TagsResponse.MESSAGE, "OK");
-		return response;
+		return responseBuilder.build(OK);
 	}
-
 
 }

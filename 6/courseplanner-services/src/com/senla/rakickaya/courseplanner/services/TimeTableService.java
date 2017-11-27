@@ -42,7 +42,7 @@ public class TimeTableService implements ITimeTableService {
 	@Override
 	public void createLesson(long idLecture, Date dateForLecture, int countStudent) throws Exception {
 		ILecture lecture = getLectureCourse(idLecture);
-		List<ILesson> timeTable = getListLessons(dateForLecture);
+		List<ILesson> timeTable = getLessons(dateForLecture);
 		int amount = 0;
 		for (ILesson lesson : timeTable) {
 			amount += lesson.getCountStudent();
@@ -74,9 +74,9 @@ public class TimeTableService implements ITimeTableService {
 	}
 
 	@Override
-	public List<ILesson> getListLessons(Date pDate) {
+	public List<ILesson> getLessons(Date pDate) {
 		List<ILesson> resultList = new ArrayList<>();
-		List<ILesson> allLessons = mTimeTable.getListLessons();
+		List<ILesson> allLessons = mTimeTable.getLessons();
 		for (int i = 0; i < allLessons.size(); i++) {
 			if (DateWorker.isEqualsDate(pDate, allLessons.get(i).getDate()))
 				resultList.add(allLessons.get(i));
@@ -86,7 +86,7 @@ public class TimeTableService implements ITimeTableService {
 
 	@Override
 	public void removeLessonByLecture(long idLecture) throws EntityNotFoundException {
-		List<ILesson> lessons = mTimeTable.getListLessons();
+		List<ILesson> lessons = mTimeTable.getLessons();
 		boolean exist = false;
 		for (int i = 0; i < lessons.size(); i++) {
 			ILecture lecture = lessons.get(i).getLecture();
@@ -101,7 +101,7 @@ public class TimeTableService implements ITimeTableService {
 	}
 
 	private ILecture getLectureCourse(long id) {
-		for (ICourse course : mRepositoryCourses.getListCourses()) {
+		for (ICourse course : mRepositoryCourses.getCourses()) {
 			for (ILecture lecture : course.getLectures()) {
 				if (lecture.getId() == id) {
 					return lecture;
@@ -114,7 +114,7 @@ public class TimeTableService implements ITimeTableService {
 	@Override
 	public void exportCSV(String path) {
 		CSVWorker worker = new CSVWorker(path);
-		List<ILesson> lessons = mTimeTable.getListLessons();
+		List<ILesson> lessons = mTimeTable.getLessons();
 		List<CSVObject> objects = new ArrayList<CSVObject>();
 		for (ILesson lesson : lessons) {
 			objects.add(CSVObject.valueOf(lesson));
@@ -145,7 +145,7 @@ public class TimeTableService implements ITimeTableService {
 	}
 	@Override
 	public List<ILesson> getSortedList(Comparator<ILesson> pComparator) {
-		List<ILesson> listLesson = mTimeTable.getListLessons();
+		List<ILesson> listLesson = mTimeTable.getLessons();
 		listLesson.sort(pComparator);
 		return listLesson;
 

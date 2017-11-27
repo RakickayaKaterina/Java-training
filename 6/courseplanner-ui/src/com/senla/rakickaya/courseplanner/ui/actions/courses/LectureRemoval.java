@@ -23,13 +23,12 @@ public class LectureRemoval implements IAction {
 		IFacade facade = Facade.getInstance();
 
 		IResponse responseCourse = facade.getAllCourses();
+		@SuppressWarnings("unchecked")
 		List<ICourse> courses = (List<ICourse>) responseCourse.getObject(TagsResponse.DATA);
 		Printer.showList(courses);
 		Printer.show("Input the number of the course");
 		int positionCourse = input.getInt();
-
-		IResponse responseLecture = facade.getLecturesByCourse(positionCourse);
-		List<ILecture> lectures = (List<ILecture>) responseLecture.getObject(TagsResponse.DATA);
+		List<ILecture> lectures = courses.get(positionCourse).getLectures();
 		Printer.showList(lectures);
 		Printer.show("Input the number of the lecture to remove");
 		int positionLecture = input.getInt();

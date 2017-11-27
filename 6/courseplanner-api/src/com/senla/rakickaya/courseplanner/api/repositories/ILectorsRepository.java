@@ -6,16 +6,16 @@ import com.senla.rakickaya.courseplanner.api.beans.ILector;
 
 
 public interface ILectorsRepository {
-	public boolean addLector(ILector pLector);
+	boolean addLector(ILector pLector);
 
-	public ILector removeLector(long pId);
+	ILector removeLector(long pId);
 
-	public void updateLector(ILector pLector);
+	void updateLector(ILector pLector);
 
-	public ILector getLector(long pId);
+	ILector getLector(long pId);
 
-	public List<ILector> getListLectors();
+	List<ILector> getLectors();
 
-	public void save();
+	void save();
 
 }

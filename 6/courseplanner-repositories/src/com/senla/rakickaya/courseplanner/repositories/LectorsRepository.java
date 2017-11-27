@@ -1,6 +1,5 @@
 package com.senla.rakickaya.courseplanner.repositories;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class LectorsRepository implements ILectorsRepository {
 	@Override
 	public ILector removeLector(long pId) {
 		ILector lector = ListWorker.removeItemById(mLectors, pId);
-		if(lector!=null){
+		if (lector != null) {
 			save();
 		}
 		return lector;
@@ -64,20 +63,14 @@ public class LectorsRepository implements ILectorsRepository {
 	}
 
 	@Override
-	public List<ILector> getListLectors() {
+	public List<ILector> getLectors() {
 		return mLectors;
 	}
 
 	@Override
 	public void save() {
-		try {
-			FillerRepositories fillerRepositories = FillerRepositories.getInstance();
-			fillerRepositories.writeLectorToFile(mLectors);
-		} catch (IOException e) {
-			// TODO LOGGER
-			e.printStackTrace();
-		}
-
+		FillerRepositories fillerRepositories = FillerRepositories.getInstance();
+		fillerRepositories.writeLectorToFile(mLectors);
 	}
 
 }

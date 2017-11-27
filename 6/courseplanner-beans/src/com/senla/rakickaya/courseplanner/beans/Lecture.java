@@ -33,13 +33,14 @@ public class Lecture implements ILecture {
 
 	@Override
 	public String toString() {
-		return "Lecture [ name=" + name + "]";
+		return String.format("Lecture [id=%s, name lecture =%s]", idLecture, name);
 	}
+
 	@Override
 	public ILecture clone() throws CloneNotSupportedException {
-		ILecture lecture = (ILecture)super.clone();
+		ILecture lecture = (ILecture) super.clone();
 		lecture.setId(GeneratorId.getInstance().nextIdLecture());
 		return lecture;
 	}
-	
+
 }

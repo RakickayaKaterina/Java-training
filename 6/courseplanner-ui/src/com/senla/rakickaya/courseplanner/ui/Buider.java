@@ -354,7 +354,7 @@ public class Buider {
 		itemLessonsByDate.setAction(new PrinterInfoParam(new PrinterInfoParam.IListResponse() {
 			@Override
 			public IResponse getResponse(IRequest request) {
-				return Facade.getInstance().getListLessonByDate(request);
+				return Facade.getInstance().getLessonsByDate(request);
 			}
 		}, new AssemblyDateRequest("Input date")));
 

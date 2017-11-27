@@ -39,7 +39,7 @@ public class StudentsService implements IStudentsService {
 		if (removedStudent == null) {
 			throw new EntityNotFoundException();
 		}
-		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<ICourse> courses = mRepositoryCourses.getCourses();
 		for (int i = 0; i < courses.size(); i++) {
 			ListWorker.removeItemById(courses.get(i).getStudents(), id);
 		}
@@ -57,14 +57,14 @@ public class StudentsService implements IStudentsService {
 	}
 
 	@Override
-	public List<IStudent> getListStudents() {
-		return mRepositoryStudents.getListStudents();
+	public List<IStudent> getStudents() {
+		return mRepositoryStudents.getStudents();
 	}
 
 	@Override
 	public void exportCSV(String path) {
 		CSVWorker worker = new CSVWorker(path);
-		List<IStudent> students = mRepositoryStudents.getListStudents();
+		List<IStudent> students = mRepositoryStudents.getStudents();
 		List<CSVObject> objects = new ArrayList<CSVObject>();
 		for (IStudent student : students) {
 			objects.add(CSVObject.valueOf(student));
@@ -78,7 +78,7 @@ public class StudentsService implements IStudentsService {
 		List<CSVObject> objects = worker.readCSV();
 		List<IStudent> students = new ArrayList<>();
 		for (CSVObject obj : objects) {
-			students.add(CSVConverter.parseStudent(obj, mRepositoryCourses.getListCourses()));
+			students.add(CSVConverter.parseStudent(obj, mRepositoryCourses.getCourses()));
 		}
 		for (IStudent student : students) {
 			if (!mRepositoryStudents.addStudent(student)) {
@@ -95,6 +95,6 @@ public class StudentsService implements IStudentsService {
 	}
 	@Override
 	public int getTotalCountStudents() {
-		return mRepositoryStudents.getListStudents().size();
+		return mRepositoryStudents.getStudents().size();
 	}
 }

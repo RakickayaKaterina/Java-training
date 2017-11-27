@@ -55,10 +55,12 @@ public class RequestExtractor {
 		long id = Long.valueOf(mRequest.getObject(el));
 		return id;
 	}
-	public int extractCountStudent(){
+
+	public int extractCountStudent() {
 		return Integer.valueOf(mRequest.getObject(TagsRequest.COUNT_STUDENT));
 	}
-	public String extractPath(){
+
+	public String extractPath() {
 		return mRequest.getObject(TagsRequest.PATH);
 	}
 

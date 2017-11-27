@@ -6,17 +6,17 @@ import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 
 public interface IStudentsService {
-	public void addStudent(IStudent pStudent);
+	void addStudent(IStudent pStudent);
 
-	public void removeStudent(long pId) throws EntityNotFoundException;
+	void removeStudent(long pId) throws EntityNotFoundException;
 
-	public void updateStudent(IStudent pStudent);
+	void updateStudent(IStudent pStudent);
 
-	public IStudent getStudent(long pId);
+	IStudent getStudent(long pId);
 
-	public List<IStudent> getListStudents();
+	List<IStudent> getStudents();
 
-	public int getTotalCountStudents();
+	int getTotalCountStudents();
 
 	void exportCSV(String path);
 

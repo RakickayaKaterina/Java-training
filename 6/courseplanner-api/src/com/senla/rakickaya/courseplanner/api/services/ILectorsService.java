@@ -8,23 +8,23 @@ import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 
 public interface ILectorsService {
-	public void addLector(ILector pLector);
+	void addLector(ILector pLector);
 
-	public void removeLector(long pId) throws EntityNotFoundException;
+	void removeLector(long pId) throws EntityNotFoundException;
 
-	public void updateLector(ILector pLector);
+	void updateLector(ILector pLector);
 
-	public ILector getLector(long pId);
+	ILector getLector(long pId);
 
-	public List<ILector> getListLectors();
+	List<ILector> getLectors();
 
-	public int getCountCoursesByLector(long pIdLector);
+	int getCountCoursesByLector(long pIdLector);
 
-	public List<ILector> getSortedList(Comparator<ILector> pComparator);
+	List<ILector> getSortedList(Comparator<ILector> pComparator);
 
-	public Map<ILector, Integer> getLectorsInformation();
+	Map<ILector, Integer> getLectorsInformation();
 
-	public int getTotalCountLectors();
+	int getTotalCountLectors();
 
 	void exportCSV(String path);
 

@@ -4,8 +4,6 @@ import java.util.Comparator;
 
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 
-
-
 public class AlphabetCourseComparator implements Comparator<ICourse> {
 	@Override
 	public int compare(ICourse o1, ICourse o2) {

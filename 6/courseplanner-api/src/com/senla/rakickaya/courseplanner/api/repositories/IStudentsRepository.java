@@ -5,15 +5,15 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 
 public interface IStudentsRepository {
-	public boolean addStudent(IStudent pStudent);
+	boolean addStudent(IStudent pStudent);
 
-	public IStudent removeStudent(long id);
+	IStudent removeStudent(long id);
 
-	public void updateStudent(IStudent pStudent);
+	void updateStudent(IStudent pStudent);
 
-	public IStudent getStudent(long pId);
+	IStudent getStudent(long pId);
 
-	public List<IStudent> getListStudents();
+	List<IStudent> getStudents();
 
-	public void save();
+	void save();
 }

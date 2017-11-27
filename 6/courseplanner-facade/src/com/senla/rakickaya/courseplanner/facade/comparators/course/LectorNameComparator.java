@@ -1,10 +1,8 @@
-package  com.senla.rakickaya.courseplanner.facade.comparators.course;
+package com.senla.rakickaya.courseplanner.facade.comparators.course;
 
 import java.util.Comparator;
 
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
-
-
 
 public class LectorNameComparator implements Comparator<ICourse> {
 

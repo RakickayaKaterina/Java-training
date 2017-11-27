@@ -40,7 +40,7 @@ public class LectorsService implements ILectorsService {
 		if (lector == null) {
 			throw new EntityNotFoundException();
 		}
-		for (ICourse course : mRepositoryCourses.getListCourses()) {
+		for (ICourse course : mRepositoryCourses.getCourses()) {
 			if (course != null && course.getLector() != null && course.getLector().getId() == pId) {
 				course.setLector(null);
 			}
@@ -59,14 +59,14 @@ public class LectorsService implements ILectorsService {
 	}
 
 	@Override
-	public List<ILector> getListLectors() {
-		return mRepositoryLectors.getListLectors();
+	public List<ILector> getLectors() {
+		return mRepositoryLectors.getLectors();
 	}
 
 	@Override
 	public int getCountCoursesByLector(long idLector) {
 		int count = 0;
-		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<ICourse> courses = mRepositoryCourses.getCourses();
 		for (int i = 0; i < courses.size(); i++) {
 			if (courses.get(i).getLector() != null && courses.get(i).getLector().getId() == idLector) {
 				count++;
@@ -77,7 +77,7 @@ public class LectorsService implements ILectorsService {
 
 	@Override
 	public List<ILector> getSortedList(Comparator<ILector> comparator) {
-		List<ILector> listLectors = mRepositoryLectors.getListLectors();
+		List<ILector> listLectors = mRepositoryLectors.getLectors();
 		listLectors.sort(comparator);
 		return listLectors;
 	}
@@ -109,7 +109,7 @@ public class LectorsService implements ILectorsService {
 	@Override
 	public void exportCSV(String path) {
 		CSVWorker worker = new CSVWorker(path);
-		List<ILector> lectors = mRepositoryLectors.getListLectors();
+		List<ILector> lectors = mRepositoryLectors.getLectors();
 		List<CSVObject> objects = new ArrayList<CSVObject>();
 		for (ILector lector : lectors) {
 			objects.add(CSVObject.valueOf(lector));
@@ -140,6 +140,6 @@ public class LectorsService implements ILectorsService {
 	}
 	@Override
 	public int getTotalCountLectors() {
-		return mRepositoryLectors.getListLectors().size();
+		return mRepositoryLectors.getLectors().size();
 	}
 }

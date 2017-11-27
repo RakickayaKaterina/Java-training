@@ -3,13 +3,13 @@ package com.senla.rakickaya.courseplanner.api.beans;
 import java.util.Date;
 
 public interface ILesson extends IEntity {
-	public ILecture getLecture();
+	ILecture getLecture();
 
-	public void setLecture(ILecture mLecture);
+	void setLecture(ILecture mLecture);
 
-	public Date getDate();
+	Date getDate();
 
-	public int getCountStudent();
+	int getCountStudent();
 
-	public void setCountStudent(int countStudent);
+	void setCountStudent(int countStudent);
 }
