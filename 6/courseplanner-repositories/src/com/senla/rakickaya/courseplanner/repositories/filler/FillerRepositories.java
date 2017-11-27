@@ -13,7 +13,6 @@ import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
-import com.senla.rakickaya.courseplanner.api.beans.IRelationSC;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.configuration.Config;
 import com.senla.rakickaya.courseplanner.utils.ListWorker;
@@ -23,13 +22,11 @@ public class FillerRepositories {
 	private String pathStudentFile;
 	private String pathLectorsFile;
 	private String pathCoursesFile;
-	private String pathRelationsFile;
 	private String pathTimeTableFile;
 
 	private List<IStudent> students;
 	private List<ILector> lectors;
 	private List<ICourse> courses;
-	private List<IRelationSC> relations;
 	private List<ILesson> timeTable;
 
 	private static FillerRepositories fillerRepositories;
@@ -38,18 +35,17 @@ public class FillerRepositories {
 		if (fillerRepositories == null) {
 			Config conf = Config.getInstance();
 			fillerRepositories = new FillerRepositories(conf.getPathStudent(), conf.getPathLector(),
-					conf.getPathCourse(), conf.getPathRelation(), conf.getPathTimeTable());
+					conf.getPathCourse(), conf.getPathTimeTable());
 		}
 		return fillerRepositories;
 	}
 
 	private FillerRepositories(String pathStudentFile, String pathLectorsFile, String pathCoursesFile,
-			String pathRelationsFile, String pathTimeTableFile) {
+			String pathTimeTableFile) {
 		init();
 		this.pathStudentFile = pathStudentFile;
 		this.pathLectorsFile = pathLectorsFile;
 		this.pathCoursesFile = pathCoursesFile;
-		this.pathRelationsFile = pathRelationsFile;
 		this.pathTimeTableFile = pathTimeTableFile;
 		fillAll();
 	}
@@ -58,7 +54,6 @@ public class FillerRepositories {
 		students = new ArrayList<>();
 		lectors = new ArrayList<>();
 		courses = new ArrayList<>();
-		relations = new ArrayList<>();
 		timeTable = new ArrayList<>();
 	}
 
@@ -117,27 +112,12 @@ public class FillerRepositories {
 		}
 	}
 
-	public void writeRelationToFile(List<IRelationSC> pRelation) throws IOException {
-		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new FileOutputStream(new File(pathRelationsFile)))) {
-			objectOutputStream.writeObject(pRelation);
-		}
-	}
-
-	private void readRelationFromFile() throws ClassNotFoundException, IOException {
-		try (ObjectInputStream objectInputStream = new ObjectInputStream(
-				new FileInputStream(new File(pathRelationsFile)))) {
-			relations = (List<IRelationSC>) objectInputStream.readObject();
-		}
-	}
-
 	public void fillAll() {
 		try {
 			readStudents();
 			readLectorsFromFile();
 			readCoursesFromFile();
 			readLessonsFromFile();
-			readRelationFromFile();
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO logger
 			e.printStackTrace();
@@ -169,10 +149,6 @@ public class FillerRepositories {
 
 	public List<ICourse> getCourses() {
 		return courses;
-	}
-
-	public List<IRelationSC> getRelations() {
-		return relations;
 	}
 
 	public List<ILesson> getTimeTable() {

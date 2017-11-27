@@ -1,5 +1,6 @@
 package com.senla.rakickaya.courseplanner.services;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,9 +11,13 @@ import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.ILectorsRepository;
 import com.senla.rakickaya.courseplanner.api.services.ILectorsService;
+import com.senla.rakickaya.courseplanner.csv.CSVConverter;
+import com.senla.rakickaya.courseplanner.csv.CSVObject;
+import com.senla.rakickaya.courseplanner.csv.CSVWorker;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.LectorsRepository;
+import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 
 public class LectorsService implements ILectorsService {
 	private final ILectorsRepository mRepositoryLectors;
@@ -101,14 +106,40 @@ public class LectorsService implements ILectorsService {
 		}
 		return map;
 	}
+	@Override
+	public void exportCSV(String path) {
+		CSVWorker worker = new CSVWorker(path);
+		List<ILector> lectors = mRepositoryLectors.getListLectors();
+		List<CSVObject> objects = new ArrayList<CSVObject>();
+		for (ILector lector : lectors) {
+			objects.add(CSVObject.valueOf(lector));
+		}
+		worker.writeCSV(objects);
+	}
 
+	@Override
+	public void importCSV(String path) {
+		CSVWorker worker = new CSVWorker(path);
+		List<CSVObject> objects = worker.readCSV();
+		List<ILector> lectors = new ArrayList<>();
+		for (CSVObject obj : objects) {
+			lectors.add(CSVConverter.parseLector(obj));
+		}
+		for (ILector lector : lectors) {
+			if (!mRepositoryLectors.addLector(lector)) {
+				mRepositoryLectors.updateLector(lector);
+			}
+			else{
+				GeneratorId generatorId = GeneratorId.getInstance();
+				long id = generatorId.getIdLector();
+				if(lector.getId() > id){
+					generatorId.setIdLector(id);
+				}
+			}
+		}
+	}
 	@Override
 	public int getTotalCountLectors() {
 		return mRepositoryLectors.getListLectors().size();
 	}
-
-	public void save() {
-		mRepositoryLectors.save();
-	}
-
 }

@@ -32,20 +32,30 @@ public class TimeTable implements ITimeTable {
 	}
 
 	@Override
-	public void addLesson(ILesson pLesson) {
-		mLessons.add(pLesson);
+	public boolean addLesson(ILesson pLesson) {
+		if (getLesson(pLesson.getId()) == null) {
+			mLessons.add(pLesson);
+			save();
+			return true;
+		}
+		return false;
 
 	}
 
 	@Override
 	public ILesson removeLesson(long pId) {
-		return ListWorker.removeItemById(mLessons, pId);
+		ILesson lesson = ListWorker.removeItemById(mLessons, pId);
+		if(lesson!=null){
+			save();
+		}
+		return lesson;
 	}
 
 	@Override
 	public void updateLesson(ILesson pLesson) {
 		ListWorker.updateItem(mLessons, pLesson);
-		;
+		save();
+		 
 
 	}
 

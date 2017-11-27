@@ -13,6 +13,9 @@ import com.senla.rakickaya.courseplanner.api.repositories.ITimeTable;
 import com.senla.rakickaya.courseplanner.api.services.ITimeTableService;
 import com.senla.rakickaya.courseplanner.beans.Lesson;
 import com.senla.rakickaya.courseplanner.configuration.Config;
+import com.senla.rakickaya.courseplanner.csv.CSVConverter;
+import com.senla.rakickaya.courseplanner.csv.CSVObject;
+import com.senla.rakickaya.courseplanner.csv.CSVWorker;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.TimeTable;
@@ -46,7 +49,7 @@ public class TimeTableService implements ITimeTableService {
 		}
 		if (lecture != null && amount + countStudent <= Config.getInstance().getAmountStudents()) {
 			mTimeTable.addLesson(
-					new Lesson(GeneratorId.getInstance().getIdLesson(), lecture, dateForLecture, countStudent));
+					new Lesson(GeneratorId.getInstance().nextIdLesson(), lecture, dateForLecture, countStudent));
 		} else {
 			throw new Exception("Limit Students");
 		}
@@ -108,7 +111,38 @@ public class TimeTableService implements ITimeTableService {
 		return null;
 
 	}
+	@Override
+	public void exportCSV(String path) {
+		CSVWorker worker = new CSVWorker(path);
+		List<ILesson> lessons = mTimeTable.getListLessons();
+		List<CSVObject> objects = new ArrayList<CSVObject>();
+		for (ILesson lesson : lessons) {
+			objects.add(CSVObject.valueOf(lesson));
+		}
+		worker.writeCSV(objects);
+	}
 
+	@Override
+	public void importCSV(String path) {
+		CSVWorker worker = new CSVWorker(path);
+		List<CSVObject> objects = worker.readCSV();
+		List<ILesson> lessons = new ArrayList<>();
+		for (CSVObject obj : objects) {
+			lessons.add(CSVConverter.parseLesson(obj, mRepositoryCourses.getAllLectures()));
+		}
+		for (ILesson lesson : lessons) {
+			if (!mTimeTable.addLesson(lesson)) {
+				mTimeTable.updateLesson(lesson);
+			}
+			else{
+				GeneratorId generatorId = GeneratorId.getInstance();
+				long id = generatorId.getIdLesson();
+				if(lesson.getId() > id){
+					generatorId.setIdLesson(id);
+				}
+			}
+		}
+	}
 	@Override
 	public List<ILesson> getSortedList(Comparator<ILesson> pComparator) {
 		List<ILesson> listLesson = mTimeTable.getListLessons();
@@ -116,9 +150,4 @@ public class TimeTableService implements ITimeTableService {
 		return listLesson;
 
 	}
-
-	public void save() {
-		mTimeTable.save();
-	}
-
 }

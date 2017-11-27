@@ -26,19 +26,19 @@ public class RequestExtractor {
 
 	public IStudent extractStudent() {
 		String studentName = mRequest.getObject(TagsRequest.STUDENT_NAME);
-		long idStudent = GeneratorId.getInstance().getIdStudent();
+		long idStudent = GeneratorId.getInstance().nextIdStudent();
 		return new Student(idStudent, studentName);
 	}
 
 	public ILector extractLector() {
 		String lectorName = mRequest.getObject(TagsRequest.LECTOR_NAME);
-		long idLector = GeneratorId.getInstance().getIdLector();
+		long idLector = GeneratorId.getInstance().nextIdLector();
 		return new Lector(idLector, lectorName);
 	}
 
 	public ILecture extractLecture() {
 		String lectureName = mRequest.getObject(TagsRequest.LECTURE_NAME);
-		long idLecture = GeneratorId.getInstance().getIdLecture();
+		long idLecture = GeneratorId.getInstance().nextIdLecture();
 		return new Lecture(idLecture, lectureName);
 	}
 
@@ -47,7 +47,7 @@ public class RequestExtractor {
 		String descriptionCourse = mRequest.getObject(TagsRequest.DESCRIPTION_COURSE);
 		Date startDate = DateWorker.createDate(mRequest.getObject(TagsRequest.START_DATE_COURSE));
 		Date endDate = DateWorker.createDate(mRequest.getObject(TagsRequest.END_DATE_COURSE));
-		long idCourse = GeneratorId.getInstance().getIdCourse();
+		long idCourse = GeneratorId.getInstance().nextIdCourse();
 		return new Course(idCourse, courseName, descriptionCourse, startDate, endDate);
 	}
 
@@ -57,6 +57,9 @@ public class RequestExtractor {
 	}
 	public int extractCountStudent(){
 		return Integer.valueOf(mRequest.getObject(TagsRequest.COUNT_STUDENT));
+	}
+	public String extractPath(){
+		return mRequest.getObject(TagsRequest.PATH);
 	}
 
 	public long extractIdCourse() {

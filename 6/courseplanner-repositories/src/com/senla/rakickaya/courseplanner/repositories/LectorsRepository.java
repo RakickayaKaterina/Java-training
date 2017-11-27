@@ -32,19 +32,29 @@ public class LectorsRepository implements ILectorsRepository {
 	}
 
 	@Override
-	public void addLector(ILector pLector) {
-		mLectors.add(pLector);
+	public boolean addLector(ILector pLector) {
+		if (getLector(pLector.getId()) == null) {
+			mLectors.add(pLector);
+			save();
+			return true;
+		}
+		return false;
 
 	}
 
 	@Override
 	public ILector removeLector(long pId) {
-		return ListWorker.removeItemById(mLectors, pId);
+		ILector lector = ListWorker.removeItemById(mLectors, pId);
+		if(lector!=null){
+			save();
+		}
+		return lector;
 	}
 
 	@Override
 	public void updateLector(ILector pLector) {
 		ListWorker.updateItem(mLectors, pLector);
+		save();
 
 	}
 

@@ -541,20 +541,78 @@ public class Facade implements IFacade {
 		}
 		return response;
 	}
-
 	@Override
-	public void save() {
-		try {
-			mCoursesService.save();
-			mLectorsService.save();
-			mStudentsService.save();
-			mTimeTableService.save();
-			GeneratorId.getInstance().saveState();
-		} catch (IOException e) {
-			logger.error(new Date() + " " + e.getMessage());
-			e.printStackTrace();
-		}
-
+	public IResponse exportCourse(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mCoursesService.exportCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
 	}
+	@Override
+	public IResponse exportLector(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mLectorsService.exportCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
+	}
+	@Override
+	public IResponse exportStudent(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mStudentsService.exportCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
+	}
+	@Override
+	public IResponse exportTimeTable(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mTimeTableService.exportCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
+	}
+	@Override
+	public IResponse importCourse(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mCoursesService.importCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
+	}
+	@Override
+	public IResponse importLector(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mLectorsService.importCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
+	}
+	@Override
+	public IResponse importStudent(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mStudentsService.importCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
+	}
+	@Override
+	public IResponse importTimeTable(IRequest request){
+		IResponse response = new Response();
+		RequestExtractor extractor = new RequestExtractor(request);
+		String path = extractor.extractPath();
+		mTimeTableService.importCSV(path);
+		response.addHead(TagsResponse.MESSAGE, "OK");
+		return response;
+	}
+
 
 }

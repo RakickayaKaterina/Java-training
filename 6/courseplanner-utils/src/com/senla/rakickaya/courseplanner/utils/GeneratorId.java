@@ -2,6 +2,7 @@ package com.senla.rakickaya.courseplanner.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,7 +22,6 @@ public class GeneratorId implements Serializable {
 	private long idLecture;
 	private long idLesson;
 	private long idStudent;
-	private long idRelation;
 
 	private String pathSave;
 	private static GeneratorId generatorId;
@@ -35,22 +35,23 @@ public class GeneratorId implements Serializable {
 	}
 
 	private GeneratorId() {
-		this(0L, 0L, 0L, 0L, 0L, 0L);
+		this(0L, 0L, 0L, 0L, 0L);
 	}
 
-	private GeneratorId(long idCourse, long idLector, long idLecture, long idLesson, long idStudent, long idRelation) {
+	private GeneratorId(long idCourse, long idLector, long idLecture, long idLesson, long idStudent) {
 		super();
 		this.idCourse = idCourse;
 		this.idLector = idLector;
 		this.idLecture = idLecture;
 		this.idLesson = idLesson;
 		this.idStudent = idStudent;
-		this.idRelation = idRelation;
 	}
 
-	public void saveState() throws IOException {
+	public void saveState() {
 		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File(pathSave)))) {
 			objectOutputStream.writeObject(this);
+		} catch (IOException e) {
+			// LOGGER File not found
 		}
 
 	}
@@ -68,28 +69,79 @@ public class GeneratorId implements Serializable {
 
 	}
 
+	public long nextIdCourse() {
+		long id =++idCourse;
+		saveState();
+		return id;
+	}
+
+	public long nextIdLector() {
+		long id = ++idLector;
+		saveState();
+		return id;
+	}
+
+	public long nextIdLecture() {
+		long id = ++idLecture;
+		saveState();
+		return id;
+	}
+
+	public long nextIdLesson() {
+		long id = ++idLesson;
+		saveState();
+		return id;
+	}
+
+	public long nextIdStudent() {
+		long id =++idStudent;
+		saveState();
+		return id;
+	}
+
 	public long getIdCourse() {
-		return ++idCourse;
+		return idCourse;
+	}
+
+	public void setIdCourse(long idCourse) {
+		this.idCourse = idCourse;
+		saveState();
 	}
 
 	public long getIdLector() {
-		return ++idLector;
+		return idLector;
+	}
+
+	public void setIdLector(long idLector) {
+		this.idLector = idLector;
+		saveState();
 	}
 
 	public long getIdLecture() {
-		return ++idLecture;
+		return idLecture;
+	}
+
+	public void setIdLecture(long idLecture) {
+		this.idLecture = idLecture;
+		saveState();
 	}
 
 	public long getIdLesson() {
-		return ++idLesson;
+		return idLesson;
+	}
+
+	public void setIdLesson(long idLesson) {
+		this.idLesson = idLesson;
+		saveState();
 	}
 
 	public long getIdStudent() {
-		return ++idStudent;
+		return idStudent;
 	}
 
-	public long getIdRelation() {
-		return ++idRelation;
+	public void setIdStudent(long idStudent) {
+		this.idStudent = idStudent;
+		saveState();
 	}
 
 }

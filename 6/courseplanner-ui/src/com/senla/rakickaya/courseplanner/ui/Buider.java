@@ -11,6 +11,8 @@ import com.senla.rakickaya.courseplanner.ui.actions.PrinterInfo;
 import com.senla.rakickaya.courseplanner.ui.actions.PrinterInfoParam;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseAddition;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseCloning;
+import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseExport;
+import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseImport;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.CourseRemoval;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.DetailedDescription;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.LectorAdditionToCourse;
@@ -21,13 +23,19 @@ import com.senla.rakickaya.courseplanner.ui.actions.courses.StudentAdditionToCou
 import com.senla.rakickaya.courseplanner.ui.actions.courses.StudentRemovalFromCourse;
 import com.senla.rakickaya.courseplanner.ui.actions.courses.TotalCountCourses;
 import com.senla.rakickaya.courseplanner.ui.actions.lectors.LectorAddition;
+import com.senla.rakickaya.courseplanner.ui.actions.lectors.LectorExport;
+import com.senla.rakickaya.courseplanner.ui.actions.lectors.LectorImport;
 import com.senla.rakickaya.courseplanner.ui.actions.lectors.LectorRemoval;
 import com.senla.rakickaya.courseplanner.ui.actions.lectors.SortLectorsByCountCourse;
 import com.senla.rakickaya.courseplanner.ui.actions.lectors.TotalCountLectors;
 import com.senla.rakickaya.courseplanner.ui.actions.students.StudentAddition;
+import com.senla.rakickaya.courseplanner.ui.actions.students.StudentExport;
+import com.senla.rakickaya.courseplanner.ui.actions.students.StudentImport;
 import com.senla.rakickaya.courseplanner.ui.actions.students.StudentRemoval;
 import com.senla.rakickaya.courseplanner.ui.actions.students.TotalCountSt;
 import com.senla.rakickaya.courseplanner.ui.actions.timetable.LessonAddition;
+import com.senla.rakickaya.courseplanner.ui.actions.timetable.LessonExport;
+import com.senla.rakickaya.courseplanner.ui.actions.timetable.LessonImport;
 import com.senla.rakickaya.courseplanner.ui.actions.timetable.LessonRemoval;
 import com.senla.rakickaya.courseplanner.ui.assembly_request.AssemblyDateRequest;
 import com.senla.rakickaya.courseplanner.ui.assembly_request.AssemblyIntervalRequest;
@@ -52,10 +60,21 @@ public class Buider {
 		MenuItem countItem = new MenuItem();
 		countItem.setTitle("Show count of students");
 		countItem.setAction(new TotalCountSt());
+		
+		MenuItem exportItem = new MenuItem();
+		exportItem.setTitle("Export student");
+		exportItem.setAction(new StudentExport());
+		
+		MenuItem importItem = new MenuItem();
+		importItem.setTitle("Import student");
+		importItem.setAction(new StudentImport());
+		
 		list.add(backItem);
 		list.add(addItem);
 		list.add(remItem);
 		list.add(countItem);
+		list.add(exportItem);
+		list.add(importItem);
 		studentMenu.setListItems(list);
 		return studentMenu;
 	}
@@ -89,6 +108,16 @@ public class Buider {
 		MenuItem sortLectorByCountCourseItem = new MenuItem();
 		sortLectorByCountCourseItem.setTitle("Show sorted lectors by count courses");
 		sortLectorByCountCourseItem.setAction(new SortLectorsByCountCourse());
+		
+
+		MenuItem exportItem = new MenuItem();
+		exportItem.setTitle("Export lector");
+		exportItem.setAction(new LectorExport());
+		
+		MenuItem importItem = new MenuItem();
+		importItem.setTitle("Import lector");
+		importItem.setAction(new LectorImport());
+		
 
 		list.add(backItem);
 		list.add(addItem);
@@ -96,6 +125,8 @@ public class Buider {
 		list.add(countItem);
 		list.add(sortLectorByAlfItem);
 		list.add(sortLectorByCountCourseItem);
+		list.add(exportItem);
+		list.add(importItem);
 		lectorMenu.setListItems(list);
 		return lectorMenu;
 
@@ -265,6 +296,14 @@ public class Buider {
 		cloneItem.setTitle("Clone course");
 		cloneItem.setAction(new CourseCloning());
 		
+		MenuItem exportItem = new MenuItem();
+		exportItem.setTitle("Export course");
+		exportItem.setAction(new CourseExport());
+		
+		MenuItem importItem = new MenuItem();
+		importItem.setTitle("Import course");
+		importItem.setAction(new CourseImport());
+		
 		list.add(backItem);
 		list.add(addItem);
 		list.add(remItem);
@@ -290,6 +329,8 @@ public class Buider {
 		list.add(itemSortCurrentCourseByCount);
 		list.add(itemPastCourseInInterval);
 		list.add(cloneItem);
+		list.add(exportItem);
+		list.add(importItem);
 		courseMenu.setListItems(list);
 		return courseMenu;
 
@@ -335,12 +376,23 @@ public class Buider {
 				return Facade.getInstance().getSortedTimeTableByAlphabet();
 			}
 		}));
+		
+		MenuItem exportItem = new MenuItem();
+		exportItem.setTitle("Export time table");
+		exportItem.setAction(new LessonExport());
+		
+		MenuItem importItem = new MenuItem();
+		importItem.setTitle("Import time table");
+		importItem.setAction(new LessonImport());
+		
 		list.add(backItem);
 		list.add(createItem);
 		list.add(remItem);
 		list.add(itemLessonsByDate);
 		list.add(itemSortedTimeTableByDate);
 		list.add(itemSortedTimeTableByAlp);
+		list.add(exportItem);
+		list.add(importItem);
 		timeTableMenu.setListItems(list);
 		return timeTableMenu;
 	}

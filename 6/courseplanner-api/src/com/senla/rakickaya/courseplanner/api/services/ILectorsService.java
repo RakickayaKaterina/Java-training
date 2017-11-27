@@ -26,6 +26,8 @@ public interface ILectorsService {
 
 	public int getTotalCountLectors();
 
-	public void save();
+	void exportCSV(String path);
+
+	void importCSV(String path);
 
 }

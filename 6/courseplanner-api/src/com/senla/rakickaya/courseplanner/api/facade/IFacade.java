@@ -86,7 +86,21 @@ public interface IFacade {
 
 	IResponse getLecturesByCourse(int n);
 
-	public void save();
-
 	IResponse cloneCourse(IRequest idCourse);
+
+	IResponse exportCourse(IRequest request);
+
+	IResponse importCourse(IRequest request);
+
+	IResponse exportTimeTable(IRequest request);
+
+	IResponse exportStudent(IRequest request);
+
+	IResponse exportLector(IRequest request);
+
+	IResponse importTimeTable(IRequest request);
+
+	IResponse importStudent(IRequest request);
+
+	IResponse importLector(IRequest request);
 }

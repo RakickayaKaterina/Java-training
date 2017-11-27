@@ -12,7 +12,7 @@ import com.senla.rakickaya.courseplanner.utils.DateWorker;
 public class CSVObject {
 	private String csvObject;
 
-	private CSVObject(String csvObject) {
+	CSVObject(String csvObject) {
 		this.csvObject = csvObject;
 	}
 
@@ -48,16 +48,23 @@ public class CSVObject {
 		List<ICourse> courses = student.getCourses();
 		str.append(student.getId()).append(Separators.SEPARATOR_FIELDS).append(student.getNameStudent())
 				.append(Separators.SEPARATOR_FIELDS);
-		for (ICourse course : courses) {
-			str.append(course.getId()).append(Separators.SEPARATOR_ARRAYS);
+
+		if (courses == null || courses.isEmpty()) {
+			str.append("No courses");
+		} else {
+			for (ICourse course : courses) {
+				str.append(course.getId()).append(Separators.SEPARATOR_ARRAYS);
+			}
 		}
+		str.append(Separators.SEPARATOR_FIELDS);
 		return new CSVObject(str.toString());
 	}
 
 	public static CSVObject valueOf(ILesson lesson) {
 		StringBuilder str = new StringBuilder();
 		str.append(lesson.getId()).append(Separators.SEPARATOR_FIELDS).append(lesson.getLecture().getId())
-				.append(Separators.SEPARATOR_FIELDS).append(DateWorker.getStringFromDate(lesson.getDate()));
+				.append(Separators.SEPARATOR_FIELDS).append(DateWorker.getStringFromDate(lesson.getDate()))
+				.append(Separators.SEPARATOR_FIELDS).append(lesson.getCountStudent());
 		return new CSVObject(str.toString());
 	}
 

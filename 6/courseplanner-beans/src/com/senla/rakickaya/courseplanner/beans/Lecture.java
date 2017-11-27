@@ -38,7 +38,7 @@ public class Lecture implements ILecture {
 	@Override
 	public ILecture clone() throws CloneNotSupportedException {
 		ILecture lecture = (ILecture)super.clone();
-		lecture.setId(GeneratorId.getInstance().getIdLecture());
+		lecture.setId(GeneratorId.getInstance().nextIdLecture());
 		return lecture;
 	}
 	

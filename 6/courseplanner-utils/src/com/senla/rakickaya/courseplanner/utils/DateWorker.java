@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateWorker {
-	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd:MM:yyyy");
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	public static boolean isAfterDate(Date pDate, Date comparableDate) {
 		return comparableDate.after(pDate);

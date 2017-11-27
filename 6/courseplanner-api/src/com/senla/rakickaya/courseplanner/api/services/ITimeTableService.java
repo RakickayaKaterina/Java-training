@@ -10,7 +10,7 @@ import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 public interface ITimeTableService {
 	public void addLesson(ILesson pLesson);
 
-	public void createLesson(long idLecture, Date dateForLecture,int countStudent) throws Exception;
+	public void createLesson(long idLecture, Date dateForLecture, int countStudent) throws Exception;
 
 	public void removeLesson(long pId);
 
@@ -24,5 +24,7 @@ public interface ITimeTableService {
 
 	public void removeLessonByLecture(long pIdLecture) throws EntityNotFoundException;
 
-	public void save();
+	void exportCSV(String path);
+
+	void importCSV(String path);
 }

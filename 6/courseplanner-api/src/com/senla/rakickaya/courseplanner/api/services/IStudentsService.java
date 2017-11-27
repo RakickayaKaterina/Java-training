@@ -18,5 +18,7 @@ public interface IStudentsService {
 
 	public int getTotalCountStudents();
 
-	public void save();
+	void exportCSV(String path);
+
+	void importCSV(String path);
 }

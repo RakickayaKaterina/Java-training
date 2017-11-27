@@ -32,18 +32,28 @@ public class StudentsRepository implements IStudentsRepository {
 	}
 
 	@Override
-	public void addStudent(IStudent pStudent) {
-		mStudents.add(pStudent);
+	public boolean addStudent(IStudent pStudent) {
+		if (getStudent(pStudent.getId()) == null) {
+			mStudents.add(pStudent);
+			save();
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public IStudent removeStudent(long pId) {
-		return ListWorker.removeItemById(mStudents, pId);
+		IStudent student = ListWorker.removeItemById(mStudents, pId);
+		if (student != null) {
+			save();
+		}
+		return student;
 	}
 
 	@Override
 	public void updateStudent(IStudent pStudent) {
 		ListWorker.updateItem(mStudents, pStudent);
+		save();
 
 	}
 

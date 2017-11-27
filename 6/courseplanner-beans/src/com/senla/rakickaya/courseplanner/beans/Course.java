@@ -107,7 +107,7 @@ public class Course implements ICourse {
 		Date cloneStartDate = startDate !=null ? (Date)startDate.clone() : null;
 		Date cloneEndDate = endDate !=null ? (Date)endDate.clone() : null;
 		ArrayList<ILecture> cloneLectures = (ArrayList<ILecture>)((ArrayList<ILecture>)lectures).clone();
-		course.setId(GeneratorId.getInstance().getIdCourse());
+		course.setId(GeneratorId.getInstance().nextIdCourse());
 		course.setStartDate(cloneStartDate);
 		course.setEndDate(cloneEndDate);
 		course.setLectures(cloneLectures);

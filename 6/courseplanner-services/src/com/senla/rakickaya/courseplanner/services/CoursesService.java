@@ -8,18 +8,17 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
-import com.senla.rakickaya.courseplanner.api.beans.IRelationSC;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.ILectorsRepository;
-import com.senla.rakickaya.courseplanner.api.repositories.IRelationsRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.IStudentsRepository;
 import com.senla.rakickaya.courseplanner.api.services.ICoursesService;
-import com.senla.rakickaya.courseplanner.beans.RelationSC;
+import com.senla.rakickaya.courseplanner.csv.CSVConverter;
+import com.senla.rakickaya.courseplanner.csv.CSVObject;
+import com.senla.rakickaya.courseplanner.csv.CSVWorker;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.LectorsRepository;
-import com.senla.rakickaya.courseplanner.repositories.RelationsRepository;
 import com.senla.rakickaya.courseplanner.repositories.StudentsRepository;
 import com.senla.rakickaya.courseplanner.utils.DateWorker;
 import com.senla.rakickaya.courseplanner.utils.GeneratorId;
@@ -28,14 +27,12 @@ import com.senla.rakickaya.courseplanner.utils.ListWorker;
 public class CoursesService implements ICoursesService {
 	private final ICoursesRepository mRepositoryCourses;
 	private final IStudentsRepository mRepositoryStudents;
-	private final IRelationsRepository mRepositoryRelations;
 	private final ILectorsRepository mRepositoryLectors;
 
 	public CoursesService() {
 		super();
 		this.mRepositoryCourses = CoursesRepository.getInstance();
 		this.mRepositoryStudents = StudentsRepository.getInstance();
-		this.mRepositoryRelations = RelationsRepository.getInstance();
 		this.mRepositoryLectors = LectorsRepository.getInstance();
 	}
 
@@ -54,13 +51,6 @@ public class CoursesService implements ICoursesService {
 		for (int i = 0; i < students.size(); i++) {
 			ListWorker.removeItemById(students.get(i).getCourses(), pId);
 		}
-		List<IRelationSC> relations = mRepositoryRelations.getListRelations();
-		for (int i = 0; i < relations.size(); i++) {
-			if (relations.get(i).getCourse().getId() == pId) {
-				mRepositoryRelations.removeRelation(relations.get(i).getId());
-			}
-		}
-
 	}
 
 	@Override
@@ -85,7 +75,7 @@ public class CoursesService implements ICoursesService {
 		IStudent student = mRepositoryStudents.getStudent(pIdStudent);
 		course.getStudents().add(student);
 		student.getCourses().add(course);
-		mRepositoryRelations.addRelation(new RelationSC(GeneratorId.getInstance().getIdRelation(), student, course));
+
 	}
 
 	@Override
@@ -97,12 +87,6 @@ public class CoursesService implements ICoursesService {
 		IStudent student = ListWorker.removeItemById(course.getStudents(), pIdStudent);
 		if (student == null) {
 			throw new EntityNotFoundException();
-		}
-		List<IRelationSC> relations = mRepositoryRelations.getListRelations();
-		for (int i = 0; i < relations.size(); i++) {
-			if (relations.get(i).getStudent().getId() == pIdStudent) {
-				mRepositoryRelations.removeRelation(relations.get(i).getId());
-			}
 		}
 
 	}
@@ -205,14 +189,10 @@ public class CoursesService implements ICoursesService {
 
 	@Override
 	public List<ILecture> getAllLectures() {
-		List<ICourse> courses = mRepositoryCourses.getListCourses();
-		List<ILecture> resultList = new ArrayList<>();
-		for (int i = 0; i < courses.size(); i++) {
-			resultList.addAll(courses.get(i).getLectures());
-		}
-		return resultList;
+		return mRepositoryCourses.getAllLectures();
 	}
-  @Override
+
+	@Override
 	public void cloneCourseById(long pId) throws CloneNotSupportedException, EntityNotFoundException {
 		ICourse course = mRepositoryCourses.getCourse(pId);
 		if (course == null) {
@@ -224,10 +204,37 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public void save() {
-		mRepositoryCourses.save();
-		mRepositoryRelations.save();
+	public void exportCSV(String path) {
+		CSVWorker worker = new CSVWorker(path);
+		List<ICourse> courses = mRepositoryCourses.getListCourses();
+		List<CSVObject> objects = new ArrayList<CSVObject>();
+		for (ICourse course : courses) {
+			objects.add(CSVObject.valueOf(course));
+		}
+		worker.writeCSV(objects);
+	}
 
+	@Override
+	public void importCSV(String path) {
+		CSVWorker worker = new CSVWorker(path);
+		List<CSVObject> objects = worker.readCSV();
+		List<ICourse> courses = new ArrayList<>();
+		for (CSVObject obj : objects) {
+			courses.add(CSVConverter.parseCourse(obj, mRepositoryStudents.getListStudents(),
+					mRepositoryLectors.getListLectors()));
+		}
+		for (ICourse course : courses) {
+			if (!mRepositoryCourses.addCourse(course)) {
+				mRepositoryCourses.updateCourse(course);
+			}
+			else{
+				GeneratorId generatorId = GeneratorId.getInstance();
+				long id = generatorId.getIdCourse();
+				if(course.getId() > id){
+					generatorId.setIdCourse(id);
+				}
+			}
+		}
 	}
 
 }

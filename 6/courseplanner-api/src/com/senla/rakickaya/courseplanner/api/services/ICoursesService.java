@@ -43,8 +43,10 @@ public interface ICoursesService {
 
 	List<ILecture> getAllLectures();
 
-	public void save();
-
 	void cloneCourseById(long pId) throws CloneNotSupportedException, EntityNotFoundException;
+
+	void exportCSV(String path);
+
+	void importCSV(String path);
 
 }

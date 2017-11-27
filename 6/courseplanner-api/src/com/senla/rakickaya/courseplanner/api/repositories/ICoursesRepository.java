@@ -3,9 +3,10 @@ package com.senla.rakickaya.courseplanner.api.repositories;
 import java.util.List;
 
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
+import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 
 public interface ICoursesRepository {
-	public void addCourse(ICourse pCourse);
+	public boolean addCourse(ICourse pCourse);
 
 	public ICourse removeCourse(long pId);
 
@@ -16,5 +17,7 @@ public interface ICoursesRepository {
 	public List<ICourse> getListCourses();
 
 	public void save();
+
+	List<ILecture> getAllLectures();
 
 }

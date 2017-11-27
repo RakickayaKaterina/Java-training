@@ -5,7 +5,7 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
 
 public interface ITimeTable {
-	public void addLesson(ILesson pLesson);
+	public boolean addLesson(ILesson pLesson);
 
 	public ILesson removeLesson(long pId);
 
