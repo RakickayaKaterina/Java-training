@@ -2,6 +2,7 @@ package com.senla.rakickaya.courseplanner.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -10,10 +11,10 @@ import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.IStudentsRepository;
 import com.senla.rakickaya.courseplanner.api.services.IStudentsService;
-import com.senla.rakickaya.courseplanner.csv.CsvConverter;
-import com.senla.rakickaya.courseplanner.csv.CsvObject;
-import com.senla.rakickaya.courseplanner.csv.CsvWorker;
+import com.senla.rakickaya.courseplanner.beans.Student;
+import com.senla.rakickaya.courseplanner.csv.converters.ConverterFromCsv;
 import com.senla.rakickaya.courseplanner.csv.converters.ConverterToCsv;
+import com.senla.rakickaya.courseplanner.csv.converters.entities.CsvResponse;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.StudentsRepository;
@@ -85,13 +86,34 @@ public class StudentsService implements IStudentsService {
 		worker.write(csvEntities);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void importCSV(String path) {
-		CsvWorker worker = new CsvWorker(path);
-		List<CsvObject> objects = worker.readCSV();
+		final String COURSES = "courses";
 		List<IStudent> students = new ArrayList<>();
-		for (CsvObject obj : objects) {
-			students.add(CsvConverter.parseStudent(obj, mRepositoryCourses.getCourses()));
+		try {
+			FileWorker worker = new FileWorker(path);
+			List<String> list = worker.read();
+			for (String str : list) {
+				CsvResponse response = ConverterFromCsv.convert(str, Student.class);
+				IStudent student = (IStudent) response.getEntity();
+				Map<String, Object> map = response.getRelation();
+				if (map.containsKey(COURSES)) {
+					List<Long> idCourses = (List<Long>) map.get(COURSES);
+					List<ICourse> courses = new ArrayList<>();
+					for (Long idC : idCourses) {
+						ICourse course = mRepositoryCourses.getCourse(idC);
+						if (course != null) {
+							courses.add(course);
+						}
+					}
+					student.setCourses(courses);
+				}
+				students.add(student);
+			}
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		for (IStudent student : students) {
 			if (!mRepositoryStudents.addStudent(student)) {

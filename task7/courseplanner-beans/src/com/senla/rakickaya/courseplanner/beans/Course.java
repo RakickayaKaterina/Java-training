@@ -34,6 +34,10 @@ public class Course implements ICourse {
 	private List<IStudent> students;
 	@CsvProperty(columnNumber = 7, propertyType = PropertyType.CompositeProperty, keyField="idLecture")
 	private List<ILecture> lectures;
+	
+	public Course() {
+		super();
+	}
 
 	public Course(long id, String name, String description, Date startDate, Date endDate) {
 		super();
@@ -98,7 +102,9 @@ public class Course implements ICourse {
 
 	@Override
 	public String toString() {
-		return name;
+		return "Course [id=" + id + ", name=" + name + ", description=" + description + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", lector=" + lector + ", students=" + students + ", lectures=" + lectures
+				+ "]";
 	}
 
 	@Override

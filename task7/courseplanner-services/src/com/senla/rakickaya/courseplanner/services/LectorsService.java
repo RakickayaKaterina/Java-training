@@ -13,10 +13,10 @@ import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.ILectorsRepository;
 import com.senla.rakickaya.courseplanner.api.services.ILectorsService;
-import com.senla.rakickaya.courseplanner.csv.CsvConverter;
-import com.senla.rakickaya.courseplanner.csv.CsvObject;
-import com.senla.rakickaya.courseplanner.csv.CsvWorker;
+import com.senla.rakickaya.courseplanner.beans.Lector;
+import com.senla.rakickaya.courseplanner.csv.converters.ConverterFromCsv;
 import com.senla.rakickaya.courseplanner.csv.converters.ConverterToCsv;
+import com.senla.rakickaya.courseplanner.csv.converters.entities.CsvResponse;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.LectorsRepository;
@@ -132,11 +132,17 @@ public class LectorsService implements ILectorsService {
 
 	@Override
 	public void importCSV(String path) {
-		CsvWorker worker = new CsvWorker(path);
-		List<CsvObject> objects = worker.readCSV();
 		List<ILector> lectors = new ArrayList<>();
-		for (CsvObject obj : objects) {
-			lectors.add(CsvConverter.parseLector(obj));
+		try {
+			FileWorker worker = new FileWorker(path);
+			List<String> list = worker.read();
+			for (String str : list) {
+				CsvResponse response = ConverterFromCsv.convert(str, Lector.class);
+				ILector lector = (ILector) response.getEntity();
+				lectors.add(lector);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		for (ILector lector : lectors) {
 			if (!mRepositoryLectors.addLector(lector)) {
@@ -149,8 +155,8 @@ public class LectorsService implements ILectorsService {
 				}
 			}
 		}
-	}
 
+	}
 	@Override
 	public int getTotalCountLectors() {
 		return mRepositoryLectors.getLectors().size();

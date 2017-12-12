@@ -11,6 +11,7 @@ public @interface CsvProperty {
 	PropertyType propertyType();
 	int columnNumber();
 	String keyField() default "id";
+	Class<?> typeField() default long.class;
 	String separartorArray() default " ";
 	
 }

@@ -11,6 +11,12 @@ public class Lecture implements ILecture {
 	private long idLecture;
 	private String name;
 
+	
+	
+	public Lecture() {
+		super();
+	}
+
 	public Lecture(long idLecture, String name) {
 		super();
 		this.idLecture = idLecture;

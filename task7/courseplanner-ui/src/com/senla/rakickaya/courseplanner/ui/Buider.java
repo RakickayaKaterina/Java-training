@@ -371,7 +371,7 @@ public class Buider {
 			}
 		}));
 		MenuItem itemSortedTimeTableByAlp = new MenuItem();
-		itemSortedTimeTableByAlp.setTitle("Show sorted coures by alphabet");
+		itemSortedTimeTableByAlp.setTitle("Show sorted time table by alphabet");
 		itemSortedTimeTableByAlp.setAction(new PrinterInfo(new PrinterInfo.IListResponse() {
 
 			@Override

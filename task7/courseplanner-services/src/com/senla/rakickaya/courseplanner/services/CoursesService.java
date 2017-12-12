@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -15,10 +16,10 @@ import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.ILectorsRepository;
 import com.senla.rakickaya.courseplanner.api.repositories.IStudentsRepository;
 import com.senla.rakickaya.courseplanner.api.services.ICoursesService;
-import com.senla.rakickaya.courseplanner.csv.CsvConverter;
-import com.senla.rakickaya.courseplanner.csv.CsvObject;
-import com.senla.rakickaya.courseplanner.csv.CsvWorker;
+import com.senla.rakickaya.courseplanner.beans.Course;
+import com.senla.rakickaya.courseplanner.csv.converters.ConverterFromCsv;
 import com.senla.rakickaya.courseplanner.csv.converters.ConverterToCsv;
+import com.senla.rakickaya.courseplanner.csv.converters.entities.CsvResponse;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.LectorsRepository;
@@ -29,6 +30,7 @@ import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class CoursesService implements ICoursesService {
+
 	private static final Logger logger = Logger.getLogger(CoursesRepository.class.getName());
 
 	private final ICoursesRepository mRepositoryCourses;
@@ -193,6 +195,15 @@ public class CoursesService implements ICoursesService {
 		return resultList;
 	}
 
+	private ILecture getLectureById(long idLecture) {
+		for (ILecture lecture : getAllLectures()) {
+			if (lecture.getId() == idLecture) {
+				return lecture;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public List<ILecture> getAllLectures() {
 		return mRepositoryCourses.getAllLectures();
@@ -227,14 +238,52 @@ public class CoursesService implements ICoursesService {
 		worker.write(csvEntities);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void importCSV(String path) {
-		CsvWorker worker = new CsvWorker(path);
-		List<CsvObject> objects = worker.readCSV();
+		final String LECTOR = "lector";
+		final String STUDENTS = "students";
+		final String LECTURES = "lectures";
 		List<ICourse> courses = new ArrayList<>();
-		for (CsvObject obj : objects) {
-			courses.add(
-					CsvConverter.parseCourse(obj, mRepositoryStudents.getStudents(), mRepositoryLectors.getLectors()));
+		try {
+			FileWorker worker = new FileWorker(path);
+			List<String> list = worker.read();
+			for (String str : list) {
+				CsvResponse response = ConverterFromCsv.convert(str, Course.class);
+				ICourse course = (ICourse) response.getEntity();
+				Map<String, Object> map = response.getRelation();
+				if (map.containsKey(LECTOR)) {
+					Long idLector = (Long) map.get(LECTOR);
+					ILector lector = mRepositoryLectors.getLector(idLector);
+					course.setLector(lector);
+				}
+				if (map.containsKey(STUDENTS)) {
+					List<Long> idStudents = (List<Long>) map.get(STUDENTS);
+					List<IStudent> students = new ArrayList<>();
+					for (Long idS : idStudents) {
+						IStudent student = mRepositoryStudents.getStudent(idS);
+						if (student != null) {
+							students.add(student);
+						}
+					}
+					course.setStudents(students);
+				}
+				if (map.containsKey(LECTURES)) {
+					List<Long> idLectures = (List<Long>) map.get(LECTURES);
+					List<ILecture> lectures = new ArrayList<>();
+					for (Long idL : idLectures) {
+						ILecture lecture = getLectureById(idL);
+						if (lecture != null) {
+							lectures.add(lecture);
+						}
+					}
+					course.setLectures(lectures);
+				}
+				courses.add(course);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
 		}
 		for (ICourse course : courses) {
 			if (!mRepositoryCourses.addCourse(course)) {

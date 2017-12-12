@@ -1,6 +1,8 @@
 package com.senla.rakickaya.courseplanner.csv.converters;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -8,12 +10,12 @@ import org.apache.log4j.Logger;
 import com.senla.rakickaya.courseplanner.csv.CsvEntity;
 import com.senla.rakickaya.courseplanner.csv.CsvProperty;
 import com.senla.rakickaya.courseplanner.csv.PropertyType;
-import com.senla.rakickaya.courseplanner.csv.converters.columns.CsvColumns;
+import com.senla.rakickaya.courseplanner.csv.converters.entities.CsvColumns;
 
 public class ConverterToCsv {
-	
+
 	private static final Logger logger = Logger.getLogger(ConverterToCsv.class.getName());
-	
+
 	public static String convert(Object obj) throws Exception {
 		Class<?> cl = obj.getClass();
 		CsvEntity csvEntity = cl.getDeclaredAnnotation(CsvEntity.class);
@@ -43,7 +45,11 @@ public class ConverterToCsv {
 		String property = "";
 		try {
 			field.setAccessible(true);
-			property = String.valueOf(field.get(object));
+			if (field.getType() == Date.class) {
+				property = DateFormat.getDateInstance(DateFormat.DEFAULT).format(field.get(object));
+			} else {
+				property = String.valueOf(field.get(object));
+			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.getMessage();
 		}
@@ -76,7 +82,7 @@ public class ConverterToCsv {
 		Class<?> typeFieldValue = fieldValue.getClass();
 		Field keyField = typeFieldValue.getDeclaredField(keyId);
 		keyField.setAccessible(true);
-		Object obj  = keyField.get(fieldValue);
+		Object obj = keyField.get(fieldValue);
 		return String.valueOf(obj);
 
 	}
@@ -95,8 +101,7 @@ public class ConverterToCsv {
 				Field keyObjField = classObj.getDeclaredField(keyField);
 				keyObjField.setAccessible(true);
 				String value = String.valueOf(keyObjField.get(obj));
-				result.append(value)
-						.append(separator);
+				result.append(value).append(separator);
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 			logger.error(e.getMessage());

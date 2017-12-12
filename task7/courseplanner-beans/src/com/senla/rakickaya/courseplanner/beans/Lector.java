@@ -14,6 +14,11 @@ public class Lector implements ILector {
 	private long id;
 	@CsvProperty(columnNumber = 1, propertyType = PropertyType.SimpleProperty)
 	private String nameLector;
+	
+	
+	public Lector() {
+		super();
+	}
 
 	public Lector(long id, String nameLector) {
 		super();

@@ -34,7 +34,10 @@ public class Config {
 	}
 
 	public int getAmountStudents() {
-		return Integer.valueOf(properties.getProperty(Tags.AMOUNT.name()));
+		String tag = Tags.AMOUNT.name();
+		String obj = properties.getProperty(tag);
+		int i = Integer.valueOf(obj);
+		return i;
 	}
 
 	private String getPath(Tags tag) {

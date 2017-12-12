@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -15,10 +16,9 @@ import com.senla.rakickaya.courseplanner.api.repositories.ITimeTable;
 import com.senla.rakickaya.courseplanner.api.services.ITimeTableService;
 import com.senla.rakickaya.courseplanner.beans.Lesson;
 import com.senla.rakickaya.courseplanner.configuration.Config;
-import com.senla.rakickaya.courseplanner.csv.CsvConverter;
-import com.senla.rakickaya.courseplanner.csv.CsvObject;
-import com.senla.rakickaya.courseplanner.csv.CsvWorker;
+import com.senla.rakickaya.courseplanner.csv.converters.ConverterFromCsv;
 import com.senla.rakickaya.courseplanner.csv.converters.ConverterToCsv;
+import com.senla.rakickaya.courseplanner.csv.converters.entities.CsvResponse;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.TimeTable;
@@ -55,7 +55,7 @@ public class TimeTableService implements ITimeTableService {
 		}
 		if (lecture != null && amount + countStudent <= Config.getInstance().getAmountStudents()) {
 			mTimeTable.addLesson(
-					new Lesson(GeneratorId.getInstance().nextIdLesson(), lecture, dateForLecture, countStudent));
+					new Lesson(0L, lecture, dateForLecture, countStudent));
 		} else {
 			throw new Exception("Limit Students");
 		}
@@ -138,11 +138,25 @@ public class TimeTableService implements ITimeTableService {
 
 	@Override
 	public void importCSV(String path) {
-		CsvWorker worker = new CsvWorker(path);
-		List<CsvObject> objects = worker.readCSV();
+		final String LECTURE = "mLecture";
 		List<ILesson> lessons = new ArrayList<>();
-		for (CsvObject obj : objects) {
-			lessons.add(CsvConverter.parseLesson(obj, mRepositoryCourses.getAllLectures()));
+		try {
+			FileWorker worker = new FileWorker(path);
+			List<String> list = worker.read();
+			for (String str : list) {
+				CsvResponse response = ConverterFromCsv.convert(str, Lesson.class);
+				ILesson lesson = (ILesson) response.getEntity();
+				Map<String, Object> map = response.getRelation();
+				if (map.containsKey(LECTURE)) {
+					Long idLecture = (Long) map.get(LECTURE);
+					ILecture lecture = getLectureCourse(idLecture);
+					lesson.setLecture(lecture);
+				}
+				lessons.add(lesson);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+
 		}
 		for (ILesson lesson : lessons) {
 			if (!mTimeTable.addLesson(lesson)) {
@@ -155,8 +169,8 @@ public class TimeTableService implements ITimeTableService {
 				}
 			}
 		}
-	}
 
+	}
 	@Override
 	public List<ILesson> getSortedList(Comparator<ILesson> pComparator) {
 		List<ILesson> listLesson = mTimeTable.getLessons();

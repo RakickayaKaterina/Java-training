@@ -28,6 +28,10 @@ public class Student implements IStudent {
 		courses = new ArrayList<>();
 	}
 
+	public Student() {
+		super();
+	}
+
 	@Override
 	public long getId() {
 		return id;

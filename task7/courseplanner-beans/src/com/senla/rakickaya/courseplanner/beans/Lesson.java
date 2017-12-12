@@ -23,6 +23,12 @@ public class Lesson implements ILesson {
 	@CsvProperty(columnNumber = 3, propertyType = PropertyType.SimpleProperty)
 	private int countStudent;
 
+	
+	
+	public Lesson() {
+		super();
+	}
+
 	public Lesson(long id, ILecture mLecture, Date pDate, int countStudent) {
 		super();
 		this.id = id;

@@ -58,7 +58,9 @@ public class RequestExtractor {
 	}
 
 	public int extractCountStudent() {
-		return Integer.valueOf(mRequest.getObject(TagsRequest.COUNT_STUDENT));
+		String str = mRequest.getObject(TagsRequest.COUNT_STUDENT);
+		int i = Integer.valueOf(str);
+		return i;
 	}
 
 	public String extractPath() {
