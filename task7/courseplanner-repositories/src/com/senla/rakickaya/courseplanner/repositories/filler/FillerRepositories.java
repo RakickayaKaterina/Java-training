@@ -19,6 +19,9 @@ import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.configuration.Config;
 
 public class FillerRepositories {
+	private static final Logger logger = Logger.getLogger(FillerRepositories.class.getName());
+
+	private static FillerRepositories fillerRepositories;
 
 	private String pathStudentFile;
 	private String pathLectorsFile;
@@ -29,10 +32,6 @@ public class FillerRepositories {
 	private List<ILector> lectors;
 	private List<ICourse> courses;
 	private List<ILesson> timeTable;
-
-	private static FillerRepositories fillerRepositories;
-
-	private static final Logger logger = Logger.getLogger(FillerRepositories.class.getName());
 
 	public static FillerRepositories getInstance() {
 		if (fillerRepositories == null) {

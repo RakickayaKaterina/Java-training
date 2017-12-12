@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
@@ -22,6 +24,8 @@ import com.senla.rakickaya.courseplanner.utils.FileWorker;
 import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 
 public class LectorsService implements ILectorsService {
+	private static final Logger logger = Logger.getLogger(LectorsService.class.getName());
+
 	private final ILectorsRepository mRepositoryLectors;
 	private final ICoursesRepository mRepositoryCourses;
 
@@ -107,6 +111,7 @@ public class LectorsService implements ILectorsService {
 		}
 		return map;
 	}
+
 	@Override
 	public void exportCSV(String path) {
 		FileWorker worker = new FileWorker(path);
@@ -118,8 +123,7 @@ public class LectorsService implements ILectorsService {
 				csvString = ConverterToCsv.convert(lector);
 				csvEntities.add(csvString);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 		}
@@ -137,16 +141,16 @@ public class LectorsService implements ILectorsService {
 		for (ILector lector : lectors) {
 			if (!mRepositoryLectors.addLector(lector)) {
 				mRepositoryLectors.updateLector(lector);
-			}
-			else{
+			} else {
 				GeneratorId generatorId = GeneratorId.getInstance();
 				long id = generatorId.getIdLector();
-				if(lector.getId() > id){
+				if (lector.getId() > id) {
 					generatorId.setIdLector(id);
 				}
 			}
 		}
 	}
+
 	@Override
 	public int getTotalCountLectors() {
 		return mRepositoryLectors.getLectors().size();

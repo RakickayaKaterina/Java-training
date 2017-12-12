@@ -132,7 +132,7 @@ public class Facade implements IFacade {
 					mCoursesService.getCoursesAfterDate(requestExtractor.extractDate(), new CountStudentsComparator()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -146,7 +146,7 @@ public class Facade implements IFacade {
 					mCoursesService.getCoursesAfterDate(requestExtractor.extractDate(), new LectorNameComparator()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -160,7 +160,7 @@ public class Facade implements IFacade {
 					mCoursesService.getCoursesAfterDate(requestExtractor.extractDate(), new AlphabetCourseComparator()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -174,7 +174,7 @@ public class Facade implements IFacade {
 					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new DateCourseComparator()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -188,7 +188,7 @@ public class Facade implements IFacade {
 					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new CountStudentsComparator()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -202,7 +202,7 @@ public class Facade implements IFacade {
 					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new LectorNameComparator()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -216,7 +216,7 @@ public class Facade implements IFacade {
 					mCoursesService.getCurrentCourses(requestExtractor.extractDate(), new AlphabetCourseComparator()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -247,7 +247,7 @@ public class Facade implements IFacade {
 			return responseBuilder.build(mTimeTableService.getLessons(requestExtractor.extractDate()),
 					Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -260,7 +260,7 @@ public class Facade implements IFacade {
 			return responseBuilder.build(mCoursesService.getPastCourses(requestExtractor.extractStartDate(),
 					requestExtractor.extractEndDate()), Messages.LIST_IS_EMPTY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -274,7 +274,7 @@ public class Facade implements IFacade {
 			mCoursesService.addCourse(requestExtractor.extractCourse());
 			return responseBuilder.build(Messages.COURSE_ADDED_SUCCESSFULLY);
 		} catch (ParseException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.BAD_REQUEST);
 	}
@@ -288,7 +288,7 @@ public class Facade implements IFacade {
 			mCoursesService.removeCourse(requestExtractor.extractIdCourse());
 			return responseBuilder.build(Messages.COURSE_REMOVED_SUCCESSFULLY);
 		} catch (Exception e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.COURSE_NOT_FOUND);
 	}
@@ -311,7 +311,7 @@ public class Facade implements IFacade {
 					requestExtractor.extractIdCourse());
 			return responseBuilder.build(Messages.LECTURE_REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.COURSE_OR_LECTURE_NOT_FOUND);
 
@@ -341,7 +341,7 @@ public class Facade implements IFacade {
 			mStudentsService.removeStudent(requestExtractor.extractIdStudent());
 			return responseBuilder.build(Messages.STUDENT_REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.STUDENT_NOT_FOUND);
 
@@ -356,7 +356,7 @@ public class Facade implements IFacade {
 					requestExtractor.extractIdCourse());
 			return responseBuilder.build(Messages.STUDENT_REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.COURSE_OR_STUDENT_NOT_FOUND);
 	}
@@ -385,7 +385,7 @@ public class Facade implements IFacade {
 			mLectorsService.removeLector(requestExtractor.extractIdLector());
 			return responseBuilder.build(Messages.LECTOR_REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.LECTOR_NOT_FOUND);
 	}
@@ -399,7 +399,7 @@ public class Facade implements IFacade {
 					requestExtractor.extractIdCourse());
 			return responseBuilder.build(Messages.LECTOR_REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.COURSE_OR_LECTOR_NOT_FOUND);
 	}
@@ -431,7 +431,7 @@ public class Facade implements IFacade {
 			mTimeTableService.removeLessonByLecture(requestExtractor.extractIdLecture());
 			return responseBuilder.build(Messages.LESSON_REMOVED_SUCCESSFULLY);
 		} catch (EntityNotFoundException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.LESSON_NOT_FOUND);
 	}
@@ -468,7 +468,7 @@ public class Facade implements IFacade {
 			mCoursesService.cloneCourseById(requestExtractor.extractIdCourse());
 			return responseBuilder.build(Messages.CLONED_SUCCESSFULLY);
 		} catch (CloneNotSupportedException | EntityNotFoundException e) {
-			logger.error(new Date() + " " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return responseBuilder.build(Messages.CLONED_BAD);
 	}

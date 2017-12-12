@@ -13,9 +13,9 @@ public class Config {
 
 	private static Config conf;
 
-	private Properties properties;
-	
 	private static Logger logger = Logger.getLogger(Config.class.getName());
+	
+	private Properties properties;
 
 	public static Config getInstance() {
 		if (conf == null) {
@@ -25,7 +25,7 @@ public class Config {
 	}
 
 	private Config() {
-		try(InputStream inputStream = new FileInputStream(new File("resourses/config.properties"))) {
+		try (InputStream inputStream = new FileInputStream(new File("resourses/config.properties"))) {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
@@ -37,10 +37,10 @@ public class Config {
 		return Integer.valueOf(properties.getProperty(Tags.AMOUNT.name()));
 	}
 
-	private String getPath(Tags tag){
+	private String getPath(Tags tag) {
 		return properties.getProperty(tag.name());
 	}
-	
+
 	public String getPathId() {
 		return getPath(Tags.GENERATOR_FILE);
 	}
@@ -60,6 +60,7 @@ public class Config {
 	public String getPathTimeTable() {
 		return getPath(Tags.TIME_TABLE_FILE);
 	}
+
 	public String getPathCourse() {
 		return getPath(Tags.COURSES_FILE);
 	}

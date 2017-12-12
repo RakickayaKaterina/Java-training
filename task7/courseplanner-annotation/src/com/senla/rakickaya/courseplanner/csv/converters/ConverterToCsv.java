@@ -3,12 +3,17 @@ package com.senla.rakickaya.courseplanner.csv.converters;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.senla.rakickaya.courseplanner.csv.CsvEntity;
 import com.senla.rakickaya.courseplanner.csv.CsvProperty;
 import com.senla.rakickaya.courseplanner.csv.PropertyType;
 import com.senla.rakickaya.courseplanner.csv.converters.columns.CsvColumns;
 
 public class ConverterToCsv {
+	
+	private static final Logger logger = Logger.getLogger(ConverterToCsv.class.getName());
+	
 	public static String convert(Object obj) throws Exception {
 		Class<?> cl = obj.getClass();
 		CsvEntity csvEntity = cl.getDeclaredAnnotation(CsvEntity.class);
@@ -57,8 +62,7 @@ public class ConverterToCsv {
 			}
 
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return result;
 	}
@@ -95,8 +99,7 @@ public class ConverterToCsv {
 						.append(separator);
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return result.toString();
 

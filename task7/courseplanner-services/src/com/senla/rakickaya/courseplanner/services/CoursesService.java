@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
@@ -21,9 +23,14 @@ import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.LectorsRepository;
 import com.senla.rakickaya.courseplanner.repositories.StudentsRepository;
-import com.senla.rakickaya.courseplanner.utils.*;
+import com.senla.rakickaya.courseplanner.utils.DateWorker;
+import com.senla.rakickaya.courseplanner.utils.FileWorker;
+import com.senla.rakickaya.courseplanner.utils.GeneratorId;
+import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class CoursesService implements ICoursesService {
+	private static final Logger logger = Logger.getLogger(CoursesRepository.class.getName());
+
 	private final ICoursesRepository mRepositoryCourses;
 	private final IStudentsRepository mRepositoryStudents;
 	private final ILectorsRepository mRepositoryLectors;
@@ -213,8 +220,7 @@ public class CoursesService implements ICoursesService {
 				csvString = ConverterToCsv.convert(course);
 				csvEntities.add(csvString);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 		}

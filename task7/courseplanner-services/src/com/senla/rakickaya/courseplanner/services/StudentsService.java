@@ -3,6 +3,8 @@ package com.senla.rakickaya.courseplanner.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.api.repositories.ICoursesRepository;
@@ -20,6 +22,8 @@ import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class StudentsService implements IStudentsService {
+	private static final Logger logger = Logger.getLogger(StudentsService.class.getName());
+
 	private final IStudentsRepository mRepositoryStudents;
 	private final ICoursesRepository mRepositoryCourses;
 
@@ -74,8 +78,7 @@ public class StudentsService implements IStudentsService {
 				csvString = ConverterToCsv.convert(student);
 				csvEntities.add(csvString);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 		}
@@ -93,16 +96,16 @@ public class StudentsService implements IStudentsService {
 		for (IStudent student : students) {
 			if (!mRepositoryStudents.addStudent(student)) {
 				mRepositoryStudents.updateStudent(student);
-			}
-			else{
+			} else {
 				GeneratorId generatorId = GeneratorId.getInstance();
 				long id = generatorId.getIdStudent();
-				if(student.getId() > id){
+				if (student.getId() > id) {
 					generatorId.setIdStudent(id);
 				}
 			}
 		}
 	}
+
 	@Override
 	public int getTotalCountStudents() {
 		return mRepositoryStudents.getStudents().size();

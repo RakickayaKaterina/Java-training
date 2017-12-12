@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
@@ -26,6 +28,8 @@ import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
 public class TimeTableService implements ITimeTableService {
+	private static final Logger logger = Logger.getLogger(TimeTableService.class.getName());
+
 	private final ITimeTable mTimeTable;
 	private final ICoursesRepository mRepositoryCourses;
 
@@ -113,19 +117,19 @@ public class TimeTableService implements ITimeTableService {
 		return null;
 
 	}
+
 	@Override
 	public void exportCSV(String path) {
 		FileWorker worker = new FileWorker(path);
 		List<String> csvEntities = new ArrayList<>();
-		List<ILesson> lessons =mTimeTable.getLessons();
+		List<ILesson> lessons = mTimeTable.getLessons();
 		for (ILesson lesson : lessons) {
 			try {
 				String csvString;
 				csvString = ConverterToCsv.convert(lesson);
 				csvEntities.add(csvString);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 		}
@@ -143,16 +147,16 @@ public class TimeTableService implements ITimeTableService {
 		for (ILesson lesson : lessons) {
 			if (!mTimeTable.addLesson(lesson)) {
 				mTimeTable.updateLesson(lesson);
-			}
-			else{
+			} else {
 				GeneratorId generatorId = GeneratorId.getInstance();
 				long id = generatorId.getIdLesson();
-				if(lesson.getId() > id){
+				if (lesson.getId() > id) {
 					generatorId.setIdLesson(id);
 				}
 			}
 		}
 	}
+
 	@Override
 	public List<ILesson> getSortedList(Comparator<ILesson> pComparator) {
 		List<ILesson> listLesson = mTimeTable.getLessons();
