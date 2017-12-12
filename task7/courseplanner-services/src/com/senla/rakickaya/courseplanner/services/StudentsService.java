@@ -11,9 +11,11 @@ import com.senla.rakickaya.courseplanner.api.services.IStudentsService;
 import com.senla.rakickaya.courseplanner.csv.CsvConverter;
 import com.senla.rakickaya.courseplanner.csv.CsvObject;
 import com.senla.rakickaya.courseplanner.csv.CsvWorker;
+import com.senla.rakickaya.courseplanner.csv.converters.ConverterToCsv;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.StudentsRepository;
+import com.senla.rakickaya.courseplanner.utils.FileWorker;
 import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
@@ -63,13 +65,21 @@ public class StudentsService implements IStudentsService {
 
 	@Override
 	public void exportCSV(String path) {
-		CsvWorker worker = new CsvWorker(path);
+		FileWorker worker = new FileWorker(path);
+		List<String> csvEntities = new ArrayList<>();
 		List<IStudent> students = mRepositoryStudents.getStudents();
-		List<CsvObject> objects = new ArrayList<CsvObject>();
 		for (IStudent student : students) {
-			objects.add(CsvObject.valueOf(student));
+			try {
+				String csvString;
+				csvString = ConverterToCsv.convert(student);
+				csvEntities.add(csvString);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-		worker.writeCSV(objects);
+		worker.write(csvEntities);
 	}
 
 	@Override

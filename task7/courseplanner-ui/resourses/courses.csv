@@ -1,3 +1,2 @@
-3;course2;some text about this course;20.11.2017;21.12.2017;13;;2 History&3 Math&
-2;course1new;some text about this course;20.11.2017;21.12.2017;13;31&31&;2 History&3 Math&
-1;sds;sdsdsdsds;10.10.2010;23.10.2011;Not lector;;1 SuperLecture&
+3,course2,some text about this course,Mon Nov 20 00:00:00 GMT+03:00 2017,Thu Dec 21 00:00:00 GMT+03:00 2017,13,,2 3 
+2,course1new,some text about this course,Mon Nov 20 00:00:00 GMT+03:00 2017,Thu Dec 21 00:00:00 GMT+03:00 2017,13,31 31 ,2 3 

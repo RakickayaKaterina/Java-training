@@ -1,13 +1,18 @@
 package com.senla.rakickaya.courseplanner.beans;
 
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
-
+import com.senla.rakickaya.courseplanner.csv.CsvEntity;
+import com.senla.rakickaya.courseplanner.csv.CsvProperty;
+import com.senla.rakickaya.courseplanner.csv.PropertyType;
+@CsvEntity(entityId = "id", filename = "lectors.csv")
 public class Lector implements ILector {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7879323810348630802L;
+	@CsvProperty(columnNumber = 0, propertyType = PropertyType.SimpleProperty)
 	private long id;
+	@CsvProperty(columnNumber = 1, propertyType = PropertyType.SimpleProperty)
 	private String nameLector;
 
 	public Lector(long id, String nameLector) {

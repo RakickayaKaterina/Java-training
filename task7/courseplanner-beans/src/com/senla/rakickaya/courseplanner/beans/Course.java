@@ -8,20 +8,31 @@ import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.beans.IStudent;
+import com.senla.rakickaya.courseplanner.csv.CsvEntity;
+import com.senla.rakickaya.courseplanner.csv.CsvProperty;
+import com.senla.rakickaya.courseplanner.csv.PropertyType;
 import com.senla.rakickaya.courseplanner.utils.GeneratorId;
-
+@CsvEntity(entityId = "id", filename = "courses.csv")
 public class Course implements ICourse {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8297816945287329962L;
+	@CsvProperty(columnNumber = 0, propertyType = PropertyType.SimpleProperty)
 	private long id;
+	@CsvProperty(columnNumber = 1, propertyType = PropertyType.SimpleProperty)
 	private String name;
+	@CsvProperty(columnNumber = 2, propertyType = PropertyType.SimpleProperty)
 	private String description;
+	@CsvProperty(columnNumber = 3, propertyType = PropertyType.SimpleProperty)
 	private Date startDate;
+	@CsvProperty(columnNumber = 4, propertyType = PropertyType.SimpleProperty)
 	private Date endDate;
+	@CsvProperty(columnNumber = 5, propertyType = PropertyType.CompositeProperty, keyField="id")
 	private ILector lector;
+	@CsvProperty(columnNumber = 6, propertyType = PropertyType.CompositeProperty, keyField="id")
 	private List<IStudent> students;
+	@CsvProperty(columnNumber = 7, propertyType = PropertyType.CompositeProperty, keyField="idLecture")
 	private List<ILecture> lectures;
 
 	public Course(long id, String name, String description, Date startDate, Date endDate) {

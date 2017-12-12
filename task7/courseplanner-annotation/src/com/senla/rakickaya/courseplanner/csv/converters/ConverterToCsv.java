@@ -71,7 +71,9 @@ public class ConverterToCsv {
 		Object fieldValue = field.get(object);
 		Class<?> typeFieldValue = fieldValue.getClass();
 		Field keyField = typeFieldValue.getDeclaredField(keyId);
-		return String.valueOf(keyField.get(fieldValue));
+		keyField.setAccessible(true);
+		Object obj  = keyField.get(fieldValue);
+		return String.valueOf(obj);
 
 	}
 
@@ -81,9 +83,16 @@ public class ConverterToCsv {
 			field.setAccessible(true);
 			Object fieldValue = field.get(object);
 			List<?> list = (List<?>) fieldValue;
+			CsvProperty property = field.getDeclaredAnnotation(CsvProperty.class);
+			String keyField = property.keyField();
+			String separator = property.separartorArray();
 			for (Object obj : list) {
-				result.append(getValue(field, obj))
-						.append(field.getDeclaredAnnotation(CsvProperty.class).separartorArray());
+				Class<?> classObj = obj.getClass();
+				Field keyObjField = classObj.getDeclaredField(keyField);
+				keyObjField.setAccessible(true);
+				String value = String.valueOf(keyObjField.get(obj));
+				result.append(value)
+						.append(separator);
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 			// TODO Auto-generated catch block

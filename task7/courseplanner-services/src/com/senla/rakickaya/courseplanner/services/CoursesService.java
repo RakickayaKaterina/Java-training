@@ -16,6 +16,7 @@ import com.senla.rakickaya.courseplanner.api.services.ICoursesService;
 import com.senla.rakickaya.courseplanner.csv.CsvConverter;
 import com.senla.rakickaya.courseplanner.csv.CsvObject;
 import com.senla.rakickaya.courseplanner.csv.CsvWorker;
+import com.senla.rakickaya.courseplanner.csv.converters.ConverterToCsv;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.LectorsRepository;
@@ -203,13 +204,21 @@ public class CoursesService implements ICoursesService {
 
 	@Override
 	public void exportCSV(String path) {
-		CsvWorker worker = new CsvWorker(path);
+		FileWorker worker = new FileWorker(path);
+		List<String> csvEntities = new ArrayList<>();
 		List<ICourse> courses = mRepositoryCourses.getCourses();
-		List<CsvObject> objects = new ArrayList<CsvObject>();
 		for (ICourse course : courses) {
-			objects.add(CsvObject.valueOf(course));
+			try {
+				String csvString;
+				csvString = ConverterToCsv.convert(course);
+				csvEntities.add(csvString);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-		worker.writeCSV(objects);
+		worker.write(csvEntities);
 	}
 
 	@Override

@@ -25,12 +25,26 @@ public class CsvColumns {
 		}
 		return columns[numberColumn];
 	}
-	public String getConcatString(String separator){
+
+	private void cuteArray() {
+		int length = columns.length;
+		for (; length > 0; length--) {
+			if (columns[length - 1] != null) {
+				break;
+			}
+		}
+		if(length !=columns.length){
+			columns = Arrays.copyOf(columns, length);
+		}
+	}
+
+	public String getConcatString(String separator) {
 		StringBuilder result = new StringBuilder();
-		for(int i=0;i<columns.length-1;i++){
+		cuteArray();
+		for (int i = 0; i < columns.length - 1; i++) {
 			result.append(columns[i]).append(separator);
 		}
-		result.append(columns.length-1);
+		result.append(columns[columns.length - 1]);
 		return result.toString();
 	}
 

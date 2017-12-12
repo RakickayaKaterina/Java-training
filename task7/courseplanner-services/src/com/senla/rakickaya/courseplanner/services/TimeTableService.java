@@ -16,10 +16,12 @@ import com.senla.rakickaya.courseplanner.configuration.Config;
 import com.senla.rakickaya.courseplanner.csv.CsvConverter;
 import com.senla.rakickaya.courseplanner.csv.CsvObject;
 import com.senla.rakickaya.courseplanner.csv.CsvWorker;
+import com.senla.rakickaya.courseplanner.csv.converters.ConverterToCsv;
 import com.senla.rakickaya.courseplanner.exception.EntityNotFoundException;
 import com.senla.rakickaya.courseplanner.repositories.CoursesRepository;
 import com.senla.rakickaya.courseplanner.repositories.TimeTable;
 import com.senla.rakickaya.courseplanner.utils.DateWorker;
+import com.senla.rakickaya.courseplanner.utils.FileWorker;
 import com.senla.rakickaya.courseplanner.utils.GeneratorId;
 import com.senla.rakickaya.courseplanner.utils.ListWorker;
 
@@ -113,13 +115,21 @@ public class TimeTableService implements ITimeTableService {
 	}
 	@Override
 	public void exportCSV(String path) {
-		CsvWorker worker = new CsvWorker(path);
-		List<ILesson> lessons = mTimeTable.getLessons();
-		List<CsvObject> objects = new ArrayList<CsvObject>();
+		FileWorker worker = new FileWorker(path);
+		List<String> csvEntities = new ArrayList<>();
+		List<ILesson> lessons =mTimeTable.getLessons();
 		for (ILesson lesson : lessons) {
-			objects.add(CsvObject.valueOf(lesson));
+			try {
+				String csvString;
+				csvString = ConverterToCsv.convert(lesson);
+				csvEntities.add(csvString);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-		worker.writeCSV(objects);
+		worker.write(csvEntities);
 	}
 
 	@Override
