@@ -37,25 +37,36 @@ public class LectorsService implements ILectorsService {
 
 	@Override
 	public void addLector(ILector pLector) {
-		mRepositoryLectors.addLector(pLector);
+		synchronized (mRepositoryLectors) {
+			mRepositoryLectors.addLector(pLector);
+		}
+
 	}
 
 	@Override
 	public void removeLector(long pId) throws EntityNotFoundException {
-		ILector lector = mRepositoryLectors.removeLector(pId);
+		ILector lector;
+		synchronized (mRepositoryLectors) {
+			lector = mRepositoryLectors.removeLector(pId);
+		}
 		if (lector == null) {
 			throw new EntityNotFoundException();
 		}
-		for (ICourse course : mRepositoryCourses.getCourses()) {
-			if (course != null && course.getLector() != null && course.getLector().getId() == pId) {
-				course.setLector(null);
+		synchronized (mRepositoryCourses) {
+			for (ICourse course : mRepositoryCourses.getCourses()) {
+				if (course != null && course.getLector() != null && course.getLector().getId() == pId) {
+					course.setLector(null);
+					mRepositoryCourses.updateCourse(course);
+				}
 			}
 		}
 	}
 
 	@Override
 	public void updateLector(ILector pLector) {
-		mRepositoryLectors.updateLector(pLector);
+		synchronized (mRepositoryLectors) {
+			mRepositoryLectors.updateLector(pLector);
+		}
 
 	}
 
@@ -144,19 +155,22 @@ public class LectorsService implements ILectorsService {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		for (ILector lector : lectors) {
-			if (!mRepositoryLectors.addLector(lector)) {
-				mRepositoryLectors.updateLector(lector);
-			} else {
-				GeneratorId generatorId = GeneratorId.getInstance();
-				long id = generatorId.getIdLector();
-				if (lector.getId() > id) {
-					generatorId.setIdLector(id);
+		synchronized (mRepositoryLectors) {
+			for (ILector lector : lectors) {
+				if (!mRepositoryLectors.addLector(lector)) {
+					mRepositoryLectors.updateLector(lector);
+				} else {
+					GeneratorId generatorId = GeneratorId.getInstance();
+					long id = generatorId.getIdLector();
+					if (lector.getId() > id) {
+						generatorId.setIdLector(id);
+					}
 				}
 			}
 		}
 
 	}
+
 	@Override
 	public int getTotalCountLectors() {
 		return mRepositoryLectors.getLectors().size();

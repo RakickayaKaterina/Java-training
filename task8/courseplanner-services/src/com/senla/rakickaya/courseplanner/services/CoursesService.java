@@ -46,24 +46,34 @@ public class CoursesService implements ICoursesService {
 
 	@Override
 	public void addCourse(ICourse pCourse) {
-		mRepositoryCourses.addCourse(pCourse);
+		synchronized (mRepositoryCourses) {
+			mRepositoryCourses.addCourse(pCourse);
+		}
 
 	}
 
 	@Override
 	public void removeCourse(long pId) throws EntityNotFoundException {
-		ICourse course = mRepositoryCourses.removeCourse(pId);
+		ICourse course;
+		synchronized (mRepositoryCourses) {
+			course = mRepositoryCourses.removeCourse(pId);
+		}
 		if (course == null)
 			throw new EntityNotFoundException();
 		List<IStudent> students = mRepositoryStudents.getStudents();
-		for (int i = 0; i < students.size(); i++) {
-			ListWorker.removeItemById(students.get(i).getCourses(), pId);
+		synchronized (mRepositoryStudents) {
+			for (int i = 0; i < students.size(); i++) {
+				ListWorker.removeItemById(students.get(i).getCourses(), pId);
+				mRepositoryStudents.updateStudent(students.get(i));
+			}
 		}
 	}
 
 	@Override
 	public void updateCourse(ICourse pCourse) {
-		mRepositoryCourses.updateCourse(pCourse);
+		synchronized (mRepositoryCourses) {
+			mRepositoryCourses.updateCourse(pCourse);
+		}
 
 	}
 
@@ -78,16 +88,17 @@ public class CoursesService implements ICoursesService {
 	}
 
 	@Override
-	public void addStudentToCourse(long pIdStudent, long pIdCourse) {
+	public synchronized void addStudentToCourse(long pIdStudent, long pIdCourse) {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
 		IStudent student = mRepositoryStudents.getStudent(pIdStudent);
 		course.getStudents().add(student);
 		student.getCourses().add(course);
-
+		mRepositoryCourses.updateCourse(course);
+		mRepositoryStudents.updateStudent(student);
 	}
 
 	@Override
-	public void removeStudentFromCourse(long pIdStudent, long pIdCourse) throws EntityNotFoundException {
+	public synchronized void removeStudentFromCourse(long pIdStudent, long pIdCourse) throws EntityNotFoundException {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
 		if (course == null) {
 			throw new EntityNotFoundException();
@@ -96,19 +107,23 @@ public class CoursesService implements ICoursesService {
 		if (student == null) {
 			throw new EntityNotFoundException();
 		}
+		mRepositoryCourses.updateCourse(course);
+		mRepositoryStudents.updateStudent(student);
 
 	}
 
 	@Override
-	public void addLectorToCourse(long pIdLector, long pIdCourse) {
+	public synchronized void addLectorToCourse(long pIdLector, long pIdCourse) {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
 		ILector lector = mRepositoryLectors.getLector(pIdLector);
 		course.setLector(lector);
+		mRepositoryCourses.updateCourse(course);
+		mRepositoryLectors.updateLector(lector);
 
 	}
 
 	@Override
-	public void removeLectorFromCourse(long pIdLector, long pIdCourse) throws EntityNotFoundException {
+	public synchronized void removeLectorFromCourse(long pIdLector, long pIdCourse) throws EntityNotFoundException {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
 		if (course == null) {
 			throw new EntityNotFoundException();
@@ -119,15 +134,18 @@ public class CoursesService implements ICoursesService {
 		}
 		if (lector != null && lector.getId() == pIdLector) {
 			course.setLector(null);
-
 		}
+		mRepositoryCourses.updateCourse(course);
+		mRepositoryLectors.updateLector(lector);
 	}
 
 	@Override
 	public void addLectureToCourse(ILecture lecture, long pIdCourse) {
 		ICourse course = mRepositoryCourses.getCourse(pIdCourse);
-
 		course.getLectures().add(lecture);
+		synchronized (mRepositoryCourses) {
+			mRepositoryCourses.updateCourse(course);
+		}
 
 	}
 
@@ -140,6 +158,9 @@ public class CoursesService implements ICoursesService {
 		ILecture lecture = ListWorker.removeItemById(course.getLectures(), pIdLecture);
 		if (lecture == null) {
 			throw new EntityNotFoundException();
+		}
+		synchronized (mRepositoryCourses) {
+			mRepositoryCourses.updateCourse(course);
 		}
 
 	}
@@ -285,14 +306,16 @@ public class CoursesService implements ICoursesService {
 			logger.error(e.getMessage());
 
 		}
-		for (ICourse course : courses) {
-			if (!mRepositoryCourses.addCourse(course)) {
-				mRepositoryCourses.updateCourse(course);
-			} else {
-				GeneratorId generatorId = GeneratorId.getInstance();
-				long id = generatorId.getIdCourse();
-				if (course.getId() > id) {
-					generatorId.setIdCourse(id);
+		synchronized (mRepositoryCourses) {
+			for (ICourse course : courses) {
+				if (!mRepositoryCourses.addCourse(course)) {
+					mRepositoryCourses.updateCourse(course);
+				} else {
+					GeneratorId generatorId = GeneratorId.getInstance();
+					long id = generatorId.getIdCourse();
+					if (course.getId() > id) {
+						generatorId.setIdCourse(id);
+					}
 				}
 			}
 		}

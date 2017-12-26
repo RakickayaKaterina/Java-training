@@ -41,7 +41,9 @@ public class TimeTableService implements ITimeTableService {
 
 	@Override
 	public void addLesson(ILesson pLesson) {
-		mTimeTable.addLesson(pLesson);
+		synchronized (mTimeTable) {
+			mTimeTable.addLesson(pLesson);
+		}
 
 	}
 
@@ -53,24 +55,30 @@ public class TimeTableService implements ITimeTableService {
 		for (ILesson lesson : timeTable) {
 			amount += lesson.getCountStudent();
 		}
-		if (lecture != null && amount + countStudent <= Config.getInstance().getAmountStudents()) {
-			mTimeTable.addLesson(
-					new Lesson(0L, lecture, dateForLecture, countStudent));
-		} else {
-			throw new Exception("Limit Students");
+		synchronized (mTimeTable) {
+			if (lecture != null && amount + countStudent <= Config.getInstance().getAmountStudents()) {
+				mTimeTable.addLesson(new Lesson(0L, lecture, dateForLecture, countStudent));
+
+			} else {
+				throw new Exception("Limit Students");
+			}
 		}
 
 	}
 
 	@Override
 	public void removeLesson(long pId) {
-		mTimeTable.removeLesson(pId);
+		synchronized (mTimeTable) {
+			mTimeTable.removeLesson(pId);
+		}
 
 	}
 
 	@Override
 	public void updateLesson(ILesson pLesson) {
-		mTimeTable.updateLesson(pLesson);
+		synchronized (mTimeTable) {
+			mTimeTable.updateLesson(pLesson);
+		}
 
 	}
 
@@ -96,9 +104,12 @@ public class TimeTableService implements ITimeTableService {
 		boolean exist = false;
 		for (int i = 0; i < lessons.size(); i++) {
 			ILecture lecture = lessons.get(i).getLecture();
-			if (lecture.getId() == idLecture) {
-				ListWorker.removeItemById(lessons, lessons.get(i).getId());
-				exist = true;
+			synchronized (mTimeTable) {
+				if (lecture.getId() == idLecture) {
+					ListWorker.removeItemById(lessons, lessons.get(i).getId());
+					mTimeTable.updateLesson(lessons.get(i));
+					exist = true;
+				}
 			}
 		}
 		if (!exist) {
@@ -158,19 +169,22 @@ public class TimeTableService implements ITimeTableService {
 			logger.error(e.getMessage());
 
 		}
-		for (ILesson lesson : lessons) {
-			if (!mTimeTable.addLesson(lesson)) {
-				mTimeTable.updateLesson(lesson);
-			} else {
-				GeneratorId generatorId = GeneratorId.getInstance();
-				long id = generatorId.getIdLesson();
-				if (lesson.getId() > id) {
-					generatorId.setIdLesson(id);
+		synchronized (mTimeTable) {
+			for (ILesson lesson : lessons) {
+				if (!mTimeTable.addLesson(lesson)) {
+					mTimeTable.updateLesson(lesson);
+				} else {
+					GeneratorId generatorId = GeneratorId.getInstance();
+					long id = generatorId.getIdLesson();
+					if (lesson.getId() > id) {
+						generatorId.setIdLesson(id);
+					}
 				}
 			}
 		}
 
 	}
+
 	@Override
 	public List<ILesson> getSortedList(Comparator<ILesson> pComparator) {
 		List<ILesson> listLesson = mTimeTable.getLessons();

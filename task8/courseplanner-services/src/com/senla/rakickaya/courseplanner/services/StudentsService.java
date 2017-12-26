@@ -36,25 +36,35 @@ public class StudentsService implements IStudentsService {
 
 	@Override
 	public void addStudent(IStudent pStudent) {
-		mRepositoryStudents.addStudent(pStudent);
+		synchronized (mRepositoryStudents) {
+			mRepositoryStudents.addStudent(pStudent);
+		}
 
 	}
 
 	@Override
 	public void removeStudent(long id) throws EntityNotFoundException {
-		IStudent removedStudent = mRepositoryStudents.removeStudent(id);
+		IStudent removedStudent;
+		synchronized (mRepositoryStudents) {
+			removedStudent = mRepositoryStudents.removeStudent(id);
+		}
 		if (removedStudent == null) {
 			throw new EntityNotFoundException();
 		}
 		List<ICourse> courses = mRepositoryCourses.getCourses();
-		for (int i = 0; i < courses.size(); i++) {
-			ListWorker.removeItemById(courses.get(i).getStudents(), id);
+		synchronized (mRepositoryCourses) {
+			for (int i = 0; i < courses.size(); i++) {
+				ListWorker.removeItemById(courses.get(i).getStudents(), id);
+				mRepositoryCourses.updateCourse(courses.get(i));
+			}
 		}
 	}
 
 	@Override
 	public void updateStudent(IStudent pStudent) {
-		mRepositoryStudents.updateStudent(pStudent);
+		synchronized (mRepositoryStudents) {
+			mRepositoryStudents.updateStudent(pStudent);
+		}
 
 	}
 
@@ -115,14 +125,16 @@ public class StudentsService implements IStudentsService {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
-		for (IStudent student : students) {
-			if (!mRepositoryStudents.addStudent(student)) {
-				mRepositoryStudents.updateStudent(student);
-			} else {
-				GeneratorId generatorId = GeneratorId.getInstance();
-				long id = generatorId.getIdStudent();
-				if (student.getId() > id) {
-					generatorId.setIdStudent(id);
+		synchronized (mRepositoryStudents) {
+			for (IStudent student : students) {
+				if (!mRepositoryStudents.addStudent(student)) {
+					mRepositoryStudents.updateStudent(student);
+				} else {
+					GeneratorId generatorId = GeneratorId.getInstance();
+					long id = generatorId.getIdStudent();
+					if (student.getId() > id) {
+						generatorId.setIdStudent(id);
+					}
 				}
 			}
 		}
