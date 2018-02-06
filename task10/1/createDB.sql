@@ -1,7 +1,7 @@
 CREATE DATABASE `Equipment shop` DEFAULT CHARACTER SET utf8 ;
 USE `Equipment shop`;
 CREATE TABLE `Product` (
-	marker varchar(10) NOT NULL,
+	maker varchar(10) NOT NULL,
     model varchar(50),
     type varchar(50) CHECK ( type IN ('PC', 'Laptop', 'Printer') ),
 	PRIMARY KEY (model)

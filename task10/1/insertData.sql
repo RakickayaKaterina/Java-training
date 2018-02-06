@@ -1,5 +1,5 @@
 START TRANSACTION;
-INSERT INTO Product(marker, model, type) values
+INSERT INTO Product(maker, model, type) values
 	('HP', 'Pavilion', 'Laptop'),
     ('HP', 'Chromebook', 'Laptop'),
     ('ASUS', 'VivoBook', 'Laptop'),
