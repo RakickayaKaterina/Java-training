@@ -29,7 +29,7 @@ import com.senla.rakickaya.courseplanner.utils.FileWorker;
 public class LectorsService implements ILectorsService {
 	private static final Logger logger = Logger.getLogger(LectorsService.class.getName());
 
-	private ILectorDao lectorDao;
+	private ILectorDao lectorDao = (ILectorDao) ServiceDI.getInstance().getObject(ILectorDao.class);
 
 	public LectorsService() {
 		super();

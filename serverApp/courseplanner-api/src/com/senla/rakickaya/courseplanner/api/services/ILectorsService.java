@@ -1,7 +1,6 @@
 package com.senla.rakickaya.courseplanner.api.services;
 
 import java.sql.SQLException;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 

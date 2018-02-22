@@ -27,7 +27,7 @@ import com.senla.rakickaya.courseplanner.utils.FileWorker;
 public class StudentsService implements IStudentsService {
 	private static final Logger logger = Logger.getLogger(StudentsService.class.getName());
 
-	private IStudentDao studentDao;
+	private IStudentDao studentDao = (IStudentDao) ServiceDI.getInstance().getObject(IStudentDao.class);
 
 	public StudentsService() {
 		super();

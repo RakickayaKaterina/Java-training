@@ -7,7 +7,7 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.ILesson;
 import com.senla.rakickaya.courseplanner.api.dao.enums.SortColumnLesson;
 
-public interface ILessonDao extends EntityDao<ILesson, Long>{
+public interface ILessonDao extends GenericDao<ILesson, Long>{
 
 	void deleteLessonByLecture(Long idLecture, Connection connection) throws Exception;
 

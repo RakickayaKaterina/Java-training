@@ -20,7 +20,17 @@ import com.senla.rakickaya.courseplanner.api.dao.enums.SortColumnLector;
 import com.senla.rakickaya.courseplanner.beans.Course;
 import com.senla.rakickaya.courseplanner.beans.Lector;
 
-public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILectorDao {
+public class LectorDao extends AbstractDao<ILector, Long> implements ILectorDao {
+	private static final String COURSE_TABLE = "course";
+	private static final String LECTOR_TABLE = "lector";
+	private static final String ID_COURSE = "idCourse";
+	private static final String ID_LECTOR = "idLector";
+	private static final String NAME_LECTOR = "nameLector";
+	private static final String FK_KEY_LECTOR = "Lector_idLector";
+	private static final String NAME_COURSE = "name";
+	private static final String DESCRIPTION_COURSE = "description";
+	private static final String START_DATE_COURSE = "start_date";
+	private static final String END_DATE_COURSE = "end_date";
 
 	private static Logger logger = Logger.getLogger(LectorDao.class);
 
@@ -45,7 +55,8 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 
 	@Override
 	public List<ILector> getLectorsWithCourses(Connection connection) throws Exception {
-		String sqlJoin = "select * from lector LEFT JOIN course ON Lector_idLector = idLector";
+		String sqlJoin = "select * from " + LECTOR_TABLE + " LEFT JOIN " + COURSE_TABLE + " ON " + FK_KEY_LECTOR + " = "
+				+ ID_LECTOR;
 		Map<Long, ILector> lectorsMap = new HashMap<>();
 		try (Statement statement = connection.createStatement()) {
 
@@ -78,13 +89,13 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 
 	@Override
 	public int getCount(Connection connection) throws Exception {
-		String sql = "select count(*) from Lector";
+		String sql = "select count(*) from " + LECTOR_TABLE;
 		return getCountFromQuery(sql, connection);
 	}
 
 	@Override
 	protected String getCreateSql() {
-		return "insert into Lector(nameLector) values (?)";
+		return "insert into " + LECTOR_TABLE + "(" + NAME_LECTOR + ") values (?)";
 	}
 
 	@Override
@@ -99,7 +110,7 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 
 	@Override
 	protected String getDeleteSql() {
-		return "delete from Lector where idLector = ?";
+		return "delete from " + LECTOR_TABLE + " where " + ID_LECTOR + " = ?";
 	}
 
 	@Override
@@ -114,7 +125,7 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 
 	@Override
 	protected String getUpdateSql() {
-		return "update Lector set name = ? where idLector = ?";
+		return "update " + LECTOR_TABLE + " set " + NAME_LECTOR + " = ? where " + ID_LECTOR + " = ?";
 	}
 
 	@Override
@@ -130,12 +141,12 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 
 	@Override
 	protected String getReadSql() {
-		return "select * from Lector";
+		return "select * from " + LECTOR_TABLE;
 	}
 
 	@Override
 	protected String getFindByIdSql() {
-		return getReadSql() + " where idLector = ? ";
+		return getReadSql() + " where " + ID_LECTOR + " = ? ";
 	}
 
 	@Override
@@ -152,11 +163,11 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 	protected ILector parseEntity(ResultSet resultSet) {
 		ILector lector = null;
 		try {
-			Long idLecture = resultSet.getLong("idLecture");
+			Long idLector = resultSet.getLong(ID_LECTOR);
 
-			String nameLector = resultSet.getString("nameLector");
+			String nameLector = resultSet.getString(NAME_LECTOR);
 
-			lector = new Lector(idLecture, nameLector);
+			lector = new Lector(idLector, nameLector);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		}
@@ -166,15 +177,15 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 	protected ICourse parseCourse(ResultSet resultSet) {
 		ICourse course = null;
 		try {
-			Long idCourse = resultSet.getLong("idCourse");
+			Long idCourse = resultSet.getLong(ID_COURSE);
 
-			String name = resultSet.getString("name");
+			String name = resultSet.getString(NAME_COURSE);
 
-			String description = resultSet.getString("description");
+			String description = resultSet.getString(DESCRIPTION_COURSE);
 
-			Date startDate = resultSet.getDate("start_date");
+			Date startDate = resultSet.getDate(START_DATE_COURSE);
 
-			Date endDate = resultSet.getDate("end_date");
+			Date endDate = resultSet.getDate(END_DATE_COURSE);
 
 			course = new Course(idCourse, name, description, startDate, endDate);
 
@@ -186,15 +197,20 @@ public class LectorDao extends AbstractEntityDao<ILector, Long> implements ILect
 
 	@Override
 	public int getCountCoursesByLector(long idLector, Connection connection) throws Exception {
-		String query = "select count(*) from lector INNER JOIN course ON Lector_idLector = idLector WHERE idLector = "
-				+ idLector;
+		String query = "select count(*) from " + LECTOR_TABLE + " INNER JOIN " + COURSE_TABLE + " ON " + FK_KEY_LECTOR
+				+ " = " + ID_LECTOR + " WHERE " + ID_LECTOR + " = " + idLector;
 		return getCountFromQuery(query, connection);
 	}
 
 	private int getCountFromQuery(String query, Connection connection) throws Exception {
 		try (Statement statement = connection.createStatement()) {
+			
 			ResultSet result = statement.executeQuery(query);
-			return result.getInt(1);
+			int count = 0;
+			if (result.next()) {
+				count = result.getInt(1);
+			}
+			return count;
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			throw new Exception(e);

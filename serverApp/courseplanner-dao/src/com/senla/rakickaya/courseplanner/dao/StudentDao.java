@@ -12,16 +12,24 @@ import com.senla.rakickaya.courseplanner.api.beans.IStudent;
 import com.senla.rakickaya.courseplanner.api.dao.IStudentDao;
 import com.senla.rakickaya.courseplanner.beans.Student;
 
-public class StudentDao extends AbstractEntityDao<IStudent, Long> implements IStudentDao {
+public class StudentDao extends AbstractDao<IStudent, Long> implements IStudentDao {
+	
+	private static final String STUDENT_TABLE = "student";
+	private static final String ID_STUDENT = "idStudent";
+	private static final String NAME_STUDENT = "nameStudent";
 	
 	private static Logger logger = Logger.getLogger(StudentDao.class);
 
 	@Override
 	public int getCount(Connection connection) throws Exception {
-		String sql = "select count(*) from Student";
+		String sql = "select count(*) from "+STUDENT_TABLE;
 		try(Statement statement = connection.createStatement()){
 			ResultSet result = statement.executeQuery(sql);
-			return result.getInt(1);
+			int count = 0;
+			if (result.next()) {
+				count = result.getInt(1);
+			}
+			return count;
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			throw new Exception(e);
@@ -30,7 +38,7 @@ public class StudentDao extends AbstractEntityDao<IStudent, Long> implements ISt
 
 	@Override
 	protected String getCreateSql() {
-		return " INSERT INTO Student(nameStudent) values (?) ";
+		return " INSERT INTO "+STUDENT_TABLE+"("+NAME_STUDENT+") values (?) ";
 	}
 
 	@Override
@@ -46,7 +54,7 @@ public class StudentDao extends AbstractEntityDao<IStudent, Long> implements ISt
 
 	@Override
 	protected String getDeleteSql() {
-		return "delete from Student where idStudent = ? ";
+		return "delete from "+STUDENT_TABLE+" where "+ID_STUDENT+" = ? ";
 	}
 
 	@Override
@@ -62,7 +70,7 @@ public class StudentDao extends AbstractEntityDao<IStudent, Long> implements ISt
 
 	@Override
 	protected String getUpdateSql() {
-		return "update Student set nameStudent = ? where idStudent = ? ";
+		return "update "+STUDENT_TABLE+" set "+NAME_STUDENT+" = ? where "+ID_STUDENT+" = ? ";
 	}
 
 	@Override
@@ -79,12 +87,12 @@ public class StudentDao extends AbstractEntityDao<IStudent, Long> implements ISt
 
 	@Override
 	protected String getReadSql() {
-		return "select * from Student";
+		return "select * from "+STUDENT_TABLE;
 	}
 
 	@Override
 	protected String getFindByIdSql() {
-		return "select * frow Student where idStudent = ? ";
+		return "select * from "+STUDENT_TABLE+" where "+ID_STUDENT+" = ? ";
 	}
 
 	@Override
@@ -102,8 +110,8 @@ public class StudentDao extends AbstractEntityDao<IStudent, Long> implements ISt
 	protected IStudent parseEntity(ResultSet resultSet) {
 		IStudent student = null;
 		try {
-			Long id = resultSet.getLong("idStudent");
-			String name = resultSet.getString("nameStudent");
+			Long id = resultSet.getLong(ID_STUDENT);
+			String name = resultSet.getString(NAME_STUDENT);
 			
 			student = new Student(id, name);
 		} catch (SQLException e) {

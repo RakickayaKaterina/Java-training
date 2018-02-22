@@ -25,14 +25,34 @@ import com.senla.rakickaya.courseplanner.beans.Lecture;
 import com.senla.rakickaya.courseplanner.beans.Student;
 import com.senla.rakickaya.courseplanner.utils.DateWorker;
 
-public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICourseDao {
+public class CourseDao extends AbstractDao<ICourse, Long> implements ICourseDao {
+	private static final String COURSE_TABLE = "course";
+	private static final String STUDENT_TABLE = "student";
+	private static final String LECTURE_TABLE = "lecture";
+	private static final String LECTOR_TABLE = "lector";
+	private static final String COURSE_STUDENT_TABLE = "Course_Student";
+	private static final String ID_COURSE = "idCourse";
+	private static final String ID_STUDENT = "idStudent";
+	private static final String ID_LECTURE = "idLecture";
+	private static final String ID_LECTOR = "idLector";
+	private static final String NAME_LECTOR = "nameLector";
+	private static final String FK_KEY_COURSE = "Course_idCourse";
+	private static final String FK_KEY_STUDENT = "Student_idStudent";
+	private static final String FK_KEY_LECTOR = "Lector_idLector";
+	private static final String NAME_COURSE = "name";
+	private static final String DESCRIPTION_COURSE = "description";
+	private static final String START_DATE_COURSE = "start_date";
+	private static final String END_DATE_COURSE = "end_date";
+	private static final String NAME_STUDENT = "nameStudent";
+	private static final String NAME_LECTURE = "name";
 
 	private static Logger logger = Logger.getLogger(CourseDao.class);
 
 	@Override
 	public List<ICourse> getCoursesWithStudents(Connection connection) throws Exception {
-		String sqlJoin = "select course.* , student.* from course LEFT JOIN `Course_Student` ON idCourse = Course_idCourse"
-				+ " LEFT JOIN student ON student_idStudent = idStudent";
+		String sqlJoin = "select " + COURSE_TABLE + ".* , " + STUDENT_TABLE + ".* from " + COURSE_TABLE + " LEFT JOIN "
+				+ COURSE_STUDENT_TABLE + " ON " + ID_COURSE + " = " + FK_KEY_COURSE + " LEFT JOIN " + STUDENT_TABLE
+				+ " ON " + FK_KEY_STUDENT + " = " + ID_STUDENT;
 		Map<Long, ICourse> courseMap = new HashMap<>();
 		try (Statement statement = connection.createStatement()) {
 
@@ -65,7 +85,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public void addStudentToCourse(Long pIdCourse, Long pIdStudent, Connection connection) throws Exception {
-		String insertQuery = "INSERT INTO course_student(Course_idCourse,Student_idStudent) values (?,?)";
+		String insertQuery = "INSERT INTO " + COURSE_STUDENT_TABLE + "(" + FK_KEY_COURSE + "," + FK_KEY_STUDENT
+				+ ") values (?,?)";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 			preparedStatement.setLong(1, pIdCourse);
 			preparedStatement.setLong(2, pIdStudent);
@@ -75,16 +96,16 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 			throw new Exception(e);
 		}
 	}
-	
+
 	@Override
-	public ILecture findLectureById(Long idLecture, Connection connection) throws Exception{
-		
-		String insertQuery = "select * from lecture where idLecture = " + idLecture;
+	public ILecture findLectureById(Long idLecture, Connection connection) throws Exception {
+
+		String insertQuery = "select * from " + LECTURE_TABLE + " where " + ID_LECTURE + " = " + idLecture;
 		ILecture lecture = null;
 		try (Statement statement = connection.createStatement()) {
-			
+
 			ResultSet resultSet = statement.executeQuery(insertQuery);
-			if(resultSet.next()){
+			if (resultSet.next()) {
 				lecture = parseLecture(resultSet);
 			}
 		} catch (SQLException e) {
@@ -96,7 +117,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public void removeStudentFromCourse(Long pIdCourse, Long pIdStudent, Connection connection) throws Exception {
-		String insertQuery = "delete from course_student where Course_idCourse = ? AND Student_idStudent = ? ";
+		String insertQuery = "delete from " + COURSE_STUDENT_TABLE + " where " + FK_KEY_COURSE + " = ? AND "
+				+ FK_KEY_STUDENT + " = ? ";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 			preparedStatement.setLong(1, pIdCourse);
 			preparedStatement.setLong(2, pIdStudent);
@@ -109,7 +131,7 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public void addLectorToCourse(Long pIdCourse, Long pIdLector, Connection connection) throws Exception {
-		String insertQuery = "update course set  Lector_idLector = ? where idCourse = ?";
+		String insertQuery = "update " + COURSE_TABLE + " set  " + FK_KEY_LECTOR + " = ? where " + ID_COURSE + " = ?";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 			preparedStatement.setLong(1, pIdLector);
 			preparedStatement.setLong(2, pIdCourse);
@@ -122,7 +144,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public void removeLectorFromCourse(Long pIdCourse, Long pIdLector, Connection connection) throws Exception {
-		String insertQuery = "update course set  Lector_idLector = NULL where Lector_idLector = ? AND idCourse = ?";
+		String insertQuery = "update " + COURSE_TABLE + " set  " + FK_KEY_LECTOR + " = NULL where " + FK_KEY_LECTOR
+				+ " = ? AND " + ID_COURSE + " = ?";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
 			preparedStatement.setLong(1, pIdLector);
 			preparedStatement.setLong(2, pIdCourse);
@@ -135,7 +158,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public List<ICourse> getCoursesWithLectures(Connection connection) throws Exception {
-		String sqlJoin = "select * from course LEFT JOIN lecture ON Course_idCourse = idCourse";
+		String sqlJoin = "select * from " + COURSE_TABLE + " LEFT JOIN " + LECTURE_TABLE + " ON " + FK_KEY_COURSE
+				+ " = " + ID_COURSE;
 		Map<Long, ICourse> courseMap = new HashMap<>();
 		try (Statement statement = connection.createStatement()) {
 
@@ -168,7 +192,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public List<ICourse> getCoursesWithLectorSortByLectorName(Connection connection) throws Exception {
-		String sql = "select * from course LEFT JOIN lector ON Lector_idLector = idLector order by nameLector ";
+		String sql = "select * from " + COURSE_TABLE + " LEFT JOIN " + LECTOR_TABLE + " ON " + FK_KEY_LECTOR + " = "
+				+ ID_LECTOR + " order by " + NAME_LECTOR;
 		List<ICourse> courses = new ArrayList<>();
 		try (Statement statement = connection.createStatement()) {
 			ResultSet resultSet = statement.executeQuery(sql);
@@ -191,7 +216,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public void addLectureToCourse(Long pIdCourse, ILecture lecture, Connection connection) throws Exception {
-		String sqlInsert = "insert into Lecture(name, Course_idCourse) values (?, ?)";
+		String sqlInsert = "insert into " + LECTURE_TABLE + "(" + NAME_LECTURE + ", " + FK_KEY_COURSE
+				+ ") values (?, ?)";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sqlInsert)) {
 			preparedStatement.setString(1, lecture.getName());
 			preparedStatement.setLong(2, pIdCourse);
@@ -205,7 +231,7 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public void removeLectureFromCourse(Long pIdLecture, Connection connection) throws Exception {
-		String deleteLecture = "delete from Lecture where idLecture = " + pIdLecture;
+		String deleteLecture = "delete from " + LECTURE_TABLE + " where " + ID_LECTURE + " = " + pIdLecture;
 		try (Statement statement = connection.createStatement()) {
 			statement.executeQuery(deleteLecture);
 		} catch (SQLException e) {
@@ -216,7 +242,7 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public List<ICourse> getSortedCourses(SortColumnCourse column, Connection connection) throws Exception {
-		String sql = "select * from course order by " + column.getOrderColumn();
+		String sql = "select * from " + COURSE_TABLE + " order by " + column.getOrderColumn();
 		List<ICourse> courses = new ArrayList<>();
 		try (Statement statement = connection.createStatement()) {
 			ResultSet resultSet = statement.executeQuery(sql);
@@ -238,7 +264,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 	@Override
 	public List<ICourse> getSortedCoursesByAfterDate(Date pDate, SortColumnCourse column, Connection connection)
 			throws Exception {
-		String sql = "select * from course where start_date > ? order by " + column.getOrderColumn();
+		String sql = "select * from " + COURSE_TABLE + " where " + START_DATE_COURSE + " > ? order by "
+				+ column.getOrderColumn();
 		List<ICourse> courses = new ArrayList<>();
 		java.sql.Date date = DateWorker.convert(pDate);
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -262,7 +289,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 	@Override
 	public List<ICourse> getSortedCoursesByCurrentDate(Date pCurrentDate, SortColumnCourse column,
 			Connection connection) throws Exception {
-		String sql = "select * from course where ? between start_date and end_date order by " + column.getOrderColumn();
+		String sql = "select * from " + COURSE_TABLE + " where ? between " + START_DATE_COURSE + " and "
+				+ END_DATE_COURSE + " order by " + column.getOrderColumn();
 		List<ICourse> courses = new ArrayList<>();
 		java.sql.Date date = DateWorker.convert(pCurrentDate);
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -285,19 +313,24 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public int getCount(Connection connection) throws Exception {
-		String query = "select count(*) from course";
+		String query = "select count(*) from " + COURSE_TABLE;
+		int count = 0;
 		try (Statement statement = connection.createStatement()) {
 			ResultSet result = statement.executeQuery(query);
-			return result.getInt(1);
+			if (result.next()) {
+				count = result.getInt(1);
+			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 			throw new Exception(e);
 		}
+		return count;
 	}
 
 	@Override
 	public List<ICourse> getPastCourses(Date startDateSub, Date endDateSub, Connection connection) throws Exception {
-		String query = "select * from course where start_date < ? and end_date > ?";
+		String query = "select * from " + COURSE_TABLE + " where " + START_DATE_COURSE + " < ? and " + END_DATE_COURSE
+				+ " > ?";
 		java.sql.Date startDate = DateWorker.convert(startDateSub);
 		java.sql.Date endDate = DateWorker.convert(endDateSub);
 		List<ICourse> courses = new ArrayList<>();
@@ -321,8 +354,9 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public List<ICourse> getSortedCoursesWithStudentsAfterDate(Date pDate, Connection connection) throws Exception {
-		String sqlJoin = "select course.* , student.* from course LEFT JOIN `Course_Student` ON idCourse = Course_idCourse"
-				+ " LEFT JOIN student ON student_idStudent = idStudent WHERE start_date > ?";
+		String sqlJoin = "select " + COURSE_TABLE + ".* , " + STUDENT_TABLE + ".* from " + COURSE_TABLE + " LEFT JOIN "
+				+ COURSE_STUDENT_TABLE + " ON " + ID_COURSE + " = " + FK_KEY_COURSE + " LEFT JOIN " + STUDENT_TABLE
+				+ " ON " + FK_KEY_STUDENT + " = " + ID_STUDENT + " WHERE " + START_DATE_COURSE + " > ?";
 		java.sql.Date date = DateWorker.convert(pDate);
 		Map<Long, ICourse> courseMap = new HashMap<>();
 		try (PreparedStatement statement = connection.prepareStatement(sqlJoin)) {
@@ -356,7 +390,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	protected String getCreateSql() {
-		return "INSERT INTO course(name,description,start_date,end_date) values (?,?,?,?)";
+		return "INSERT INTO " + COURSE_TABLE + "(" + NAME_COURSE + "," + DESCRIPTION_COURSE + "," + START_DATE_COURSE
+				+ "," + END_DATE_COURSE + ") values (?,?,?,?)";
 	}
 
 	@Override
@@ -376,7 +411,7 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	protected String getDeleteSql() {
-		return "delete from course where idCourse = ?";
+		return "delete from " + COURSE_TABLE + " where " + ID_COURSE + " = ?";
 	}
 
 	@Override
@@ -391,7 +426,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	protected String getUpdateSql() {
-		return "update course set name = ? ,description = ? , start_date = ? , end_date = ? where idCourse = ?";
+		return "update " + COURSE_TABLE + " set " + NAME_COURSE + " = ? ," + DESCRIPTION_COURSE + " = ? , "
+				+ START_DATE_COURSE + " = ? , " + END_DATE_COURSE + " = ? where " + ID_COURSE + " = ?";
 	}
 
 	@Override
@@ -413,12 +449,12 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	protected String getReadSql() {
-		return "select * from course ";
+		return "select * from " + COURSE_TABLE;
 	}
 
 	@Override
 	protected String getFindByIdSql() {
-		return getReadSql() + " where idCourse = ?";
+		return getReadSql() + " where " + ID_COURSE + " = ?";
 	}
 
 	@Override
@@ -435,15 +471,15 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 	protected ICourse parseEntity(ResultSet resultSet) {
 		ICourse course = null;
 		try {
-			Long idCourse = resultSet.getLong("idCourse");
+			Long idCourse = resultSet.getLong(ID_COURSE);
 
-			String name = resultSet.getString("name");
+			String name = resultSet.getString(NAME_COURSE);
 
-			String description = resultSet.getString("description");
+			String description = resultSet.getString(DESCRIPTION_COURSE);
 
-			Date startDate = resultSet.getDate("start_date");
+			Date startDate = resultSet.getDate(START_DATE_COURSE);
 
-			Date endDate = resultSet.getDate("end_date");
+			Date endDate = resultSet.getDate(END_DATE_COURSE);
 
 			course = new Course(idCourse, name, description, startDate, endDate);
 
@@ -456,8 +492,8 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 	private IStudent parseStudent(ResultSet resultSet) {
 		IStudent student = null;
 		try {
-			Long id = resultSet.getLong("idStudent");
-			String name = resultSet.getString("nameStudent");
+			Long id = resultSet.getLong(ID_STUDENT);
+			String name = resultSet.getString(NAME_STUDENT);
 
 			student = new Student(id, name);
 		} catch (SQLException e) {
@@ -469,9 +505,9 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 	private ILecture parseLecture(ResultSet resultSet) {
 		ILecture lecture = null;
 		try {
-			Long idLecture = resultSet.getLong("idLecture");
+			Long idLecture = resultSet.getLong(ID_LECTURE);
 
-			String nameLecture = resultSet.getString("name");
+			String nameLecture = resultSet.getString(NAME_LECTURE);
 
 			lecture = new Lecture(idLecture, nameLecture);
 		} catch (SQLException e) {
@@ -483,11 +519,11 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 	private ILector parseLector(ResultSet resultSet) {
 		ILector lector = null;
 		try {
-			Long idLecture = resultSet.getLong("idLecture");
+			Long idLector = resultSet.getLong(ID_LECTOR);
 
-			String nameLector = resultSet.getString("nameLector");
+			String nameLector = resultSet.getString(NAME_LECTOR);
 
-			lector = new Lector(idLecture, nameLector);
+			lector = new Lector(idLector, nameLector);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
 		}
@@ -496,7 +532,7 @@ public class CourseDao extends AbstractEntityDao<ICourse, Long> implements ICour
 
 	@Override
 	public List<ILecture> getAllLectures(Connection connection) throws Exception {
-		String sql = "select * from Lecture";
+		String sql = "select * from " + LECTURE_TABLE;
 		List<ILecture> lectures = new ArrayList<>();
 		try (Statement statement = connection.createStatement()) {
 			ResultSet resultSet = statement.executeQuery(sql);

@@ -6,7 +6,7 @@ import java.util.List;
 import com.senla.rakickaya.courseplanner.api.beans.ILector;
 import com.senla.rakickaya.courseplanner.api.dao.enums.SortColumnLector;
 
-public interface ILectorDao extends EntityDao<ILector, Long>{
+public interface ILectorDao extends GenericDao<ILector, Long>{
 
 	List<ILector> getSortedLectors(SortColumnLector column, Connection connection) throws Exception;
 

@@ -31,7 +31,7 @@ import com.senla.rakickaya.courseplanner.utils.FileWorker;
 public class TimeTableService implements ITimeTableService {
 	private static final Logger logger = Logger.getLogger(TimeTableService.class.getName());
 
-	private ILessonDao lessonDao;
+	private ILessonDao lessonDao = (ILessonDao) ServiceDI.getInstance().getObject(ILessonDao.class);;
 
 	public TimeTableService() {
 		super();

@@ -8,7 +8,7 @@ import com.senla.rakickaya.courseplanner.api.beans.ICourse;
 import com.senla.rakickaya.courseplanner.api.beans.ILecture;
 import com.senla.rakickaya.courseplanner.api.dao.enums.SortColumnCourse;
 
-public interface ICourseDao extends EntityDao<ICourse, Long> {
+public interface ICourseDao extends GenericDao<ICourse, Long> {
 
 	List<ICourse> getCoursesWithStudents(Connection connection) throws Exception;
 
